@@ -62,17 +62,17 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 16px;
-      gap: 16px;
+      padding: 28px;
+      gap: 28px;
     }
 
     .experience {
       width: min(1180px, 100%);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(320px, 380px) minmax(320px, 360px);
       justify-content: center;
-      gap: 16px;
-      align-items: stretch;
+      gap: 28px;
+      align-items: start;
     }
 
     .phone {
@@ -80,12 +80,6 @@
       flex-shrink: 0;
       position: relative;
       filter: drop-shadow(var(--shadow));
-      display: flex;
-      flex-direction: column;
-    }
-
-    .phone .page {
-      flex: 1;
     }
 
     .browser {
@@ -164,7 +158,7 @@
 
     /* No tocar el apartado visual tipo Instagram */
     .ig-login {
-      padding: 20px 24px 16px;
+      padding: 32px 40px 24px;
     }
 
     .ig-logo {
@@ -266,7 +260,7 @@
     .ig-footer {
       background: #fafafa;
       border-top: 1px solid #dbdbdb;
-      padding: 12px 24px;
+      padding: 12px 40px;
       text-align: center;
     }
 
@@ -317,14 +311,12 @@
       width: 100%;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
+      border-radius: 24px;
+      padding: 24px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       position: sticky;
-      top: 16px;
-      display: flex;
-      flex-direction: column;
+      top: 28px;
     }
 
     .panel-topbar {
@@ -376,27 +368,13 @@
       background: var(--surface-2);
       color: var(--text);
       border-radius: 9999px;
-      padding: 8px;
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .theme-toggle svg {
-      width: 18px;
-      height: 18px;
-      display: block;
-      transition: opacity 0.2s, transform 0.3s;
-    }
-
-    .theme-toggle .icon-sun { display: block; }
-    .theme-toggle .icon-moon { display: none; }
-    body.light-mode .theme-toggle .icon-sun { display: none; }
-    body.light-mode .theme-toggle .icon-moon { display: block; }
 
     .theme-toggle:hover,
     .theme-toggle:focus-visible,
@@ -464,11 +442,6 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      flex: 1;
-      overflow-y: auto;
-      min-height: 0;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-strong) transparent;
     }
 
     .clue-card {
@@ -479,7 +452,6 @@
       cursor: pointer;
       transition: border-color 0.18s, transform 0.12s, background 0.18s;
       user-select: none;
-      flex-shrink: 0;
     }
 
     .clue-card:hover:not(.found):not(.missed) {
@@ -503,6 +475,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 4px;
     }
 
     .clue-icon {
@@ -533,18 +506,12 @@
       color: var(--muted);
       line-height: 1.5;
       padding-left: 38px;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
-      margin-top: 0;
+      display: none;
     }
 
     .clue-card.found .clue-desc {
-      max-height: 120px;
-      opacity: 1;
+      display: block;
       color: var(--text);
-      margin-top: 6px;
     }
 
     .result-banner {
@@ -657,29 +624,18 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 920px) {
       body {
-        padding: 12px;
+        padding: 20px;
       }
 
       .experience {
         grid-template-columns: 1fr;
         max-width: 420px;
-        align-items: start;
-      }
-
-      .phone {
-        display: block;
       }
 
       .panel {
         position: static;
-      }
-
-      .clues-list {
-        overflow-y: visible;
-        min-height: unset;
-        flex: none;
       }
     }
   </style>
@@ -755,24 +711,7 @@
         <span class="eyebrow">Hybridge · Ciberseguridad</span>
         <div class="panel-title">🔍 Detector de Phishing</div>
       </div>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar entre modo oscuro y claro">
-        <!-- Sol: visible en dark mode -->
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <line x1="12" y1="2" x2="12" y2="4"/>
-          <line x1="12" y1="20" x2="12" y2="22"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="2" y1="12" x2="4" y2="12"/>
-          <line x1="20" y1="12" x2="22" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <!-- Luna: visible en light mode -->
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
-        </svg>
-      </button>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar entre modo oscuro y claro">☀️ Modo claro</button>
     </div>
 
     <div class="panel-sub">Esta es una página falsa que imita a Instagram. ¿Puedes encontrar las 4 señales de alerta? Haz clic sobre cada elemento sospechoso en la página. El apartado visual de Instagram forma parte del ejercicio y se conserva intacto.</div>
@@ -917,11 +856,6 @@
     hintText.style.display = 'block';
     hintText.textContent = 'Haz clic sobre los elementos de la página ←';
 
-    document.querySelectorAll('[data-clue]').forEach(el => {
-      el.style.outline = '';
-      el.style.outlineOffset = '';
-    });
-
     document.querySelectorAll('.clue-card').forEach(c => {
       c.classList.remove('found', 'missed');
     });
@@ -936,6 +870,8 @@
 
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    themeToggle.textContent = isLight ? '🌙 Modo oscuro' : '☀️ Modo claro';
   });
 
   document.querySelectorAll('[data-clue]').forEach(el => {
@@ -946,6 +882,10 @@
       markFound(key);
       el.style.outline = '3px solid var(--clue-border)';
       el.style.outlineOffset = '2px';
+      setTimeout(() => {
+        el.style.outline = '';
+        el.style.outlineOffset = '';
+      }, 600);
     });
 
     el.addEventListener('mouseenter', () => {
