@@ -62,16 +62,16 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 28px;
-      gap: 28px;
+      padding: 16px;
+      gap: 16px;
     }
 
     .experience {
       width: min(1180px, 100%);
       display: grid;
-      grid-template-columns: minmax(320px, 380px) minmax(320px, 360px);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       justify-content: center;
-      gap: 28px;
+      gap: 16px;
       align-items: stretch;
     }
 
@@ -164,7 +164,7 @@
 
     /* No tocar el apartado visual tipo Instagram */
     .ig-login {
-      padding: 32px 40px 24px;
+      padding: 20px 24px 16px;
     }
 
     .ig-logo {
@@ -266,7 +266,7 @@
     .ig-footer {
       background: #fafafa;
       border-top: 1px solid #dbdbdb;
-      padding: 12px 40px;
+      padding: 12px 24px;
       text-align: center;
     }
 
@@ -317,12 +317,12 @@
       width: 100%;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 24px;
+      border-radius: 18px;
+      padding: 16px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       position: sticky;
-      top: 28px;
+      top: 16px;
       display: flex;
       flex-direction: column;
     }
@@ -657,9 +657,9 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    @media (max-width: 920px) {
+    @media (max-width: 480px) {
       body {
-        padding: 20px;
+        padding: 12px;
       }
 
       .experience {
@@ -917,6 +917,11 @@
     hintText.style.display = 'block';
     hintText.textContent = 'Haz clic sobre los elementos de la página ←';
 
+    document.querySelectorAll('[data-clue]').forEach(el => {
+      el.style.outline = '';
+      el.style.outlineOffset = '';
+    });
+
     document.querySelectorAll('.clue-card').forEach(c => {
       c.classList.remove('found', 'missed');
     });
@@ -941,10 +946,6 @@
       markFound(key);
       el.style.outline = '3px solid var(--clue-border)';
       el.style.outlineOffset = '2px';
-      setTimeout(() => {
-        el.style.outline = '';
-        el.style.outlineOffset = '';
-      }, 600);
     });
 
     el.addEventListener('mouseenter', () => {
