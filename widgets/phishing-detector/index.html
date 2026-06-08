@@ -3,60 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detector de Phishing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Detector de Phishing · Hybridge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #fafafa;
+      color-scheme: dark;
+      --bg: #0D0D0D;
+      --surface: #0C1821;
+      --surface-2: #132331;
+      --panel: rgba(12, 24, 33, 0.92);
       --white: #ffffff;
-      --border: #dbdbdb;
-      --text: #262626;
-      --muted: #8e8e8e;
-      --blue: #0095f6;
-      --red: #ed4956;
-      --green: #44bf69;
-      --yellow: #fdcb58;
-      --clue-bg: rgba(237, 73, 86, 0.1);
-      --clue-border: #ed4956;
+      --border: rgba(255,255,255,0.12);
+      --border-strong: rgba(255,255,255,0.18);
+      --text: #F7F9FC;
+      --muted: rgba(247,249,252,0.72);
+      --blue: #304D6D;
+      --red: #FF6B7E;
+      --green: #9BE7BC;
+      --yellow: #E2F897;
+      --yellow-ink: #0D0D0D;
+      --clue-bg: rgba(255, 107, 126, 0.12);
+      --clue-border: #FF6B7E;
+      --shadow: 0 28px 60px rgba(0,0,0,0.45);
+      --focus: 0 0 0 3px rgba(226,248,151,0.32);
+    }
+
+    body.light-mode {
+      color-scheme: light;
+      --bg: #F4F7F8;
+      --surface: #FFFFFF;
+      --surface-2: #EEF3F6;
+      --panel: rgba(255,255,255,0.94);
+      --white: #ffffff;
+      --border: rgba(29,48,69,0.14);
+      --border-strong: rgba(29,48,69,0.22);
+      --text: #1D3045;
+      --muted: rgba(29,48,69,0.72);
+      --blue: #304D6D;
+      --red: #D64B69;
+      --green: #237A52;
+      --yellow: #E2F897;
+      --yellow-ink: #0D0D0D;
+      --clue-bg: rgba(214, 75, 105, 0.08);
+      --clue-border: #D64B69;
+      --shadow: 0 24px 50px rgba(17,24,39,0.12);
+      --focus: 0 0 0 3px rgba(48,77,109,0.18);
     }
 
     body {
-      background: #f0f0f0;
-      font-family: 'Inter', -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(226,248,151,0.09), transparent 24%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      color: var(--text);
+      font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 20px;
-      gap: 24px;
+      padding: 28px;
+      gap: 28px;
     }
 
-    /* ─── PHONE WRAPPER ─── */
+    .experience {
+      width: min(1180px, 100%);
+      display: grid;
+      grid-template-columns: minmax(320px, 380px) minmax(320px, 360px);
+      justify-content: center;
+      gap: 28px;
+      align-items: stretch;
+    }
+
     .phone {
-      width: 380px;
+      width: 100%;
       flex-shrink: 0;
       position: relative;
+      filter: drop-shadow(var(--shadow));
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ─── BROWSER CHROME ─── */
+    .phone .page {
+      flex: 1;
+    }
+
     .browser {
-      background: #e8e8e8;
-      border-radius: 12px 12px 0 0;
-      padding: 10px 12px 8px;
-      border: 1px solid #ccc;
+      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.09));
+      backdrop-filter: blur(14px);
+      border-radius: 18px 18px 0 0;
+      padding: 12px 14px 10px;
+      border: 1px solid var(--border);
       border-bottom: none;
+    }
+
+    body.light-mode .browser {
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(244,247,248,0.98));
     }
 
     .browser-dots {
       display: flex;
-      gap: 5px;
-      margin-bottom: 8px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .browser-dot {
-      width: 10px; height: 10px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
     }
 
@@ -68,27 +121,30 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: white;
-      border-radius: 6px;
-      padding: 5px 10px;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 7px 10px;
       font-size: 12px;
-      color: #333;
-      border: 1px solid #ccc;
+      color: var(--text);
+      border: 1px solid var(--border);
       cursor: pointer;
-      transition: box-shadow 0.2s;
+      transition: box-shadow 0.2s, transform 0.2s;
       position: relative;
     }
 
-    .browser-bar:hover { box-shadow: 0 0 0 2px var(--red); }
+    .browser-bar:hover {
+      box-shadow: 0 0 0 2px var(--clue-border);
+      transform: translateY(-1px);
+    }
 
     .browser-bar .lock-icon {
       font-size: 11px;
-      color: #555;
+      color: var(--muted);
     }
 
     .url-text {
       flex: 1;
-      font-family: monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 12px;
       letter-spacing: -0.02em;
     }
@@ -98,33 +154,15 @@
       font-weight: 700;
     }
 
-    .clue-badge {
-      position: absolute;
-      top: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--red);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    /* ─── PAGE CONTENT ─── */
     .page {
       background: var(--white);
       border: 1px solid var(--border);
       border-top: none;
-      border-radius: 0 0 12px 12px;
+      border-radius: 0 0 18px 18px;
       overflow: hidden;
     }
 
-    /* Fake IG login */
+    /* No tocar el apartado visual tipo Instagram */
     .ig-login {
       padding: 32px 40px 24px;
     }
@@ -136,7 +174,7 @@
       font-family: 'Billabong', cursive;
       letter-spacing: -0.5px;
       margin-bottom: 24px;
-      color: var(--text);
+      color: #262626;
       font-style: italic;
     }
 
@@ -149,11 +187,11 @@
 
     .ig-input {
       background: #fafafa;
-      border: 1px solid var(--border);
+      border: 1px solid #dbdbdb;
       border-radius: 4px;
       padding: 9px 10px;
       font-size: 12px;
-      color: var(--text);
+      color: #262626;
       outline: none;
       transition: border-color 0.15s;
     }
@@ -161,7 +199,7 @@
     .ig-input:focus { border-color: #aaa; }
 
     .ig-btn {
-      background: var(--blue);
+      background: #0095f6;
       color: white;
       border: none;
       border-radius: 8px;
@@ -178,7 +216,7 @@
       align-items: center;
       gap: 12px;
       margin: 16px 0;
-      color: var(--muted);
+      color: #8e8e8e;
       font-size: 12px;
       font-weight: 600;
     }
@@ -187,7 +225,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border);
+      background: #dbdbdb;
     }
 
     .ig-fb-btn {
@@ -204,7 +242,7 @@
     .ig-forgot {
       text-align: center;
       font-size: 12px;
-      color: var(--blue);
+      color: #0095f6;
       margin-top: 12px;
       cursor: pointer;
     }
@@ -223,31 +261,39 @@
     }
 
     .ig-urgency:hover { box-shadow: 0 0 0 2px var(--red); }
-
     .ig-urgency strong { display: block; margin-bottom: 2px; }
 
     .ig-footer {
       background: #fafafa;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid #dbdbdb;
       padding: 12px 40px;
       text-align: center;
     }
 
     .ig-footer-signup {
       font-size: 13px;
-      color: var(--text);
+      color: #262626;
     }
 
-    .ig-footer-signup a {
-      color: var(--blue);
+    .ig-footer-signup a,
+    .ig-signup-btn {
+      color: #0095f6;
       font-weight: 700;
       text-decoration: none;
+    }
+
+    .ig-signup-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
     }
 
     .ig-footer-app {
       margin-top: 16px;
       font-size: 13px;
-      color: var(--text);
+      color: #262626;
     }
 
     .ig-app-badges {
@@ -258,7 +304,7 @@
     }
 
     .ig-badge {
-      border: 1px solid var(--text);
+      border: 1px solid #262626;
       border-radius: 4px;
       padding: 4px 10px;
       font-size: 11px;
@@ -267,52 +313,149 @@
       gap: 4px;
     }
 
-    /* Clue overlays */
-    .clue-overlay {
-      display: none;
-      position: absolute;
-      background: var(--red);
-      color: white;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 20px;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 10;
+    .panel {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 28px;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ─── PANEL LATERAL ─── */
-    .panel {
-      width: 320px;
-      flex-shrink: 0;
+    .panel-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .panel-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 6px 12px;
+      background: rgba(226,248,151,0.1);
+      border: 1px solid rgba(226,248,151,0.22);
+      border-radius: 9999px;
+      color: var(--yellow);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #111;
-      margin-bottom: 4px;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
     }
 
     .panel-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.55;
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      border-radius: 9999px;
+      padding: 8px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      transition: opacity 0.2s, transform 0.3s;
+    }
+
+    .theme-toggle .icon-sun { display: block; }
+    .theme-toggle .icon-moon { display: none; }
+    body.light-mode .theme-toggle .icon-sun { display: none; }
+    body.light-mode .theme-toggle .icon-moon { display: block; }
+
+    .theme-toggle:hover,
+    .theme-toggle:focus-visible,
+    .reset-btn:hover,
+    .reset-btn:focus-visible,
+    .result-modal-btn:hover,
+    .result-modal-btn:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: var(--focus);
+      outline: none;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
       font-size: 12px;
-      color: #666;
-      margin-bottom: 16px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .progress-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      padding: 6px 10px;
+      border-radius: 9999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .progress-bar-wrap {
-      background: #e0e0e0;
-      border-radius: 20px;
-      height: 6px;
-      margin-bottom: 16px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 9999px;
+      height: 10px;
+      margin-bottom: 20px;
       overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    body.light-mode .progress-bar-wrap {
+      background: rgba(29,48,69,0.08);
     }
 
     .progress-bar-fill {
       height: 100%;
-      background: var(--green);
-      border-radius: 20px;
+      background: linear-gradient(90deg, var(--yellow), #f0ffb8);
+      border-radius: 9999px;
       width: 0%;
       transition: width 0.4s ease;
     }
@@ -321,31 +464,37 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
     }
 
     .clue-card {
-      background: white;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 12px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 16px;
       cursor: pointer;
-      transition: border-color 0.15s, transform 0.1s;
+      transition: border-color 0.18s, transform 0.12s, background 0.18s;
       user-select: none;
+      flex-shrink: 0;
     }
 
     .clue-card:hover:not(.found):not(.missed) {
-      border-color: var(--blue);
+      border-color: rgba(226,248,151,0.35);
       transform: translateX(2px);
+      background: var(--surface-2);
     }
 
     .clue-card.found {
-      border-color: var(--green);
-      background: rgba(68, 191, 105, 0.06);
+      border-color: rgba(155,231,188,0.5);
+      background: rgba(155,231,188,0.08);
       cursor: default;
     }
 
     .clue-card.missed {
-      border-color: #ddd;
       opacity: 0.5;
       cursor: default;
     }
@@ -353,19 +502,24 @@
     .clue-card-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
+      gap: 10px;
     }
 
     .clue-icon {
-      font-size: 16px;
-      width: 24px;
-      text-align: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 9999px;
+      display: grid;
+      place-items: center;
+      background: rgba(226,248,151,0.1);
+      color: var(--yellow);
+      font-size: 14px;
+      flex-shrink: 0;
     }
 
     .clue-name {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
       flex: 1;
     }
@@ -377,56 +531,49 @@
     .clue-desc {
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.4;
-      padding-left: 32px;
-      display: none;
+      line-height: 1.5;
+      padding-left: 38px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
+      margin-top: 0;
     }
 
-    .clue-card.found .clue-desc { display: block; color: #2e7d32; }
+    .clue-card.found .clue-desc {
+      max-height: 120px;
+      opacity: 1;
+      color: var(--text);
+      margin-top: 6px;
+    }
 
     .result-banner {
       display: none;
-      background: var(--green);
-      color: white;
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .result-banner h3 { font-size: 16px; margin-bottom: 4px; }
-    .result-banner p { font-size: 12px; opacity: 0.9; }
-
-    .result-banner.partial {
-      background: var(--yellow);
-      color: #333;
     }
 
     .reset-btn {
       display: none;
       width: 100%;
-      margin-top: 12px;
-      padding: 10px;
-      background: #111;
-      color: white;
+      margin-top: 16px;
+      padding: 13px 16px;
+      background: var(--yellow);
+      color: var(--yellow-ink);
       border: none;
-      border-radius: 8px;
+      border-radius: 9999px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.2s, box-shadow 0.2s;
     }
-
-    .reset-btn:hover { opacity: 0.8; }
 
     .hint {
-      font-size: 11px;
-      color: #999;
+      font-size: 12px;
+      color: var(--muted);
       text-align: center;
-      margin-top: 8px;
+      margin-top: 10px;
+      line-height: 1.5;
     }
 
-    /* Tooltip-style popups on hover */
     .tooltip-popup {
       display: none;
       position: fixed;
@@ -442,158 +589,269 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    .highlight-zone {
-      position: relative;
-      display: inline-block;
+    .result-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(13,13,13,0.72);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
     }
 
-    .found-marker {
-      display: inline-block;
-      background: var(--green);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 10px;
-      margin-left: 4px;
-      vertical-align: middle;
+    .result-modal-backdrop.show {
+      display: flex;
+    }
+
+    .result-modal {
+      width: min(480px, 100%);
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .result-kicker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 9999px;
+      background: rgba(226,248,151,0.12);
+      color: var(--yellow);
+      font-size: 30px;
+      margin-bottom: 14px;
+    }
+
+    .result-modal h3 {
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .result-modal p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .result-modal-btn {
+      width: 100%;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 9999px;
+      background: var(--yellow);
+      color: var(--yellow-ink);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    @media (max-width: 920px) {
+      body {
+        padding: 20px;
+      }
+
+      .experience {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        align-items: start;
+      }
+
+      .phone {
+        display: block;
+      }
+
+      .panel {
+        position: static;
+      }
+
+      .clues-list {
+        overflow-y: visible;
+        min-height: unset;
+        flex: none;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- FAKE INSTAGRAM PAGE -->
-<div class="phone">
-  <div class="browser">
-    <div class="browser-dots">
-      <div class="browser-dot"></div>
-      <div class="browser-dot"></div>
-      <div class="browser-dot"></div>
-    </div>
-    <div class="browser-bar" data-clue="url" title="Haz clic aquí">
-      <span class="lock-icon">🔓</span>
-      <span class="url-text">
-        http://<span class="url-suspicious">1nstagram</span>-login.net/account/verify
-      </span>
-      <span style="color:#aaa;font-size:11px">↗</span>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="ig-login">
-
-      <!-- Urgency banner -->
-      <div class="ig-urgency" data-clue="urgency">
-        <strong>⚠️ Tu cuenta ha sido comprometida</strong>
-        Debes verificar tu identidad en las próximas 24 horas o tu cuenta será suspendida permanentemente.
+<div class="experience">
+  <!-- FAKE INSTAGRAM PAGE -->
+  <div class="phone">
+    <div class="browser">
+      <div class="browser-dots">
+        <div class="browser-dot"></div>
+        <div class="browser-dot"></div>
+        <div class="browser-dot"></div>
       </div>
-
-      <!-- Fake logo -->
-      <div class="ig-logo" data-clue="logo">
-        Instаgram
-      </div>
-
-      <div class="ig-form">
-        <input class="ig-input" type="text" placeholder="Número de teléfono, usuario o correo">
-        <input class="ig-input" type="password" placeholder="Contraseña">
-        <button class="ig-btn">Iniciar sesión</button>
-      </div>
-
-      <div class="ig-divider">O</div>
-
-      <div class="ig-fb-btn" data-clue="fb">
-        <span>f</span>
-        <span>Inicia sesión con Facebook</span>
-      </div>
-
-      <div class="ig-forgot" data-clue="forgot">
-        ¿Olvidaste la contraseña?
+      <div class="browser-bar" data-clue="url" title="Haz clic aquí">
+        <span class="lock-icon">🔓</span>
+        <span class="url-text">
+          http://<span class="url-suspicious">1nstagram</span>-login.net/account/verify
+        </span>
+        <span style="color:#aaa;font-size:11px">↗</span>
       </div>
     </div>
 
-    <div class="ig-footer">
-      <div class="ig-footer-signup">
-        ¿No tienes una cuenta? <a href="#">Regístrate</a>
+    <div class="page">
+      <div class="ig-login">
+        <div class="ig-urgency" data-clue="urgency">
+          <strong>⚠️ Tu cuenta ha sido comprometida</strong>
+          Debes verificar tu identidad en las próximas 24 horas o tu cuenta será suspendida permanentemente.
+        </div>
+
+        <div class="ig-logo" data-clue="logo">
+          Instаgram
+        </div>
+
+        <div class="ig-form">
+          <input class="ig-input" type="text" placeholder="Número de teléfono, usuario o correo">
+          <input class="ig-input" type="password" placeholder="Contraseña">
+          <button class="ig-btn">Iniciar sesión</button>
+        </div>
+
+        <div class="ig-divider">O</div>
+
+        <div class="ig-fb-btn" data-clue="fb">
+          <span>f</span>
+          <span>Inicia sesión con Facebook</span>
+        </div>
+
+        <div class="ig-forgot" data-clue="forgot">
+          ¿Olvidaste la contraseña?
+        </div>
       </div>
-      <div class="ig-footer-app">
-        Consigue la aplicación.
-        <div class="ig-app-badges">
-          <div class="ig-badge">🍎 App Store</div>
-          <div class="ig-badge">▶ Google Play</div>
+
+      <div class="ig-footer">
+        <div class="ig-footer-signup">
+          ¿No tienes una cuenta? <button class="ig-signup-btn" type="button">Regístrate</button>
+        </div>
+        <div class="ig-footer-app">
+          Consigue la aplicación.
+          <div class="ig-app-badges">
+            <div class="ig-badge">🍎 App Store</div>
+            <div class="ig-badge">▶ Google Play</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- PANEL DE PISTAS -->
+  <div class="panel">
+    <div class="panel-topbar">
+      <div class="panel-brand">
+        <span class="eyebrow">Hybridge · Ciberseguridad</span>
+        <div class="panel-title">🔍 Detector de Phishing</div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar entre modo oscuro y claro">
+        <!-- Sol: visible en dark mode -->
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <line x1="12" y1="2" x2="12" y2="4"/>
+          <line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="4" y2="12"/>
+          <line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Luna: visible en light mode -->
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="panel-sub">Esta es una página falsa que imita a Instagram. ¿Puedes encontrar las 4 señales de alerta? Haz clic sobre cada elemento sospechoso en la página. El apartado visual de Instagram forma parte del ejercicio y se conserva intacto.</div>
+
+    <div class="progress-meta">
+      <div class="progress-label">Progreso</div>
+      <div class="progress-count"><span id="progressCount">0</span>/4</div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <div class="clues-list">
+      <div class="clue-card" id="card-url">
+        <div class="clue-card-header">
+          <span class="clue-icon">🌐</span>
+          <span class="clue-name">URL sospechosa</span>
+          <span class="clue-status" id="status-url">❓</span>
+        </div>
+        <div class="clue-desc">
+          La URL dice <strong>1nstagram-login.net</strong> — no es instagram.com. Además usa HTTP (sin candado), lo que significa que tu información va sin cifrar. Instagram siempre usa <strong>https://www.instagram.com</strong>.
+        </div>
+      </div>
+
+      <div class="clue-card" id="card-urgency">
+        <div class="clue-card-header">
+          <span class="clue-icon">⚠️</span>
+          <span class="clue-name">Mensaje de urgencia falso</span>
+          <span class="clue-status" id="status-urgency">❓</span>
+        </div>
+        <div class="clue-desc">
+          "24 horas o tu cuenta será suspendida" es una táctica clásica de phishing. Los atacantes crean urgencia para que actúes sin pensar. Las plataformas reales nunca amenazan así por correo o en pantalla.
+        </div>
+      </div>
+
+      <div class="clue-card" id="card-logo">
+        <div class="clue-card-header">
+          <span class="clue-icon">📝</span>
+          <span class="clue-name">Logo con carácter falso</span>
+          <span class="clue-status" id="status-logo">❓</span>
+        </div>
+        <div class="clue-desc">
+          La "а" en "Instаgram" es en realidad una <strong>а cirílica</strong>, no una latina. Visualmente idéntica, pero para el navegador es un carácter diferente. Es una técnica para registrar dominios que parecen legítimos.
+        </div>
+      </div>
+
+      <div class="clue-card" id="card-forgot">
+        <div class="clue-card-header">
+          <span class="clue-icon">🔗</span>
+          <span class="clue-name">Link de recuperación roto</span>
+          <span class="clue-status" id="status-forgot">❓</span>
+        </div>
+        <div class="clue-desc">
+          En páginas falsas, los links secundarios (como "¿Olvidaste tu contraseña?") suelen no funcionar o llevan a otro sitio sospechoso. Solo el formulario de login está "activo" — porque eso es lo único que les importa capturar.
+        </div>
+      </div>
+    </div>
+
+    <div class="result-banner" id="resultBanner">
+      <h3 id="resultTitle"></h3>
+      <p id="resultMsg"></p>
+    </div>
+
+    <button class="reset-btn" id="resetBtn" type="button" onclick="resetGame()">🔄 Intentar de nuevo</button>
+    <div class="hint" id="hintText">Haz clic sobre los elementos de la página ←</div>
+  </div>
 </div>
 
-<!-- PANEL DE PISTAS -->
-<div class="panel">
-  <div class="panel-title">🔍 Detector de Phishing</div>
-  <div class="panel-sub">Esta es una página falsa que imita a Instagram. ¿Puedes encontrar las 4 señales de alerta? Haz clic sobre cada elemento sospechoso en la página.</div>
-
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" id="progressBar"></div>
-  </div>
-
-  <div class="clues-list">
-
-    <div class="clue-card" id="card-url">
-      <div class="clue-card-header">
-        <span class="clue-icon">🌐</span>
-        <span class="clue-name">URL sospechosa</span>
-        <span class="clue-status" id="status-url">❓</span>
-      </div>
-      <div class="clue-desc">
-        La URL dice <strong>1nstagram-login.net</strong> — no es instagram.com. Además usa HTTP (sin candado), lo que significa que tu información va sin cifrar. Instagram siempre usa <strong>https://www.instagram.com</strong>.
-      </div>
-    </div>
-
-    <div class="clue-card" id="card-urgency">
-      <div class="clue-card-header">
-        <span class="clue-icon">⚠️</span>
-        <span class="clue-name">Mensaje de urgencia falso</span>
-        <span class="clue-status" id="status-urgency">❓</span>
-      </div>
-      <div class="clue-desc">
-        "24 horas o tu cuenta será suspendida" es una táctica clásica de phishing. Los atacantes crean urgencia para que actúes sin pensar. Las plataformas reales nunca amenazan así por correo o en pantalla.
-      </div>
-    </div>
-
-    <div class="clue-card" id="card-logo">
-      <div class="clue-card-header">
-        <span class="clue-icon">📝</span>
-        <span class="clue-name">Logo con carácter falso</span>
-        <span class="clue-status" id="status-logo">❓</span>
-      </div>
-      <div class="clue-desc">
-        La "а" en "Instаgram" es en realidad una <strong>а cirílica</strong>, no una latina. Visualmente idéntica, pero para el navegador es un carácter diferente. Es una técnica para registrar dominios que parecen legítimos.
-      </div>
-    </div>
-
-    <div class="clue-card" id="card-forgot">
-      <div class="clue-card-header">
-        <span class="clue-icon">🔗</span>
-        <span class="clue-name">Link de recuperación roto</span>
-        <span class="clue-status" id="status-forgot">❓</span>
-      </div>
-      <div class="clue-desc">
-        En páginas falsas, los links secundarios (como "¿Olvidaste tu contraseña?") suelen no funcionar o llevan a otro sitio sospechoso. Solo el formulario de login está "activo" — porque eso es lo único que les importa capturar.
-      </div>
-    </div>
-
-  </div>
-
-  <div class="result-banner" id="resultBanner">
-    <h3 id="resultTitle"></h3>
-    <p id="resultMsg"></p>
-  </div>
-
-  <button class="reset-btn" id="resetBtn" onclick="resetGame()">🔄 Intentar de nuevo</button>
-  <div class="hint" id="hintText">Haz clic sobre los elementos de la página ←</div>
-</div>
-
-<!-- Tooltip -->
 <div class="tooltip-popup" id="tooltip"></div>
+
+<div class="result-modal-backdrop" id="resultModal" aria-hidden="true">
+  <div class="result-modal" role="dialog" aria-modal="true" aria-labelledby="resultModalTitle" aria-describedby="resultModalDesc">
+    <div class="result-kicker">🎉</div>
+    <h3 id="resultModalTitle">¡Excelente! Encontraste todo</h3>
+    <p id="resultModalDesc">Ahora ya sabes cómo detectar una página de phishing. Siempre verifica la URL antes de ingresar tus datos.</p>
+    <button class="result-modal-btn" id="resultModalBtn" type="button">Entendido</button>
+  </div>
+</div>
 
 <script>
   const clues = {
@@ -605,6 +863,19 @@
 
   let found = 0;
   const total = Object.keys(clues).length;
+  const progressBar = document.getElementById('progressBar');
+  const progressCount = document.getElementById('progressCount');
+  const hintText = document.getElementById('hintText');
+  const resetBtn = document.getElementById('resetBtn');
+  const resultModal = document.getElementById('resultModal');
+  const resultModalBtn = document.getElementById('resultModalBtn');
+  const themeToggle = document.getElementById('themeToggle');
+
+  function updateProgress() {
+    const fill = (found / total) * 100;
+    progressBar.style.width = fill + '%';
+    progressCount.textContent = found;
+  }
 
   function markFound(key) {
     if (clues[key]) return;
@@ -614,45 +885,37 @@
     document.getElementById('card-' + key).classList.add('found');
     document.getElementById('status-' + key).textContent = '✅';
 
-    const fill = (found / total) * 100;
-    document.getElementById('progressBar').style.width = fill + '%';
+    updateProgress();
 
     if (found === total) {
       showResult(true);
     } else {
-      document.getElementById('hintText').textContent =
-        `${found} de ${total} encontradas — sigue buscando`;
+      hintText.textContent = `${found} de ${total} encontradas — sigue buscando`;
     }
   }
 
   function showResult(allFound) {
-    const banner = document.getElementById('resultBanner');
-    banner.style.display = 'block';
+    if (!allFound) return;
+    resultModal.classList.add('show');
+    resultModal.setAttribute('aria-hidden', 'false');
+    resetBtn.style.display = 'block';
+    hintText.style.display = 'none';
+  }
 
-    if (allFound) {
-      banner.classList.remove('partial');
-      document.getElementById('resultTitle').textContent = '🎉 ¡Excelente! Encontraste todo';
-      document.getElementById('resultMsg').textContent =
-        'Ahora ya sabes cómo detectar una página de phishing. Siempre verifica la URL antes de ingresar tus datos.';
-    } else {
-      banner.classList.add('partial');
-      document.getElementById('resultTitle').textContent = `${found} de ${total} encontradas`;
-      document.getElementById('resultMsg').textContent = 'Sigue explorando la página para encontrar las pistas restantes.';
-    }
-
-    document.getElementById('resetBtn').style.display = 'block';
-    document.getElementById('hintText').style.display = 'none';
+  function hideResult() {
+    resultModal.classList.remove('show');
+    resultModal.setAttribute('aria-hidden', 'true');
   }
 
   function resetGame() {
     Object.keys(clues).forEach(k => clues[k] = false);
     found = 0;
+    updateProgress();
+    hideResult();
 
-    document.getElementById('progressBar').style.width = '0%';
-    document.getElementById('resultBanner').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'none';
-    document.getElementById('hintText').style.display = 'block';
-    document.getElementById('hintText').textContent = 'Haz clic sobre los elementos de la página ←';
+    resetBtn.style.display = 'none';
+    hintText.style.display = 'block';
+    hintText.textContent = 'Haz clic sobre los elementos de la página ←';
 
     document.querySelectorAll('.clue-card').forEach(c => {
       c.classList.remove('found', 'missed');
@@ -661,20 +924,29 @@
     document.querySelectorAll('.clue-status').forEach(s => s.textContent = '❓');
   }
 
-  // Bind clicks to page elements
+  resultModalBtn.addEventListener('click', hideResult);
+  resultModal.addEventListener('click', (e) => {
+    if (e.target === resultModal) hideResult();
+  });
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+  });
+
   document.querySelectorAll('[data-clue]').forEach(el => {
     const key = el.dataset.clue;
 
     el.addEventListener('click', (e) => {
       e.stopPropagation();
       markFound(key);
-
-      // Flash animation
-      el.style.outline = '3px solid var(--red)';
-      setTimeout(() => { el.style.outline = ''; }, 600);
+      el.style.outline = '3px solid var(--clue-border)';
+      el.style.outlineOffset = '2px';
+      setTimeout(() => {
+        el.style.outline = '';
+        el.style.outlineOffset = '';
+      }, 600);
     });
 
-    // Hover glow hint
     el.addEventListener('mouseenter', () => {
       if (!clues[key]) {
         el.style.cursor = 'pointer';
@@ -687,19 +959,18 @@
     });
   });
 
-  // Also allow clicking clue cards to "find" them (for mobile / hint)
   document.querySelectorAll('.clue-card').forEach(card => {
     const key = card.id.replace('card-', '');
     card.addEventListener('click', () => {
       if (!clues[key]) {
-        // Shake hint
         card.style.transform = 'translateX(4px)';
         setTimeout(() => card.style.transform = '', 200);
-        document.getElementById('hintText').textContent =
-          'Pista: busca este elemento directamente en la página ←';
+        hintText.textContent = 'Pista: busca este elemento directamente en la página ←';
       }
     });
   });
+
+  updateProgress();
 </script>
 
 </body>
