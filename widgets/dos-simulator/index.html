@@ -3,63 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador DoS / DDoS</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Simulador DoS / DDoS · Hybridge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0e13;
-      --surface: #111820;
-      --border: #1e2d3d;
-      --text: #cdd9e5;
-      --muted: #4d6275;
-      --green: #44c97a;
-      --yellow: #f5c842;
-      --orange: #f5842a;
-      --red: #ed4956;
-      --blue: #6bb8ff;
-      --purple: #b06bff;
+      /* Hybridge core */
+      --hb-black:   #0D0D0D;
+      --hb-navy:    #0C1821;
+      --hb-yellow:  #E2F897;
+      --hb-white:   #FFFFFF;
+      /* Semantic */
+      --bg:         #0D0D0D;
+      --surface:    #0C1821;
+      --surface-2:  #132331;
+      --border:     rgba(255,255,255,0.10);
+      --border-strong: rgba(255,255,255,0.18);
+      --text:       #F7F9FC;
+      --muted:      rgba(247,249,252,0.55);
+      --yellow:     #E2F897;
+      --yellow-ink: #0D0D0D;
+      /* Status colors */
+      --green:  #9BE7BC;
+      --orange: #FFBB6B;
+      --red:    #FF6B7E;
+      --blue:   #B6DCFE;
+      --purple: #C9A9FF;
+      /* shadows */
+      --shadow: 0 24px 56px rgba(0,0,0,0.5);
+      --focus:  0 0 0 3px rgba(226,248,151,0.28);
     }
 
     body {
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse at top left, rgba(226,248,151,0.07) 0%, transparent 40%),
+        var(--bg);
       color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 24px 16px;
-      gap: 20px;
+      padding: 20px 16px;
+      gap: 16px;
     }
 
     /* ── HEADER ── */
     .header {
       text-align: center;
-      max-width: 560px;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-    .header h2 {
-      font-size: 18px;
+
+    .header-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      background: rgba(226,248,151,0.10);
+      border: 1px solid rgba(226,248,151,0.22);
+      border-radius: 9999px;
+      color: var(--yellow);
+      font-size: 11px;
       font-weight: 700;
-      color: #e2f897;
-      margin-bottom: 4px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
+
+    .header h2 {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .header h2 span {
+      color: var(--yellow);
+    }
+
     .header p {
       font-size: 13px;
+      font-weight: 300;
       color: var(--muted);
+      line-height: 1.6;
+      max-width: 480px;
     }
 
     /* ── CANVAS AREA ── */
     #canvas {
       width: 100%;
       max-width: 700px;
-      height: 320px;
+      height: 300px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
       display: block;
+      box-shadow: var(--shadow);
     }
 
     /* ── STATUS BAR ── */
@@ -67,7 +112,7 @@
       width: 100%;
       max-width: 700px;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: stretch;
     }
 
@@ -75,37 +120,45 @@
       flex: 1;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.3s;
+    }
+
+    .status-card.alert {
+      border-color: rgba(255,107,126,0.45);
+      background: rgba(255,107,126,0.06);
     }
 
     .status-label {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
-      letter-spacing: 0.1em;
+      font-weight: 700;
+      letter-spacing: 0.07em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-bottom: 4px;
     }
 
     .status-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       transition: color 0.3s;
     }
 
     .status-bar-fill-wrap {
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-top: 8px;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 9999px;
+      margin-top: 6px;
       overflow: hidden;
     }
 
     .status-bar-fill {
       height: 100%;
-      border-radius: 2px;
+      border-radius: 9999px;
       transition: width 0.2s, background 0.3s;
     }
 
@@ -115,38 +168,52 @@
       max-width: 700px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px 24px;
+      border-radius: 20px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
+    }
+
+    .controls-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
     }
 
     .controls-row {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+    }
+
+    .controls-label-wrap {
+      min-width: 136px;
     }
 
     .controls-label {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
-      min-width: 140px;
+      line-height: 1.2;
     }
 
     .controls-sub {
       font-size: 11px;
+      font-weight: 300;
       color: var(--muted);
-      margin-top: 1px;
+      margin-top: 2px;
     }
 
     input[type="range"] {
       flex: 1;
       -webkit-appearance: none;
-      height: 6px;
-      border-radius: 3px;
-      background: var(--border);
+      height: 5px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.10);
       outline: none;
       cursor: pointer;
     }
@@ -155,19 +222,20 @@
       -webkit-appearance: none;
       width: 18px; height: 18px;
       border-radius: 50%;
-      background: var(--blue);
-      box-shadow: 0 0 0 3px rgba(107,184,255,0.2);
-      transition: transform 0.1s;
+      background: var(--yellow);
+      box-shadow: 0 0 0 3px rgba(226,248,151,0.22);
+      transition: transform 0.15s;
     }
 
     input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
     .slider-value {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
-      color: var(--blue);
-      min-width: 32px;
+      font-weight: 800;
+      color: var(--yellow);
+      min-width: 30px;
       text-align: right;
+      letter-spacing: -0.01em;
     }
 
     .divider {
@@ -185,25 +253,32 @@
       flex: 1;
       padding: 11px 16px;
       border: none;
-      border-radius: 10px;
-      font-family: 'Space Grotesk', sans-serif;
+      border-radius: 9999px;
+      font-family: 'Public Sans', sans-serif;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
+      transition: opacity 0.15s, transform 0.12s, box-shadow 0.2s;
+      letter-spacing: -0.01em;
     }
 
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .btn:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: var(--focus);
+    }
 
     .btn-botnet {
-      background: var(--purple);
-      color: white;
+      background: var(--yellow);
+      color: var(--yellow-ink);
     }
 
     .btn-reset {
-      background: var(--border);
+      background: var(--surface-2);
       color: var(--text);
+      border: 1px solid var(--border-strong);
     }
 
     /* ── LEGEND ── */
@@ -211,20 +286,25 @@
       width: 100%;
       max-width: 700px;
       display: flex;
-      gap: 16px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .legend-item {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 11px;
+      font-weight: 500;
       color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 5px 12px;
     }
 
     .legend-dot {
-      width: 10px; height: 10px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -234,70 +314,95 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(10,14,19,0.85);
-      backdrop-filter: blur(4px);
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(12px);
       z-index: 100;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       text-align: center;
       padding: 24px;
     }
 
     #crashOverlay.visible { display: flex; }
 
-    .crash-icon { font-size: 64px; }
+    .crash-icon { font-size: 56px; }
 
-    .crash-title {
-      font-size: 24px;
-      font-weight: 700;
+    .crash-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(255,107,126,0.12);
+      border: 1px solid rgba(255,107,126,0.35);
+      border-radius: 9999px;
       color: var(--red);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
+    .crash-title {
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .crash-title span { color: var(--red); }
+
     .crash-msg {
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 300;
       color: var(--muted);
-      max-width: 360px;
-      line-height: 1.5;
+      max-width: 380px;
+      line-height: 1.65;
     }
 
     .crash-btn {
-      margin-top: 8px;
-      padding: 12px 28px;
-      background: var(--red);
-      color: white;
+      margin-top: 4px;
+      padding: 12px 32px;
+      background: var(--yellow);
+      color: var(--yellow-ink);
       border: none;
-      border-radius: 10px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
+      border-radius: 9999px;
+      font-family: 'Public Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.15s;
+      letter-spacing: -0.01em;
+      transition: opacity 0.15s, transform 0.15s;
     }
 
-    .crash-btn:hover { opacity: 0.85; }
+    .crash-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
 
 <div class="header">
-  <h2>⚡ Simulador de Ataque DoS / DDoS</h2>
-  <p>Controla el flujo de peticiones hacia el servidor y observa cómo reacciona ante un ataque.</p>
+  <span class="header-eyebrow">⚡ Hybridge · Ciberseguridad</span>
+  <h2>Simulador de Ataque <span>DoS / DDoS</span></h2>
+  <p>Controla el flujo de peticiones hacia el servidor y observa cómo reacciona ante un ataque de denegación de servicio.</p>
 </div>
 
 <canvas id="canvas"></canvas>
 
 <div class="status-bar">
-  <div class="status-card">
+  <div class="status-card" id="cardStatus">
     <div class="status-label">Estado del servidor</div>
     <div class="status-value" id="statusText" style="color: var(--green)">🟢 Normal</div>
   </div>
-  <div class="status-card">
+  <div class="status-card" id="cardRps">
     <div class="status-label">Peticiones / seg</div>
     <div class="status-value" id="rpsText" style="color: var(--blue)">0</div>
   </div>
-  <div class="status-card">
+  <div class="status-card" id="cardLoad">
     <div class="status-label">Carga del servidor</div>
     <div class="status-value" id="loadText">0%</div>
     <div class="status-bar-fill-wrap">
@@ -309,10 +414,11 @@
 <div class="controls">
   <!-- DoS slider -->
   <div>
+    <div class="controls-section-label">Ataque individual</div>
     <div class="controls-row">
-      <div>
+      <div class="controls-label-wrap">
         <div class="controls-label">🖥️ Ataque DoS</div>
-        <div class="controls-sub">Peticiones desde una sola máquina</div>
+        <div class="controls-sub">Una sola máquina</div>
       </div>
       <input type="range" id="dosSlider" min="0" max="100" value="0" step="1">
       <span class="slider-value" id="dosVal">0</span>
@@ -322,35 +428,39 @@
   <div class="divider"></div>
 
   <!-- DDoS botnet -->
-  <div class="btn-row">
-    <button class="btn btn-botnet" id="botnetBtn" onclick="activateBotnet()">
-      🤖 Activar Botnet (DDoS)
-    </button>
-    <button class="btn btn-reset" onclick="resetAll()">
-      🔄 Reiniciar
-    </button>
+  <div>
+    <div class="controls-section-label">Ataque distribuido</div>
+    <div class="btn-row">
+      <button class="btn btn-botnet" id="botnetBtn" onclick="activateBotnet()">
+        🤖 Activar Botnet (DDoS)
+      </button>
+      <button class="btn btn-reset" onclick="resetAll()">
+        🔄 Reiniciar
+      </button>
+    </div>
   </div>
 </div>
 
 <div class="legend">
   <div class="legend-item">
-    <div class="legend-dot" style="background:#6bb8ff"></div> Petición normal
+    <div class="legend-dot" style="background:#B6DCFE"></div> Petición normal
   </div>
   <div class="legend-item">
-    <div class="legend-dot" style="background:#f5c842"></div> Carga alta
+    <div class="legend-dot" style="background:#FFBB6B"></div> Carga alta
   </div>
   <div class="legend-item">
-    <div class="legend-dot" style="background:#ed4956"></div> Petición maliciosa (botnet)
+    <div class="legend-dot" style="background:#FF6B7E"></div> Petición maliciosa
   </div>
   <div class="legend-item">
-    <div class="legend-dot" style="background:#b06bff"></div> Bot infectado
+    <div class="legend-dot" style="background:#C9A9FF"></div> Bot infectado
   </div>
 </div>
 
 <!-- Crash overlay -->
 <div id="crashOverlay">
   <div class="crash-icon">💥</div>
-  <div class="crash-title">¡El servidor colapsó!</div>
+  <span class="crash-badge">Servicio interrumpido</span>
+  <div class="crash-title">El servidor <span>colapsó</span></div>
   <div class="crash-msg">
     El servidor no pudo manejar el volumen de peticiones y dejó de responder.
     Así es como un ataque DDoS exitoso interrumpe servicios para todos los usuarios legítimos.
@@ -364,36 +474,36 @@
 
   // ── CONFIG ──
   const COLORS = {
-    bg: '#111820',
-    border: '#1e2d3d',
-    green: '#44c97a',
-    yellow: '#f5c842',
-    orange: '#f5842a',
-    red: '#ed4956',
-    blue: '#6bb8ff',
-    purple: '#b06bff',
-    muted: '#4d6275',
-    text: '#cdd9e5',
+    bg: '#0C1821',
+    border: '#1e3a4a',
+    green: '#9BE7BC',
+    yellow: '#FFBB6B',
+    orange: '#FFBB6B',
+    red: '#FF6B7E',
+    blue: '#B6DCFE',
+    purple: '#C9A9FF',
+    muted: '#4d7080',
+    text: '#F7F9FC',
   };
 
   // ── STATE ──
-  let dosLevel = 0;       // 0–100
+  let dosLevel = 0;
   let botnetActive = false;
   let crashed = false;
-  let load = 0;           // 0–100 smoothed
+  let load = 0;
   let packets = [];
   let bots = [];
   let serverShake = 0;
   let animFrame;
   let lastPacketTime = 0;
   let crashTimer = null;
-  let botnetPhase = 0;    // 0=inactive, 1=spawning, 2=attacking
+  let botnetPhase = 0;
 
   // ── LAYOUT ──
   function resize() {
     const rect = canvas.parentElement.getBoundingClientRect();
     canvas.width = Math.min(rect.width, 700);
-    canvas.height = 320;
+    canvas.height = 300;
   }
 
   resize();
@@ -450,7 +560,6 @@
     const shakeX = crashed ? (Math.random() - 0.5) * 6 : serverShake * (Math.random() - 0.5) * 3;
     const shakeY = crashed ? (Math.random() - 0.5) * 4 : 0;
 
-    // Color by load
     let color = COLORS.green;
     if (load > 40) color = COLORS.yellow;
     if (load > 65) color = COLORS.orange;
@@ -459,7 +568,6 @@
     const sx = sv.x + shakeX;
     const sy = sv.y + shakeY;
 
-    // Glow
     if (load > 20) {
       const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, 55);
       glow.addColorStop(0, color + '33');
@@ -470,42 +578,36 @@
       ctx.fill();
     }
 
-    // Server body
     ctx.save();
     ctx.translate(sx, sy);
 
-    // Rack
     const w = 64, h = 80;
-    ctx.fillStyle = crashed ? '#2a1a1a' : '#1a2535';
+    ctx.fillStyle = crashed ? '#1a0d0f' : '#0d1e2e';
     ctx.strokeStyle = crashed ? COLORS.red : color;
     ctx.lineWidth = 2;
     roundRect(ctx, -w/2, -h/2, w, h, 8);
     ctx.fill(); ctx.stroke();
 
-    // Drives
     for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = crashed ? '#3a1a1a' : '#0d1620';
-      ctx.strokeStyle = crashed ? '#553333' : COLORS.border;
+      ctx.fillStyle = crashed ? '#2a1215' : '#071018';
+      ctx.strokeStyle = crashed ? '#4a2030' : COLORS.border;
       ctx.lineWidth = 1;
       roundRect(ctx, -w/2 + 6, -h/2 + 8 + i * 22, w - 12, 16, 3);
       ctx.fill(); ctx.stroke();
 
-      // LED
       ctx.fillStyle = crashed ? COLORS.red : (i === 0 ? color : (load > 60 ? COLORS.orange : COLORS.green));
       ctx.beginPath();
       ctx.arc(w/2 - 12, -h/2 + 16 + i * 22, 3, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Label
     ctx.fillStyle = crashed ? COLORS.red : COLORS.muted;
-    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.font = '10px Public Sans, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(crashed ? 'OFFLINE' : 'SERVER', 0, h/2 - 6);
 
     ctx.restore();
 
-    // Load ring
     if (!crashed) {
       ctx.save();
       ctx.translate(sx, sy - 58);
@@ -523,32 +625,27 @@
     ctx.save();
     ctx.translate(x, y);
 
-    // Body
-    ctx.fillStyle = '#0d1620';
+    ctx.fillStyle = '#071018';
     ctx.strokeStyle = COLORS.blue;
     ctx.lineWidth = 1.5;
     roundRect(ctx, -22, -16, 44, 30, 5);
     ctx.fill(); ctx.stroke();
 
-    // Screen
-    ctx.fillStyle = '#091218';
+    ctx.fillStyle = '#040c14';
     roundRect(ctx, -17, -12, 34, 20, 3);
     ctx.fill();
 
-    // Cursor blink
     if (Math.floor(Date.now() / 500) % 2 === 0) {
       ctx.fillStyle = COLORS.blue;
       ctx.fillRect(-13, -9, 4, 8);
     }
 
-    // Stand
-    ctx.fillStyle = '#1e2d3d';
+    ctx.fillStyle = '#1e3a4a';
     ctx.fillRect(-8, 14, 16, 4);
     ctx.fillRect(-14, 18, 28, 3);
 
-    // Label
     ctx.fillStyle = COLORS.blue;
-    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.font = '9px Public Sans, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('ATACANTE', 0, 30);
 
@@ -563,26 +660,22 @@
     ctx.translate(bot.x, bot.y);
     ctx.scale(bot.scale, bot.scale);
 
-    // Body (infected PC)
-    ctx.fillStyle = '#200d2a';
+    ctx.fillStyle = '#130820';
     ctx.strokeStyle = COLORS.purple;
     ctx.lineWidth = 1.5;
     roundRect(ctx, -18, -13, 36, 24, 4);
     ctx.fill(); ctx.stroke();
 
-    // Screen
-    ctx.fillStyle = '#0d0515';
+    ctx.fillStyle = '#080512';
     roundRect(ctx, -13, -9, 26, 15, 2);
     ctx.fill();
 
-    // Skull icon
     ctx.fillStyle = COLORS.purple;
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('💀', 0, 0);
 
-    // Stand
-    ctx.fillStyle = '#330d4a';
+    ctx.fillStyle = '#2a1040';
     ctx.fillRect(-6, 11, 12, 3);
     ctx.fillRect(-10, 14, 20, 2);
 
@@ -610,13 +703,13 @@
     const filled = Math.round((load / 100) * slots);
 
     ctx.fillStyle = COLORS.muted;
-    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.font = '9px Public Sans, monospace';
     ctx.textAlign = 'left';
     ctx.fillText('COLA', qx, qy - 14);
 
     for (let i = 0; i < slots; i++) {
       const bx = qx + i * 12;
-      let color = COLORS.border;
+      let color = 'rgba(255,255,255,0.08)';
       if (i < filled) {
         if (load > 85) color = COLORS.red;
         else if (load > 65) color = COLORS.orange;
@@ -624,7 +717,7 @@
         else color = COLORS.green;
       }
       ctx.fillStyle = color;
-      ctx.strokeStyle = COLORS.border;
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       roundRect(ctx, bx, qy, 9, 14, 2);
@@ -655,7 +748,6 @@
       return;
     }
 
-    // Spawn DoS packets
     const dosRate = dosLevel / 100;
     const interval = dosLevel > 0 ? Math.max(20, 300 - dosLevel * 2.5) : Infinity;
     if (ts - lastPacketTime > interval) {
@@ -665,7 +757,6 @@
       lastPacketTime = ts;
     }
 
-    // Spawn botnet packets
     if (botnetPhase === 2) {
       bots.forEach(bot => {
         if (bot.opacity < 1) return;
@@ -677,7 +768,6 @@
       });
     }
 
-    // Animate bots spawning
     if (botnetPhase === 1) {
       let allReady = true;
       bots.forEach((bot, i) => {
@@ -691,7 +781,6 @@
       if (allReady) botnetPhase = 2;
     }
 
-    // Move packets
     const sv = serverPos();
     packets = packets.filter(p => {
       p.x += p.vx;
@@ -702,7 +791,6 @@
       const dist = Math.sqrt(dx*dx + dy*dy);
 
       if (dist < 36) {
-        // Hit!
         serverShake = Math.min(3, serverShake + 0.3);
         return false;
       }
@@ -711,16 +799,13 @@
       return p.life > 0;
     });
 
-    // Target load
     let dosContrib = dosLevel * 0.55;
     let botnetContrib = botnetPhase === 2 ? 52 : 0;
     let targetLoad = Math.min(100, dosContrib + botnetContrib);
     load += (targetLoad - load) * 0.04;
 
-    // Shake decay
     serverShake *= 0.92;
 
-    // Crash check
     if (load > 95 && !crashed) {
       triggerCrash();
     }
@@ -739,28 +824,32 @@
 
   function updateUI() {
     const loadPct = Math.round(load);
-    let color = '#44c97a';
+    let color = 'var(--green)';
     let statusText = '🟢 Normal';
+    let alert = false;
 
     if (load > 85 || crashed) {
-      color = '#ed4956';
+      color = 'var(--red)';
       statusText = crashed ? '🔴 OFFLINE' : '🔴 Crítico';
+      alert = true;
     } else if (load > 65) {
-      color = '#f5842a';
+      color = 'var(--orange)';
       statusText = '🟠 Saturado';
+      alert = true;
     } else if (load > 40) {
-      color = '#f5c842';
+      color = 'var(--yellow)';
       statusText = '🟡 Bajo estrés';
     }
 
     document.getElementById('statusText').textContent = statusText;
     document.getElementById('statusText').style.color = color;
+    document.getElementById('cardStatus').classList.toggle('alert', alert);
 
     const rps = Math.round(
       (dosLevel / 100) * 80 + (botnetPhase === 2 ? 240 : 0)
     );
     document.getElementById('rpsText').textContent = rps.toLocaleString();
-    document.getElementById('rpsText').style.color = rps > 100 ? '#ed4956' : '#6bb8ff';
+    document.getElementById('rpsText').style.color = rps > 100 ? 'var(--red)' : 'var(--blue)';
 
     document.getElementById('loadText').textContent = loadPct + '%';
     document.getElementById('loadText').style.color = color;
@@ -772,7 +861,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // BG grid
-    ctx.strokeStyle = COLORS.border + '55';
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 0.5;
     for (let x = 0; x < canvas.width; x += 40) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
@@ -781,25 +870,17 @@
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
     }
 
-    // Draw bots
     bots.forEach(drawBot);
-
-    // Draw packets
     packets.forEach(drawPacket);
 
-    // Draw attacker
     const atk = attackerPos();
     drawAttacker(atk.x, atk.y);
 
-    // Queue visualization
     drawQueue(load);
-
-    // Draw server
     drawServer();
 
-    // Crashed static effect
     if (crashed) {
-      ctx.fillStyle = 'rgba(237,73,86,0.04)';
+      ctx.fillStyle = 'rgba(255,107,126,0.04)';
       for (let i = 0; i < 5; i++) {
         const y = Math.random() * canvas.height;
         ctx.fillRect(0, y, canvas.width, 1 + Math.random() * 2);
@@ -837,6 +918,7 @@
     document.getElementById('botnetBtn').disabled = false;
     document.getElementById('botnetBtn').textContent = '🤖 Activar Botnet (DDoS)';
     document.getElementById('crashOverlay').classList.remove('visible');
+    document.getElementById('cardStatus').classList.remove('alert');
 
     updateUI();
   }
