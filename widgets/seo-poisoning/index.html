@@ -3,675 +3,452 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Batalla del Ranking · Hybridge</title>
+  <title>La Batalla del Ranking · Hybridge X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
+    /* =========================================================================
+       HYBRIDGE DESIGN TOKENS (v2)
+       ========================================================================= */
+    :root {
+      --hb-black: #0D0D0D; 
+      --hb-white: #FFFFFF; 
+      --hb-yellow: #E2F897; 
+      --hb-navy: #0C1821;
+      --hb-pink: #FFB1D2; 
+      --hb-mint: #2EE6A0;
+      --hb-bright-aqua: #A9F8FB;
+      --hb-purple: #C07CFF;
+      --hb-steel-blue: #1E3A5F;
+      
+      --hb-gray-950: #0A0A0A;
+      --hb-gray-900: #141414; 
+      --hb-gray-850: #1F1F1F; 
+      --hb-gray-800: #2A2A2A; 
+      --hb-gray-400: #A0A0A0;
+
+      --color-bg: var(--hb-black);
+      --color-surface: var(--hb-gray-900);
+      --color-surface-raised: var(--hb-gray-800);
+      --color-text: var(--hb-white);
+      --color-text-muted: var(--hb-gray-400);
+      --color-accent: var(--hb-yellow);
+      --color-border: rgba(255, 255, 255, 0.12);
+      --color-border-strong: rgba(255, 255, 255, 0.24);
+      --color-error: #FF6B7A;
+      --color-success: var(--hb-mint);
+
+      --font-display: "Public Sans";
+      --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      
+      --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
+      
+      --fs-h2: 2rem;
+      --fs-h3: 1.5rem;
+      --fs-body-l: 1.125rem;
+      --fs-caption: 0.875rem;
+      --fs-label: 0.75rem;
+      
+      --lh-tight: 1.1; 
+      --lh-base: 1.6;
+      --tracking-tight: -0.01em;
+      --tracking-label: 0.14em;
+
+      --radius-chip: 9999px; 
+      --radius-card: 16px;
+      --radius-md: 12px;
+      
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
+      --space-6: 1.5rem; --space-8: 2rem;
+
+      --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
+    }
+
+    /* =========================================================================
+       BASE & LAYOUT
+       ========================================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:            #0D0D0D;
-      --surface:       #0C1821;
-      --surface-2:     #132331;
-      --border:        rgba(255,255,255,0.09);
-      --border-strong: rgba(255,255,255,0.16);
-      --text:          #F7F9FC;
-      --muted:         rgba(247,249,252,0.50);
-      --yellow:        #E2F897;
-      --yellow-ink:    #0D0D0D;
-      --green:         #9BE7BC;
-      --red:           #FF6B7E;
-      --orange:        #FFBB6B;
-      --blue:          #B6DCFE;
-      --purple:        #C9A9FF;
-      --shadow:        0 20px 50px rgba(0,0,0,0.55);
-    }
-
     body {
-      background:
-        radial-gradient(ellipse at top left, rgba(226,248,151,0.06) 0%, transparent 38%),
-        var(--bg);
-      color: var(--text);
-      font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-base);
+      -webkit-font-smoothing: antialiased;
+      padding: var(--space-8) 0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 18px 14px 28px;
-      gap: 14px;
+      position: relative;
     }
 
-    /* ── HEADER ── */
-    .header {
-      text-align: center;
-      max-width: 680px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+    /* Ambient Lighting */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(40% 60% at 80% 20%, rgba(255, 107, 122, 0.1), transparent 60%),
+        radial-gradient(50% 70% at 20% 80%, rgba(226, 248, 151, 0.1), transparent 60%);
+      pointer-events: none;
     }
 
-    .header-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 4px 13px;
-      background: rgba(226,248,151,0.09);
-      border: 1px solid rgba(226,248,151,0.20);
-      border-radius: 9999px;
-      color: var(--yellow);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
+    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
     }
 
-    .header h2 {
-      font-size: clamp(16px, 2.8vw, 22px);
-      font-weight: 900;
-      letter-spacing: -0.035em;
-      color: var(--text);
-      line-height: 1.1;
+    .nav-back {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      color: var(--color-text-muted); text-decoration: none;
+      font-size: var(--fs-caption); font-weight: var(--fw-bold);
+      margin-bottom: var(--space-6); transition: color 0.15s;
     }
+    .nav-back:hover { color: var(--color-text); }
 
-    .header h2 span { color: var(--yellow); }
+    /* =========================================================================
+       HEADER
+       ========================================================================= */
+    .header { margin-bottom: var(--space-8); text-align: left; }
+    .hb-overline { display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-3); }
+    .hb-h2 { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); margin-bottom: var(--space-3); }
+    .hb-lead { font-size: var(--fs-body-l); font-weight: var(--fw-light); color: var(--color-text-muted); max-width: 65ch; }
 
-    .header p {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ── LAYOUT ── */
-    .main {
-      width: 100%;
-      max-width: 840px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    /* ── SERP ── */
-    .serp-wrapper {
-      flex: 1;
-      min-width: 0;
-      background: white;
-      border-radius: 14px;
+    /* =========================================================================
+       APP CARD & GRID
+       ========================================================================= */
+    .hb-app-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
       overflow: hidden;
-      box-shadow: var(--shadow);
+      position: relative; /* Para encapsular el modal de victoria */
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0;
+    }
+    @media (max-width: 860px) {
+      .app-layout { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================================
+       COLUMNA IZQUIERDA: MOTOR DE BÚSQUEDA (SERP)
+       ========================================================================= */
+    .app-visuals {
+      padding: var(--space-6);
+      background: var(--hb-gray-950);
+      border-right: 1px solid var(--color-border);
+    }
+    @media (max-width: 860px) {
+      .app-visuals { border-right: none; border-bottom: 1px solid var(--color-border); }
+    }
+
+    .serp-wrapper {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lift);
+      border: 1px solid var(--color-border);
+      font-family: Arial, sans-serif; /* Aproximación a Google */
     }
 
     .serp-bar {
-      background: #f8f9fa;
-      padding: 9px 12px;
-      border-bottom: 1px solid #e0e0e0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      background: #f8f9fa; padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 12px;
     }
-
-    .serp-dots { display: flex; gap: 5px; }
-    .serp-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .serp-dots { display: flex; gap: 6px; }
+    .serp-dot { width: 10px; height: 10px; border-radius: 50%; }
     .serp-dot:nth-child(1) { background: #ff5f57; }
     .serp-dot:nth-child(2) { background: #ffbd2e; }
     .serp-dot:nth-child(3) { background: #28c840; }
 
     .serp-search-box {
-      flex: 1;
-      background: white;
-      border: 1px solid #dfe1e5;
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 12px;
-      color: #333;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      flex: 1; background: white; border: 1px solid #dfe1e5; border-radius: 24px;
+      padding: 8px 16px; font-size: 14px; color: #333; display: flex; align-items: center; gap: 10px;
     }
-
-    .serp-search-box span { color: #888; }
 
     .serp-tabs {
-      background: white;
-      padding: 0 14px;
-      display: flex;
-      gap: 20px;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 12px;
+      background: white; padding: 0 16px; display: flex; gap: 24px;
+      border-bottom: 1px solid #e0e0e0; font-size: 13px;
     }
-
-    .serp-tab { padding: 8px 0; color: #70757a; cursor: default; }
+    .serp-tab { padding: 12px 0; color: #70757a; cursor: default; }
     .serp-tab.active { color: #1a73e8; border-bottom: 3px solid #1a73e8; font-weight: 600; }
 
-    .serp-results { padding: 8px 0 0; background: white; }
+    .serp-results { padding: 12px 0 0; background: white; }
+    .serp-info { padding: 0 16px 12px; font-size: 13px; color: #70757a; }
 
-    .serp-info { padding: 2px 14px 8px; font-size: 11px; color: #70757a; }
-
-    /* ── RESULT ITEM ── */
+    /* Resultados del Buscador */
     .result-item {
-      padding: 7px 14px 10px;
-      cursor: default;
-      transition: background 0.15s;
-      position: relative;
-      border-left: 3px solid transparent;
+      padding: 12px 16px 16px; cursor: default; transition: background 0.15s;
+      position: relative; border-left: 4px solid transparent;
     }
-
     .result-item:hover { background: #f8f9fa; }
     .result-item.official { border-left-color: #137333; }
+    .result-item.malicious { border-left-color: transparent; transition: border-left-color 0.4s, background 0.4s; }
+    .result-item.malicious.at-top { border-left-color: #c5221f; background: #fff5f5; }
 
-    .result-item.malicious {
-      border-left-color: transparent;
-      transition: border-left-color 0.4s, background 0.4s;
-    }
+    .result-rank { position: absolute; right: 16px; top: 14px; font-size: 12px; font-weight: 800; color: #ccc; }
+    .result-rank.moving { color: #ed4956; animation: rankPulse 0.4s ease; }
+    @keyframes rankPulse { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
 
-    .result-item.malicious.at-top {
-      border-left-color: #c5221f;
-      background: #fff5f5;
-    }
-
-    .result-rank {
-      position: absolute;
-      right: 12px;
-      top: 9px;
-      font-size: 10px;
-      font-weight: 800;
-      color: #ccc;
-      letter-spacing: -0.01em;
-    }
-
-    .result-rank.moving {
-      color: #ed4956;
-      animation: rankPulse 0.4s ease;
-    }
-
-    @keyframes rankPulse {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.5); }
-      100% { transform: scale(1); }
-    }
-
-    .result-domain {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .result-favicon { width: 14px; height: 14px; border-radius: 2px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
-    .result-url { font-size: 11px; color: #202124; }
+    .result-domain { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .result-favicon { width: 16px; height: 16px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+    .result-url { font-size: 13px; color: #202124; }
     .result-url.malicious-url { color: #999; }
 
-    .result-title {
-      font-size: 14px;
-      color: #1a0dab;
-      margin-bottom: 2px;
-      line-height: 1.3;
-      cursor: pointer;
-    }
-
+    .result-title { font-size: 18px; color: #1a0dab; margin-bottom: 4px; line-height: 1.3; cursor: pointer; }
     .result-title:hover { text-decoration: underline; }
-    .result-title.malicious-title { color: #1a0dab; }
+    
+    .result-snippet { font-size: 14px; color: #4d5156; line-height: 1.5; max-width: 600px; }
 
-    .result-snippet { font-size: 11px; color: #4d5156; line-height: 1.4; }
-
-    .result-badge {
-      display: inline-block;
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 9999px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
+    .result-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; margin-left: 8px; vertical-align: middle; }
     .badge-official { background: #e6f4ea; color: #137333; }
-    .badge-danger   { background: #fce8e6; color: #c5221f; }
-    .badge-hidden   { display: none; }
+    .badge-danger { background: #fce8e6; color: #c5221f; }
 
-    .keyword-spam {
-      font-size: 10px;
-      color: #bbb;
-      font-style: italic;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 320px;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
+    .keyword-spam { font-size: 12px; color: #bbb; font-style: italic; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px; opacity: 0; transition: opacity 0.4s; }
     .keyword-spam.visible { opacity: 1; }
 
-    /* ── PANEL ── */
-    .panel {
-      width: 252px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    @keyframes slideUp { 0% { background: rgba(255,107,126,0.12); } 100% { background: transparent; } }
+    .result-item.just-moved { animation: slideUp 0.6s ease forwards; }
 
-    .panel-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 15px;
-    }
+    /* =========================================================================
+       COLUMNA DERECHA: DASHBOARD DE ATAQUE
+       ========================================================================= */
+    .app-controls { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-6); }
 
-    .panel-title {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 11px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .panel-card { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); }
+    .panel-title { font-size: var(--fs-label); font-weight: var(--fw-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-3); display: flex; align-items: center; gap: 8px; }
 
-    /* Rank tracker */
-    .rank-tracker { display: flex; flex-direction: column; gap: 7px; }
+    /* Rank Tracker */
+    .rank-tracker { display: flex; flex-direction: column; gap: 10px; }
+    .rank-row { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+    .rank-label { font-size: var(--fs-caption); font-weight: var(--fw-semibold); color: var(--color-text); flex: 1; }
+    .rank-num { font-size: var(--fs-h3); font-weight: var(--fw-black); min-width: 44px; text-align: right; transition: color 0.3s; }
+    .rank-arrow { font-size: var(--fs-body); min-width: 16px; font-weight: var(--fw-bold); }
 
-    .rank-row { display: flex; align-items: center; gap: 8px; }
+    .boost-bar-wrap { height: 6px; background: rgba(255,255,255,0.06); border-radius: 9999px; margin-top: 16px; overflow: hidden; }
+    .boost-bar-fill { height: 100%; background: var(--color-error); border-radius: 9999px; width: 0%; transition: width 0.5s ease; }
 
-    .rank-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .rank-num {
-      font-size: 17px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      min-width: 34px;
-      text-align: right;
-      transition: color 0.3s;
-    }
-
-    .rank-arrow { font-size: 13px; min-width: 14px; }
-
-    /* Boost bar */
-    .boost-bar-wrap {
-      height: 4px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 9999px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-
-    .boost-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--red), #ff9a9a);
-      border-radius: 9999px;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    /* Attack buttons */
+    /* Botones de Ataque */
+    .attack-list { display: flex; flex-direction: column; gap: 8px; }
     .attack-btn {
-      width: 100%;
-      padding: 9px 11px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--surface-2);
-      color: var(--text);
-      font-family: 'Public Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: left;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      transition: border-color 0.15s, background 0.15s, transform 0.1s;
-      margin-bottom: 7px;
+      width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 10px;
+      background: rgba(255,255,255,0.03); color: var(--color-text); font-family: var(--font-sans);
+      cursor: pointer; text-align: left; display: flex; align-items: flex-start; gap: 12px;
+      transition: all 0.15s ease;
     }
-
-    .attack-btn:last-child { margin-bottom: 0; }
-
-    .attack-btn:hover:not(:disabled) {
-      border-color: rgba(255,107,126,0.5);
-      background: rgba(255,107,126,0.07);
-      transform: translateX(2px);
-    }
-
+    .attack-btn:hover:not(:disabled) { border-color: var(--color-error); background: rgba(255,107,122,0.08); transform: translateY(-1px); }
     .attack-btn:active:not(:disabled) { transform: scale(0.98); }
+    .attack-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: transparent; }
 
-    .attack-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .attack-btn:disabled:hover { transform: none; border-color: var(--border); background: var(--surface-2); }
-
-    .btn-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .btn-icon { font-size: 1.2rem; flex-shrink: 0; }
     .btn-text { flex: 1; }
-    .btn-name { display: block; font-size: 12px; font-weight: 700; color: var(--text); }
-    .btn-desc { display: block; font-size: 10px; font-weight: 300; color: var(--muted); margin-top: 1px; line-height: 1.3; }
-
-    .btn-xp {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--red);
-      flex-shrink: 0;
-      margin-top: 2px;
-      letter-spacing: -0.01em;
-    }
+    .btn-name { display: block; font-size: var(--fs-caption); font-weight: var(--fw-bold); color: var(--color-text); margin-bottom: 2px; }
+    .btn-desc { display: block; font-size: 0.7rem; color: var(--color-text-muted); line-height: 1.3; }
+    .btn-xp { font-size: var(--fs-caption); font-weight: var(--fw-black); color: var(--color-error); flex-shrink: 0; }
 
     /* Log */
-    .log {
-      max-height: 108px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .log::-webkit-scrollbar { width: 3px; }
-    .log::-webkit-scrollbar-track { background: transparent; }
-    .log::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
-
-    .log-entry {
-      font-size: 10px;
-      font-weight: 400;
-      color: var(--muted);
-      padding: 3px 0;
-      border-bottom: 1px solid var(--border);
-      animation: fadeIn 0.3s ease;
-      font-family: 'Public Sans', monospace;
-      line-height: 1.4;
-    }
-
+    .log { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--color-border-strong) transparent; }
+    .log-entry { font-size: 0.75rem; color: var(--color-text-muted); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: var(--font-mono); line-height: 1.4; animation: fadeIn 0.3s ease; }
     .log-entry:last-child { border-bottom: none; }
-    .log-entry.good { color: var(--red); font-weight: 600; }
+    .log-entry.good { color: var(--color-error); font-weight: var(--fw-semibold); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Win overlay */
+    /* =========================================================================
+       WIN OVERLAY (ENCAPSULADO)
+       ========================================================================= */
     #winOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(13,13,13,0.92);
-      backdrop-filter: blur(14px);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 13px;
-      text-align: center;
-      padding: 24px;
+      display: none; position: absolute; inset: 0; background: rgba(13,13,13,0.92); backdrop-filter: blur(10px);
+      z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: var(--space-4);
+      text-align: center; padding: var(--space-8);
     }
-
     #winOverlay.visible { display: flex; }
 
-    .win-icon { font-size: 52px; }
+    .win-icon { font-size: 4rem; line-height: 1; }
+    .win-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(255,107,126,0.12); border: 1px solid var(--color-error); border-radius: var(--radius-chip); color: var(--color-error); font-size: var(--fs-label); font-weight: var(--fw-bold); text-transform: uppercase; }
+    .win-title { font-size: var(--fs-h2); font-weight: var(--fw-black); letter-spacing: var(--tracking-tight); color: var(--color-text); line-height: var(--lh-tight); }
+    .win-title span { color: var(--color-error); }
+    .win-msg { font-size: var(--fs-caption); color: var(--color-text-muted); max-width: 460px; line-height: var(--lh-base); }
+    .win-msg strong { color: var(--color-text); font-weight: var(--fw-bold); }
 
-    .win-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 13px;
-      background: rgba(255,107,126,0.12);
-      border: 1px solid rgba(255,107,126,0.32);
-      border-radius: 9999px;
-      color: var(--red);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
+    .win-lesson { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: var(--space-4) var(--space-6); max-width: 480px; text-align: left; width: 100%; }
+    .win-lesson-title { font-size: var(--fs-label); font-weight: var(--fw-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--hb-yellow); margin-bottom: var(--space-3); }
+    .win-lesson-list { font-size: var(--fs-caption); color: var(--color-text-muted); line-height: 1.6; padding-left: 20px; }
+    .win-lesson-list li { margin-bottom: 6px; }
+    .win-lesson-list li strong { color: var(--color-text); font-weight: var(--fw-semibold); }
 
-    .win-title {
-      font-size: clamp(20px, 4vw, 26px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      line-height: 1.1;
-    }
+    .win-btn { padding: 12px 32px; background: var(--hb-yellow); color: var(--hb-black); border: none; border-radius: var(--radius-chip); font-family: var(--font-sans); font-size: var(--fs-caption); font-weight: var(--fw-bold); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; margin-top: var(--space-4); display: inline-flex; }
+    .win-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-chip); }
 
-    .win-title span { color: var(--red); }
-
-    .win-msg {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      max-width: 380px;
-      line-height: 1.65;
-    }
-
-    .win-msg strong { color: var(--text); font-weight: 600; }
-
-    .win-lesson {
-      background: var(--surface);
-      border: 1px solid var(--border-strong);
-      border-radius: 16px;
-      padding: 15px 18px;
-      max-width: 400px;
-      text-align: left;
-    }
-
-    .win-lesson-title {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--yellow);
-      margin-bottom: 10px;
-    }
-
-    .win-lesson-list {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.75;
-      padding-left: 16px;
-    }
-
-    .win-lesson-list li { margin-bottom: 2px; }
-    .win-lesson-list li strong { color: var(--text); font-weight: 600; }
-
-    .win-btn {
-      padding: 11px 32px;
-      background: var(--yellow);
-      color: var(--yellow-ink);
-      border: none;
-      border-radius: 9999px;
-      font-family: 'Public Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.15s;
-    }
-
-    .win-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    /* Floating +XP */
-    .xp-float {
-      position: fixed;
-      pointer-events: none;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--red);
-      z-index: 300;
-      letter-spacing: -0.01em;
-      animation: floatUp 1s ease forwards;
-    }
-
-    @keyframes floatUp {
-      0%   { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-50px); }
-    }
-
-    @keyframes slideUp {
-      0%   { background: rgba(255,107,126,0.12); }
-      100% { background: transparent; }
-    }
-
-    .result-item.just-moved { animation: slideUp 0.6s ease forwards; }
+    /* Floating XP */
+    .xp-float { position: fixed; pointer-events: none; font-size: var(--fs-caption); font-weight: var(--fw-black); color: var(--color-error); z-index: 300; animation: floatUp 1s ease forwards; }
+    @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-40px); } }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <span class="header-eyebrow">☠️ Hybridge · Ciberseguridad</span>
-  <h2>La Batalla del <span>Ranking</span></h2>
-  <p>Controla el sitio malicioso y hazlo escalar hasta el #1 usando técnicas reales de envenenamiento SEO.</p>
-</div>
+<div class="wrap">
+  <a href="../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
 
-<div class="main">
+  <header class="header">
+    <span class="hb-overline">☠️ Ciberseguridad</span>
+    <h2 class="hb-h2">La Batalla del Ranking</h2>
+    <p class="hb-lead">Controla un sitio malicioso y hazlo escalar hasta el codiciado #1 utilizando técnicas reales de envenenamiento SEO (Search Engine Optimization).</p>
+  </header>
 
-  <!-- SERP -->
-  <div class="serp-wrapper">
-    <div class="serp-bar">
-      <div class="serp-dots">
-        <div class="serp-dot"></div>
-        <div class="serp-dot"></div>
-        <div class="serp-dot"></div>
-      </div>
-      <div class="serp-search-box">
-        <span>🔍</span>
-        <span>descargar VLC media player gratis</span>
-      </div>
-    </div>
-    <div class="serp-tabs">
-      <div class="serp-tab active">Todo</div>
-      <div class="serp-tab">Imágenes</div>
-      <div class="serp-tab">Videos</div>
-      <div class="serp-tab">Noticias</div>
-    </div>
-    <div class="serp-results">
-      <div class="serp-info">Aproximadamente 142,000,000 resultados (0.48 segundos)</div>
-      <div id="resultsContainer"></div>
-    </div>
-  </div>
+  <div class="hb-app-card">
+    <div class="app-layout">
 
-  <!-- PANEL -->
-  <div class="panel">
-
-    <div class="panel-card">
-      <div class="panel-title">📊 Posiciones actuales</div>
-      <div class="rank-tracker">
-        <div class="rank-row">
-          <span class="rank-label">🟢 vlc.videolan.org</span>
-          <span class="rank-arrow" id="officialArrow">—</span>
-          <span class="rank-num" id="officialRank" style="color: var(--green)">#1</span>
-        </div>
-        <div class="rank-row">
-          <span class="rank-label">🔴 vlc-descarga.net</span>
-          <span class="rank-arrow" id="maliciousArrow">—</span>
-          <span class="rank-num" id="maliciousRank" style="color: var(--muted)">#10</span>
+      <!-- COLUMNA IZQUIERDA: SERP -->
+      <div class="app-visuals">
+        <div class="serp-wrapper">
+          <div class="serp-bar">
+            <div class="serp-dots">
+              <div class="serp-dot"></div>
+              <div class="serp-dot"></div>
+              <div class="serp-dot"></div>
+            </div>
+            <div class="serp-search-box">
+              <span>🔍</span>
+              <span>descargar VLC media player gratis</span>
+            </div>
+          </div>
+          <div class="serp-tabs">
+            <div class="serp-tab active">Todo</div>
+            <div class="serp-tab">Imágenes</div>
+            <div class="serp-tab">Videos</div>
+            <div class="serp-tab">Noticias</div>
+          </div>
+          <div class="serp-results">
+            <div class="serp-info">Aproximadamente 142,000,000 resultados (0.48 segundos)</div>
+            <div id="resultsContainer"></div>
+          </div>
         </div>
       </div>
-      <div class="boost-bar-wrap">
-        <div class="boost-bar-fill" id="boostBar"></div>
+
+      <!-- COLUMNA DERECHA: DASHBOARD DE ATAQUE -->
+      <div class="app-controls">
+
+        <div class="panel-card">
+          <div class="panel-title">📊 Posiciones actuales</div>
+          <div class="rank-tracker">
+            <div class="rank-row">
+              <span class="rank-label">🟢 vlc.videolan.org</span>
+              <span class="rank-arrow" id="officialArrow">—</span>
+              <span class="rank-num" id="officialRank" style="color: var(--color-success)">#1</span>
+            </div>
+            <div class="rank-row">
+              <span class="rank-label">🔴 vlc-descarga.net</span>
+              <span class="rank-arrow" id="maliciousArrow">—</span>
+              <span class="rank-num" id="maliciousRank" style="color: var(--color-text-muted)">#10</span>
+            </div>
+          </div>
+          <div class="boost-bar-wrap">
+            <div class="boost-bar-fill" id="boostBar"></div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-title">⚙️ Técnicas de ataque SEO</div>
+          <div class="attack-list">
+            <button class="attack-btn" id="btn-keywords" onclick="useAttack('keywords')">
+              <span class="btn-icon">📝</span>
+              <span class="btn-text">
+                <span class="btn-name">Inyectar palabras clave ocultas</span>
+                <span class="btn-desc">Texto invisible lleno de términos de búsqueda.</span>
+              </span>
+              <span class="btn-xp">+15</span>
+            </button>
+
+            <button class="attack-btn" id="btn-clicks" onclick="useAttack('clicks')">
+              <span class="btn-icon">🖱️</span>
+              <span class="btn-text">
+                <span class="btn-name">Generar clics falsos</span>
+                <span class="btn-desc">Bots simulan tráfico orgánico hacia el sitio.</span>
+              </span>
+              <span class="btn-xp">+20</span>
+            </button>
+
+            <button class="attack-btn" id="btn-backlinks" onclick="useAttack('backlinks')">
+              <span class="btn-icon">🔗</span>
+              <span class="btn-text">
+                <span class="btn-name">Comprar backlinks spam</span>
+                <span class="btn-desc">Miles de sitios basura apuntan al dominio.</span>
+              </span>
+              <span class="btn-xp">+25</span>
+            </button>
+
+            <button class="attack-btn" id="btn-typosquat" onclick="useAttack('typosquat')">
+              <span class="btn-icon">🔤</span>
+              <span class="btn-text">
+                <span class="btn-name">Typosquatting de dominio</span>
+                <span class="btn-desc">Registrar variantes con errores tipográficos.</span>
+              </span>
+              <span class="btn-xp">+30</span>
+            </button>
+
+            <button class="attack-btn" id="btn-cloak" onclick="useAttack('cloak')">
+              <span class="btn-icon">🎭</span>
+              <span class="btn-text">
+                <span class="btn-name">Cloaking de contenido</span>
+                <span class="btn-desc">Ocultar código malicioso a los motores de búsqueda.</span>
+              </span>
+              <span class="btn-xp">+35</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-title">📡 Registro de Actividad</div>
+          <div class="log" id="log">
+            <div class="log-entry">[ sistema ] Simulación iniciada...</div>
+          </div>
+        </div>
+
       </div>
+
     </div>
 
-    <div class="panel-card">
-      <div class="panel-title">⚙️ Técnicas de ataque SEO</div>
-
-      <button class="attack-btn" id="btn-keywords" onclick="useAttack('keywords')">
-        <span class="btn-icon">📝</span>
-        <span class="btn-text">
-          <span class="btn-name">Inyectar palabras clave ocultas</span>
-          <span class="btn-desc">Texto invisible lleno de términos de búsqueda populares</span>
-        </span>
-        <span class="btn-xp">+15</span>
-      </button>
-
-      <button class="attack-btn" id="btn-clicks" onclick="useAttack('clicks')">
-        <span class="btn-icon">🖱️</span>
-        <span class="btn-text">
-          <span class="btn-name">Generar clics falsos</span>
-          <span class="btn-desc">Bots que simulan tráfico orgánico hacia el sitio</span>
-        </span>
-        <span class="btn-xp">+20</span>
-      </button>
-
-      <button class="attack-btn" id="btn-backlinks" onclick="useAttack('backlinks')">
-        <span class="btn-icon">🔗</span>
-        <span class="btn-text">
-          <span class="btn-name">Comprar backlinks spam</span>
-          <span class="btn-desc">Miles de sitios basura apuntan al dominio malicioso</span>
-        </span>
-        <span class="btn-xp">+25</span>
-      </button>
-
-      <button class="attack-btn" id="btn-typosquat" onclick="useAttack('typosquat')">
-        <span class="btn-icon">🔤</span>
-        <span class="btn-text">
-          <span class="btn-name">Typosquatting de dominio</span>
-          <span class="btn-desc">Registrar variantes con errores tipográficos del dominio oficial</span>
-        </span>
-        <span class="btn-xp">+30</span>
-      </button>
-
-      <button class="attack-btn" id="btn-cloak" onclick="useAttack('cloak')">
-        <span class="btn-icon">🎭</span>
-        <span class="btn-text">
-          <span class="btn-name">Cloaking de contenido</span>
-          <span class="btn-desc">Mostrar a Google una página legítima, a usuarios la maliciosa</span>
-        </span>
-        <span class="btn-xp">+35</span>
-      </button>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-title">📡 Actividad</div>
-      <div class="log" id="log">
-        <div class="log-entry">[ sistema ] Simulación iniciada...</div>
+    <!-- WIN OVERLAY ENCAPSULADO -->
+    <div id="winOverlay">
+      <div class="win-icon">☠️</div>
+      <span class="win-badge">Posición #1 alcanzada</span>
+      <div class="win-title">El sitio malicioso <span>llegó al #1</span></div>
+      <div class="win-msg">
+        Ahora cualquier usuario que busque <strong>"descargar VLC"</strong> verá el sitio falso antes que el oficial. Al descargar el programa, instalaría malware sin saberlo.
       </div>
+      <div class="win-lesson">
+        <div class="win-lesson-title">🛡️ Cómo protegerte del SEO Poisoning</div>
+        <ul class="win-lesson-list">
+          <li>Verifica siempre la URL completa antes de descargar algo.</li>
+          <li>Descarga software <strong>solo desde el sitio oficial</strong> del desarrollador.</li>
+          <li>Un candado 🔒 de seguridad no garantiza que el sitio sea legítimo.</li>
+          <li>Si la URL tiene errores tipográficos sutiles, es una trampa.</li>
+          <li>El primer resultado de búsqueda <strong>no siempre es el más seguro</strong>.</li>
+        </ul>
+      </div>
+      <button class="win-btn" onclick="resetGame()">🔄 Nueva simulación</button>
     </div>
 
   </div>
-</div>
-
-<!-- Win overlay -->
-<div id="winOverlay">
-  <div class="win-icon">☠️</div>
-  <span class="win-badge">Posición #1 alcanzada</span>
-  <div class="win-title">El sitio malicioso <span>llegó al #1</span></div>
-  <div class="win-msg">
-    Ahora cualquier usuario que busque <strong>"descargar VLC"</strong> verá el sitio falso antes que el oficial.
-    Al descargar el programa, instalaría malware sin saberlo.
-  </div>
-  <div class="win-lesson">
-    <div class="win-lesson-title">🛡️ Cómo protegerte del SEO Poisoning</div>
-    <ul class="win-lesson-list">
-      <li>Verifica siempre la URL completa antes de descargar algo</li>
-      <li>Descarga software <strong>solo desde el sitio oficial</strong> del desarrollador</li>
-      <li>Un candado 🔒 no garantiza que el sitio sea legítimo</li>
-      <li>Si la URL tiene errores tipográficos, es una trampa</li>
-      <li>El primer resultado de Google <strong>no siempre es el más seguro</strong></li>
-    </ul>
-  </div>
-  <button class="win-btn" onclick="resetGame()">🔄 Jugar de nuevo</button>
 </div>
 
 <script>
-  // ── DATA ──
+  // ── PRESERVACIÓN DE DATOS DEL WIDGET ORIGINAL ──
   const OFFICIAL = {
-    id: 'official',
-    favicon: '🟢',
-    domain: 'vlc.videolan.org',
-    url: 'https://vlc.videolan.org › descargar',
-    title: 'VLC media player — Descarga oficial',
-    snippet: 'VLC es un reproductor multimedia libre y de código abierto desarrollado por el VideoLAN Project. Descarga gratis la versión más reciente para Windows, Mac y Linux.',
-    badge: 'official',
-    badgeText: 'Sitio oficial',
-    rank: 1,
+    id: 'official', favicon: '🟢', domain: 'vlc.videolan.org', url: 'https://vlc.videolan.org › descargar', title: 'VLC media player — Descarga oficial', snippet: 'VLC es un reproductor multimedia libre y de código abierto desarrollado por el VideoLAN Project. Descarga gratis la versión más reciente para Windows, Mac y Linux.', badge: 'official', badgeText: 'Sitio oficial', rank: 1,
   };
 
   const FILLERS = [
@@ -686,19 +463,9 @@
   ];
 
   const MALICIOUS = {
-    id: 'malicious',
-    favicon: '⚠️',
-    domain: 'vlc-descarga.net',
-    url: 'http://vlc-descarga.net › download › gratis',
-    title: 'Descargar VLC gratis 2024 — Última versión GRATIS',
-    snippet: 'Descarga VLC media player GRATIS aquí. Versión más nueva disponible. Compatible con Windows 10/11. Sin virus. Descarga rápida y segura.',
-    badge: 'none',
-    badgeText: '',
-    rank: 10,
-    keywordSpam: 'vlc gratis, descargar vlc, vlc windows, vlc media player gratis, descarga vlc...',
+    id: 'malicious', favicon: '⚠️', domain: 'vlc-descarga.net', url: 'http://vlc-descarga.net › download › gratis', title: 'Descargar VLC gratis 2024 — Última versión GRATIS', snippet: 'Descarga VLC media player GRATIS aquí. Versión más nueva disponible. Compatible con Windows 10/11. Sin virus. Descarga rápida y segura.', badge: 'none', badgeText: '', rank: 10, keywordSpam: 'vlc gratis, descargar vlc, vlc windows, vlc media player gratis, descarga vlc...',
   };
 
-  // ── STATE ──
   let maliciousRank = 10;
   let officialRank = 1;
   let boostPoints = 0;
@@ -713,13 +480,12 @@
     cloak:      { points: 35, used: false, log: 'Cloaking activo: Google ve contenido legítimo, usuarios el malicioso' },
   };
 
-  // ── RENDER ──
   function buildResults() {
     const all = [OFFICIAL, ...FILLERS, MALICIOUS].sort((a, b) => a.rank - b.rank);
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
 
-    all.forEach((item, idx) => {
+    all.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'result-item' +
         (item.id === 'official' ? ' official' : '') +
@@ -729,14 +495,12 @@
       const badgeHtml = item.badge === 'official'
         ? `<span class="result-badge badge-official">✓ Oficial</span>`
         : (item.id === 'malicious' && maliciousRank <= 3
-            ? `<span class="result-badge badge-danger">⚠ Sospechoso</span>`
-            : '');
+            ? `<span class="result-badge badge-danger">⚠ Sospechoso</span>` : '');
 
       const keywordHtml = item.id === 'malicious'
         ? `<div class="keyword-spam" id="keyword-spam" ${attacks.keywords.used ? 'style="opacity:1"' : ''}>
              🔍 ${item.keywordSpam}
-           </div>`
-        : '';
+           </div>` : '';
 
       div.innerHTML = `
         <span class="result-rank" id="rank-${item.id}">#${item.rank}</span>
@@ -748,12 +512,10 @@
         <div class="result-snippet">${item.snippet}</div>
         ${keywordHtml}
       `;
-
       container.appendChild(div);
     });
   }
 
-  // ── ATTACK ──
   function useAttack(key) {
     if (won || attacks[key].used) return;
 
@@ -761,15 +523,12 @@
     document.getElementById('btn-' + key).disabled = true;
 
     boostPoints += attacks[key].points;
-
     const prevRank = maliciousRank;
     const rankDrop = Math.floor(boostPoints / MAX_BOOST * 9);
     maliciousRank = Math.max(1, 10 - rankDrop);
 
     FILLERS.forEach(f => {
-      if (f.rank >= maliciousRank && f.rank < prevRank) {
-        f.rank = f.rank + 1;
-      }
+      if (f.rank >= maliciousRank && f.rank < prevRank) f.rank = f.rank + 1;
     });
 
     OFFICIAL.rank = maliciousRank === 1 ? 2 : 1;
@@ -792,14 +551,11 @@
     const btn = document.getElementById('btn-' + key);
     floatXP(btn, '+' + attacks[key].points);
 
-    if (maliciousRank === 1) {
-      setTimeout(() => triggerWin(), 800);
-    }
+    if (maliciousRank === 1) setTimeout(() => triggerWin(), 800);
   }
 
   function rebuildWithAnimation(prevRank) {
     buildResults();
-
     const el = document.getElementById('result-malicious');
     if (el && maliciousRank < prevRank) {
       el.classList.add('just-moved');
@@ -808,7 +564,7 @@
       const rankEl = document.getElementById('rank-malicious');
       if (rankEl) {
         rankEl.classList.add('moving');
-        rankEl.style.color = '#FF6B7E';
+        rankEl.style.color = 'var(--color-error)';
         setTimeout(() => rankEl.classList.remove('moving'), 500);
       }
     }
@@ -823,14 +579,12 @@
     mEl.textContent = '#' + maliciousRank;
     oEl.textContent = '#' + officialRank;
 
-    mEl.style.color = maliciousRank <= 3 ? 'var(--red)' : maliciousRank <= 6 ? 'var(--orange)' : 'var(--muted)';
-    oEl.style.color = officialRank === 1 ? 'var(--green)' : 'var(--yellow)';
+    mEl.style.color = maliciousRank <= 3 ? 'var(--color-error)' : maliciousRank <= 6 ? 'var(--hb-pink)' : 'var(--color-text-muted)';
+    oEl.style.color = officialRank === 1 ? 'var(--color-success)' : 'var(--hb-yellow)';
 
     if (maliciousRank < prevMalRank) {
-      mArrow.textContent = '↑';
-      mArrow.style.color = 'var(--red)';
-      oArrow.textContent = officialRank > 1 ? '↓' : '—';
-      oArrow.style.color = 'var(--yellow)';
+      mArrow.textContent = '↑'; mArrow.style.color = 'var(--color-error)';
+      oArrow.textContent = officialRank > 1 ? '↓' : '—'; oArrow.style.color = 'var(--hb-yellow)';
     }
   }
 
@@ -839,9 +593,7 @@
     const entry = document.createElement('div');
     entry.className = 'log-entry' + (isGood ? ' good' : '');
     const now = new Date();
-    const ts = now.getHours().toString().padStart(2,'0') + ':' +
-               now.getMinutes().toString().padStart(2,'0') + ':' +
-               now.getSeconds().toString().padStart(2,'0');
+    const ts = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
     entry.textContent = `[ ${ts} ] ${msg}`;
     log.prepend(entry);
   }
@@ -849,10 +601,8 @@
   function floatXP(anchorEl, text) {
     const rect = anchorEl.getBoundingClientRect();
     const el = document.createElement('div');
-    el.className = 'xp-float';
-    el.textContent = text;
-    el.style.left = (rect.right - 40) + 'px';
-    el.style.top  = (rect.top  - 10) + 'px';
+    el.className = 'xp-float'; el.textContent = text;
+    el.style.left = (rect.right - 40) + 'px'; el.style.top  = (rect.top  - 10) + 'px';
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 1000);
   }
@@ -863,13 +613,8 @@
   }
 
   function resetGame() {
-    won = false;
-    maliciousRank = 10;
-    officialRank = 1;
-    boostPoints = 0;
-
-    OFFICIAL.rank = 1;
-    MALICIOUS.rank = 10;
+    won = false; maliciousRank = 10; officialRank = 1; boostPoints = 0;
+    OFFICIAL.rank = 1; MALICIOUS.rank = 10;
     FILLERS.forEach((f, i) => f.rank = i + 2);
 
     Object.keys(attacks).forEach(k => {
@@ -878,20 +623,15 @@
     });
 
     document.getElementById('boostBar').style.width = '0%';
-    document.getElementById('maliciousRank').textContent = '#10';
-    document.getElementById('maliciousRank').style.color = 'var(--muted)';
-    document.getElementById('officialRank').textContent = '#1';
-    document.getElementById('officialRank').style.color = 'var(--green)';
-    document.getElementById('maliciousArrow').textContent = '—';
-    document.getElementById('officialArrow').textContent = '—';
+    document.getElementById('maliciousRank').textContent = '#10'; document.getElementById('maliciousRank').style.color = 'var(--color-text-muted)';
+    document.getElementById('officialRank').textContent = '#1'; document.getElementById('officialRank').style.color = 'var(--color-success)';
+    document.getElementById('maliciousArrow').textContent = '—'; document.getElementById('officialArrow').textContent = '—';
     document.getElementById('winOverlay').classList.remove('visible');
-
     document.getElementById('log').innerHTML = '<div class="log-entry">[ sistema ] Simulación reiniciada...</div>';
 
     buildResults();
   }
 
-  // ── INIT ──
   buildResults();
 </script>
 </body>
