@@ -3,490 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador DoS / DDoS · Hybridge</title>
+  <title>Simulador DoS / DDoS · Hybridge X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
+    /* =========================================================================
+       HYBRIDGE DESIGN TOKENS (v2)
+       ========================================================================= */
+    :root {
+      --hb-black: #0D0D0D; 
+      --hb-white: #FFFFFF; 
+      --hb-yellow: #E2F897; 
+      --hb-navy: #0C1821;
+      --hb-pink: #FFB1D2; 
+      --hb-mint: #2EE6A0;
+      --hb-bright-aqua: #A9F8FB;
+      --hb-purple: #C07CFF;
+      --hb-gray-950: #0A0A0A;
+      --hb-gray-900: #141414; 
+      --hb-gray-850: #1F1F1F; 
+      --hb-gray-800: #2A2A2A; 
+      --hb-gray-400: #A0A0A0;
+
+      --color-bg: var(--hb-black);
+      --color-surface: var(--hb-gray-900);
+      --color-text: var(--hb-white);
+      --color-text-muted: var(--hb-gray-400);
+      --color-accent: var(--hb-yellow);
+      --color-border: rgba(255, 255, 255, 0.12);
+      --color-border-strong: rgba(255, 255, 255, 0.24);
+      --color-error: #FF6B7A;
+
+      --font-display: "Public Sans";
+      --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
+      --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
+      
+      --fs-h2: 2rem;
+      --fs-body-l: 1.125rem;
+      --fs-caption: 0.875rem;
+      --fs-label: 0.75rem;
+      
+      --lh-tight: 1.1; 
+      --lh-base: 1.6;
+      --tracking-tight: -0.01em;
+      --tracking-label: 0.14em;
+
+      --radius-chip: 9999px; 
+      --radius-card: 16px;
+      --radius-md: 12px;
+      
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
+      --space-6: 1.5rem; --space-8: 2rem;
+
+      --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-chip: 0 2px 8px rgba(0, 0, 0, 0.30);
+      --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
+    }
+
+    /* =========================================================================
+       BASE & LAYOUT
+       ========================================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      /* Hybridge core */
-      --hb-black:   #0D0D0D;
-      --hb-navy:    #0C1821;
-      --hb-yellow:  #E2F897;
-      --hb-white:   #FFFFFF;
-      /* Semantic */
-      --bg:         #0D0D0D;
-      --surface:    #0C1821;
-      --surface-2:  #132331;
-      --border:     rgba(255,255,255,0.10);
-      --border-strong: rgba(255,255,255,0.18);
-      --text:       #F7F9FC;
-      --muted:      rgba(247,249,252,0.55);
-      --yellow:     #E2F897;
-      --yellow-ink: #0D0D0D;
-      /* Status colors */
-      --green:  #9BE7BC;
-      --orange: #FFBB6B;
-      --red:    #FF6B7E;
-      --blue:   #B6DCFE;
-      --purple: #C9A9FF;
-      /* shadows */
-      --shadow: 0 24px 56px rgba(0,0,0,0.5);
-      --focus:  0 0 0 3px rgba(226,248,151,0.28);
-    }
-
     body {
-      background:
-        radial-gradient(ellipse at top left, rgba(226,248,151,0.07) 0%, transparent 40%),
-        var(--bg);
-      color: var(--text);
-      font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 20px 16px;
-      gap: 16px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-base);
+      -webkit-font-smoothing: antialiased;
+      padding: var(--space-8) 0;
     }
 
-    /* ── HEADER ── */
-    .header {
-      text-align: center;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
+    
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
     }
 
-    .header-eyebrow {
+    /* Navegación Back */
+    .nav-back {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 5px 14px;
-      background: rgba(226,248,151,0.10);
-      border: 1px solid rgba(226,248,151,0.22);
-      border-radius: 9999px;
-      color: var(--yellow);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      gap: var(--space-2);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: var(--fs-caption);
+      font-weight: var(--fw-bold);
+      margin-bottom: var(--space-6);
+      transition: color 0.15s;
+    }
+    .nav-back:hover { color: var(--color-text); }
+
+    /* =========================================================================
+       HEADER
+       ========================================================================= */
+    .header { margin-bottom: var(--space-8); text-align: left; }
+    .hb-overline { display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-3); }
+    .hb-h2 { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); margin-bottom: var(--space-3); }
+    .hb-lead { font-size: var(--fs-body-l); font-weight: var(--fw-light); color: var(--color-text-muted); max-width: 65ch; }
+
+    /* =========================================================================
+       APP CARD (ENCAPSULA EL WIDGET)
+       ========================================================================= */
+    .hb-app-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
-    .header h2 {
-      font-size: clamp(18px, 3vw, 24px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      line-height: 1.15;
-    }
-
-    .header h2 span {
-      color: var(--yellow);
-    }
-
-    .header p {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 480px;
-    }
-
-    /* ── CANVAS AREA ── */
     #canvas {
       width: 100%;
-      max-width: 700px;
-      height: 300px;
-      background: var(--surface);
-      border: 1px solid var(--border-strong);
-      border-radius: 20px;
+      height: 340px;
+      background: var(--hb-gray-950);
       display: block;
-      box-shadow: var(--shadow);
+      border-bottom: 1px solid var(--color-border);
     }
 
-    /* ── STATUS BAR ── */
-    .status-bar {
-      width: 100%;
-      max-width: 700px;
-      display: flex;
-      gap: 10px;
-      align-items: stretch;
+    .app-dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      padding: var(--space-6);
     }
 
+    @media (max-width: 768px) {
+      .app-dashboard { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================================
+       ESTADOS (STATUS BAR)
+       ========================================================================= */
+    .status-panel { display: flex; flex-direction: column; gap: var(--space-3); }
+    
     .status-card {
-      flex: 1;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      transition: border-color 0.3s;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.3s, background 0.3s;
     }
-
+    
     .status-card.alert {
-      border-color: rgba(255,107,126,0.45);
-      background: rgba(255,107,126,0.06);
+      border-color: var(--color-error);
+      background: rgba(255, 107, 122, 0.08);
     }
 
-    .status-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
+    .status-label { font-size: var(--fs-label); font-weight: var(--fw-semibold); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-label); }
+    .status-value { font-size: 1.1rem; font-weight: var(--fw-bold); transition: color 0.3s; font-variant-numeric: tabular-nums; }
+    
+    .status-bar-fill-wrap { height: 4px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px; overflow: hidden; width: 100px; margin-top: 4px; }
+    .status-bar-fill { height: 100%; border-radius: 9999px; transition: width 0.2s, background 0.3s; }
 
-    .status-value {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      transition: color 0.3s;
-    }
+    /* =========================================================================
+       CONTROLES
+       ========================================================================= */
+    .controls-panel { display: flex; flex-direction: column; gap: var(--space-6); justify-content: center; }
+    .controls-section { display: flex; flex-direction: column; gap: var(--space-3); }
 
-    .status-bar-fill-wrap {
-      height: 3px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 9999px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
+    .slider-row { display: flex; align-items: center; gap: var(--space-4); }
+    .slider-label { min-width: 130px; font-size: var(--fs-caption); font-weight: var(--fw-bold); color: var(--color-text); }
+    .slider-label span { display: block; font-size: var(--fs-label); font-weight: var(--fw-regular); color: var(--color-text-muted); margin-top: 2px; }
 
-    .status-bar-fill {
-      height: 100%;
-      border-radius: 9999px;
-      transition: width 0.2s, background 0.3s;
-    }
+    input[type="range"] { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 9999px; background: var(--color-border-strong); outline: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--hb-yellow); cursor: pointer; box-shadow: 0 0 0 4px rgba(226, 248, 151, 0.2); transition: transform 0.15s, box-shadow 0.15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); box-shadow: var(--focus-ring); }
+    .slider-value { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--hb-yellow); min-width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
 
-    /* ── CONTROLS ── */
-    .controls {
-      width: 100%;
-      max-width: 700px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    /* Botones */
+    .btn-row { display: flex; gap: var(--space-3); }
+    
+    /* FIX: El botón base ya no ocupa flex: 1 de manera global */
+    .hb-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); padding: 0.75rem 1.25rem; border-radius: var(--radius-chip); border: none; font-family: var(--font-sans); font-size: var(--fs-caption); font-weight: var(--fw-bold); cursor: pointer; transition: all 0.15s ease; flex: none; }
+    .hb-btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    
+    /* FIX: Solo cuando están dentro de .btn-row se expanden horizontalmente */
+    .btn-row .hb-btn { flex: 1; } 
 
-    .controls-section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
+    .hb-btn-primary { background: var(--hb-yellow); color: var(--hb-black); }
+    .hb-btn-primary:hover { background: #D4F07A; transform: translateY(-1px); box-shadow: var(--shadow-chip); }
+    .hb-btn-primary:active { background: #C7E86A; transform: translateY(0); box-shadow: none; }
+    
+    .hb-btn-ghost { background: transparent; color: var(--hb-white); border: 1.5px solid var(--color-border-strong); }
+    .hb-btn-ghost:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--hb-white); }
+    .hb-btn-ghost:active { background: rgba(255, 255, 255, 0.14); }
 
-    .controls-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    /* =========================================================================
+       LEYENDA (FOOTER DE LA TARJETA)
+       ========================================================================= */
+    .legend { border-top: 1px solid var(--color-border); padding: var(--space-4) var(--space-6); background: rgba(0, 0, 0, 0.2); display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .hb-chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-chip); font-size: 0.75rem; font-weight: var(--fw-bold); background: var(--hb-gray-850); color: var(--hb-white); border: 1px solid var(--color-border); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-    .controls-label-wrap {
-      min-width: 136px;
-    }
-
-    .controls-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.2;
-    }
-
-    .controls-sub {
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    input[type="range"] {
-      flex: 1;
-      -webkit-appearance: none;
-      height: 5px;
-      border-radius: 9999px;
-      background: rgba(255,255,255,0.10);
-      outline: none;
-      cursor: pointer;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--yellow);
-      box-shadow: 0 0 0 3px rgba(226,248,151,0.22);
-      transition: transform 0.15s;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-    .slider-value {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--yellow);
-      min-width: 30px;
-      text-align: right;
-      letter-spacing: -0.01em;
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── BUTTONS ── */
-    .btn-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 11px 16px;
-      border: none;
-      border-radius: 9999px;
-      font-family: 'Public Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.12s, box-shadow 0.2s;
-      letter-spacing: -0.01em;
-    }
-
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    .btn:not(:disabled):hover {
-      transform: translateY(-1px);
-      box-shadow: var(--focus);
-    }
-
-    .btn-botnet {
-      background: var(--yellow);
-      color: var(--yellow-ink);
-    }
-
-    .btn-reset {
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border-strong);
-    }
-
-    /* ── LEGEND ── */
-    .legend {
-      width: 100%;
-      max-width: 700px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 9999px;
-      padding: 5px 12px;
-    }
-
-    .legend-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ── CRASH OVERLAY ── */
+    /* =========================================================================
+       CRASH OVERLAY (DENTRO DE LA APP CARD)
+       ========================================================================= */
     #crashOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(13,13,13,0.88);
-      backdrop-filter: blur(12px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 14px;
-      text-align: center;
-      padding: 24px;
+      display: none; position: absolute; inset: 0; background: rgba(13, 13, 13, 0.85); backdrop-filter: blur(8px);
+      z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: var(--space-4);
+      text-align: center; padding: var(--space-6);
     }
-
     #crashOverlay.visible { display: flex; }
-
-    .crash-icon { font-size: 56px; }
-
-    .crash-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      background: rgba(255,107,126,0.12);
-      border: 1px solid rgba(255,107,126,0.35);
-      border-radius: 9999px;
-      color: var(--red);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .crash-title {
-      font-size: clamp(22px, 5vw, 28px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      line-height: 1.1;
-    }
-
-    .crash-title span { color: var(--red); }
-
-    .crash-msg {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      max-width: 380px;
-      line-height: 1.65;
-    }
-
-    .crash-btn {
-      margin-top: 4px;
-      padding: 12px 32px;
-      background: var(--yellow);
-      color: var(--yellow-ink);
-      border: none;
-      border-radius: 9999px;
-      font-family: 'Public Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      letter-spacing: -0.01em;
-      transition: opacity 0.15s, transform 0.15s;
-    }
-
-    .crash-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
+    .crash-icon { font-size: 3rem; }
+    .crash-title { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); }
+    .crash-title span { color: var(--color-error); }
+    .crash-msg { font-size: var(--fs-caption); color: var(--color-text-muted); max-width: 400px; line-height: var(--lh-base); }
+    
   </style>
 </head>
 <body>
 
-<div class="header">
-  <span class="header-eyebrow">⚡ Hybridge · Ciberseguridad</span>
-  <h2>Simulador de Ataque <span>DoS / DDoS</span></h2>
-  <p>Controla el flujo de peticiones hacia el servidor y observa cómo reacciona ante un ataque de denegación de servicio.</p>
-</div>
+<div class="wrap">
+  <a href="../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
 
-<canvas id="canvas"></canvas>
+  <header class="header">
+    <span class="hb-overline">💻 Ciberseguridad</span>
+    <h2 class="hb-h2">Simulador de Ataque DoS / DDoS</h2>
+    <p class="hb-lead">Controla el flujo de peticiones hacia el servidor y observa cómo reacciona ante un ataque de denegación de servicio.</p>
+  </header>
 
-<div class="status-bar">
-  <div class="status-card" id="cardStatus">
-    <div class="status-label">Estado del servidor</div>
-    <div class="status-value" id="statusText" style="color: var(--green)">🟢 Normal</div>
-  </div>
-  <div class="status-card" id="cardRps">
-    <div class="status-label">Peticiones / seg</div>
-    <div class="status-value" id="rpsText" style="color: var(--blue)">0</div>
-  </div>
-  <div class="status-card" id="cardLoad">
-    <div class="status-label">Carga del servidor</div>
-    <div class="status-value" id="loadText">0%</div>
-    <div class="status-bar-fill-wrap">
-      <div class="status-bar-fill" id="loadBar" style="width:0%;background:var(--green)"></div>
+  <!-- Contenedor Principal de la Aplicación -->
+  <div class="hb-app-card">
+    
+    <!-- Lienzo -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Overlay de Colapso -->
+    <div id="crashOverlay">
+      <div class="crash-icon">💥</div>
+      <div class="crash-title">El servidor <span>colapsó</span></div>
+      <div class="crash-msg">El servidor no pudo manejar el volumen de peticiones y dejó de responder. Así es como un ataque DDoS exitoso interrumpe servicios.</div>
+      <button class="hb-btn hb-btn-primary" style="margin-top: 1rem" onclick="resetAll()">🔄 Reiniciar simulación</button>
     </div>
-  </div>
-</div>
 
-<div class="controls">
-  <!-- DoS slider -->
-  <div>
-    <div class="controls-section-label">Ataque individual</div>
-    <div class="controls-row">
-      <div class="controls-label-wrap">
-        <div class="controls-label">🖥️ Ataque DoS</div>
-        <div class="controls-sub">Una sola máquina</div>
+    <!-- Panel de Control (Dashboard) -->
+    <div class="app-dashboard">
+      
+      <!-- Panel de Estados -->
+      <div class="status-panel">
+        <div class="status-card" id="cardStatus">
+          <div class="status-label">Estado</div>
+          <div class="status-value" id="statusText" style="color: var(--hb-mint)">🟢 Normal</div>
+        </div>
+        <div class="status-card" id="cardRps">
+          <div class="status-label">Peticiones / seg</div>
+          <div class="status-value" id="rpsText" style="color: var(--hb-bright-aqua)">0</div>
+        </div>
+        <div class="status-card" id="cardLoad">
+          <div>
+            <div class="status-label">Carga del servidor</div>
+            <div class="status-bar-fill-wrap">
+              <div class="status-bar-fill" id="loadBar" style="width:0%; background:var(--hb-mint)"></div>
+            </div>
+          </div>
+          <div class="status-value" id="loadText">0%</div>
+        </div>
       </div>
-      <input type="range" id="dosSlider" min="0" max="100" value="0" step="1">
-      <span class="slider-value" id="dosVal">0</span>
+
+      <!-- Panel de Inputs -->
+      <div class="controls-panel">
+        <div class="controls-section">
+          <div class="status-label">Ataque Individual</div>
+          <div class="slider-row">
+            <div class="slider-label">🖥️ Ataque DoS <span>Una sola máquina</span></div>
+            <input type="range" id="dosSlider" min="0" max="100" value="0" step="1">
+            <span class="slider-value" id="dosVal">0</span>
+          </div>
+        </div>
+
+        <div class="controls-section" style="margin-top: 8px;">
+          <div class="status-label">Ataque Distribuido</div>
+          <div class="btn-row">
+            <button class="hb-btn hb-btn-primary" id="botnetBtn" onclick="activateBotnet()">🤖 Activar Botnet</button>
+            <button class="hb-btn hb-btn-ghost" onclick="resetAll()">🔄 Reiniciar</button>
+          </div>
+        </div>
+      </div>
+      
     </div>
-  </div>
 
-  <div class="divider"></div>
-
-  <!-- DDoS botnet -->
-  <div>
-    <div class="controls-section-label">Ataque distribuido</div>
-    <div class="btn-row">
-      <button class="btn btn-botnet" id="botnetBtn" onclick="activateBotnet()">
-        🤖 Activar Botnet (DDoS)
-      </button>
-      <button class="btn btn-reset" onclick="resetAll()">
-        🔄 Reiniciar
-      </button>
+    <!-- Leyenda Semántica -->
+    <div class="legend">
+      <span class="hb-chip"><div class="legend-dot" style="background:var(--hb-bright-aqua)"></div> Normal</span>
+      <span class="hb-chip"><div class="legend-dot" style="background:var(--hb-pink)"></div> Carga alta</span>
+      <span class="hb-chip"><div class="legend-dot" style="background:var(--color-error)"></div> Maliciosa</span>
+      <span class="hb-chip"><div class="legend-dot" style="background:var(--hb-purple)"></div> Bot infectado</span>
     </div>
-  </div>
-</div>
 
-<div class="legend">
-  <div class="legend-item">
-    <div class="legend-dot" style="background:#B6DCFE"></div> Petición normal
   </div>
-  <div class="legend-item">
-    <div class="legend-dot" style="background:#FFBB6B"></div> Carga alta
-  </div>
-  <div class="legend-item">
-    <div class="legend-dot" style="background:#FF6B7E"></div> Petición maliciosa
-  </div>
-  <div class="legend-item">
-    <div class="legend-dot" style="background:#C9A9FF"></div> Bot infectado
-  </div>
-</div>
-
-<!-- Crash overlay -->
-<div id="crashOverlay">
-  <div class="crash-icon">💥</div>
-  <span class="crash-badge">Servicio interrumpido</span>
-  <div class="crash-title">El servidor <span>colapsó</span></div>
-  <div class="crash-msg">
-    El servidor no pudo manejar el volumen de peticiones y dejó de responder.
-    Así es como un ataque DDoS exitoso interrumpe servicios para todos los usuarios legítimos.
-  </div>
-  <button class="crash-btn" onclick="resetAll()">🔄 Reiniciar simulación</button>
 </div>
 
 <script>
+  // ── PRESERVACIÓN DE LA LÓGICA DEL CANVAS Y OBJETOS ORIGINALES ──
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
 
-  // ── CONFIG ──
   const COLORS = {
-    bg: '#0C1821',
-    border: '#1e3a4a',
-    green: '#9BE7BC',
-    yellow: '#FFBB6B',
-    orange: '#FFBB6B',
-    red: '#FF6B7E',
-    blue: '#B6DCFE',
-    purple: '#C9A9FF',
-    muted: '#4d7080',
-    text: '#F7F9FC',
+    bg: '#0A0A0A',
+    border: 'rgba(255,255,255,0.12)',
+    green: '#2EE6A0',
+    yellow: '#E2F897',
+    orange: '#FFB1D2',
+    red: '#FF6B7A',
+    blue: '#A9F8FB',
+    purple: '#C07CFF',
+    muted: '#A0A0A0',
+    text: '#FFFFFF',
   };
 
-  // ── STATE ──
   let dosLevel = 0;
   let botnetActive = false;
   let crashed = false;
@@ -496,28 +333,19 @@
   let serverShake = 0;
   let animFrame;
   let lastPacketTime = 0;
-  let crashTimer = null;
   let botnetPhase = 0;
 
-  // ── LAYOUT ──
   function resize() {
     const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = Math.min(rect.width, 700);
-    canvas.height = 300;
+    canvas.width = rect.width;
+    canvas.height = 340;
   }
-
   resize();
   window.addEventListener('resize', resize);
 
-  function serverPos() {
-    return { x: canvas.width / 2, y: canvas.height / 2 - 10 };
-  }
+  function serverPos() { return { x: canvas.width / 2, y: canvas.height / 2 - 10 }; }
+  function attackerPos() { return { x: 60, y: canvas.height / 2 - 10 }; }
 
-  function attackerPos() {
-    return { x: 60, y: canvas.height / 2 - 10 };
-  }
-
-  // ── PACKET ──
   function spawnPacket(fromX, fromY, color, speed = 1) {
     const sv = serverPos();
     const angle = Math.atan2(sv.y - fromY, sv.x - fromX);
@@ -526,14 +354,10 @@
       x: fromX, y: fromY,
       vx: Math.cos(angle + spread) * (2.5 + speed * 1.2),
       vy: Math.sin(angle + spread) * (2.5 + speed * 1.2),
-      color,
-      size: 4 + Math.random() * 2,
-      life: 1,
-      target: sv,
+      color, size: 4 + Math.random() * 2, life: 1, target: sv,
     });
   }
 
-  // ── BOT NODE ──
   function createBots() {
     bots = [];
     const sv = serverPos();
@@ -542,19 +366,12 @@
       const angle = (i / count) * Math.PI * 2;
       const r = Math.min(canvas.width, canvas.height) * 0.38;
       bots.push({
-        x: sv.x + Math.cos(angle) * r,
-        y: sv.y + Math.sin(angle) * r,
-        angle,
-        r,
-        fireRate: 0.4 + Math.random() * 0.4,
-        timer: Math.random(),
-        opacity: 0,
-        scale: 0,
+        x: sv.x + Math.cos(angle) * r, y: sv.y + Math.sin(angle) * r,
+        angle, r, fireRate: 0.4 + Math.random() * 0.4, timer: Math.random(), opacity: 0, scale: 0,
       });
     }
   }
 
-  // ── DRAW ──
   function drawServer(x, y) {
     const sv = serverPos();
     const shakeX = crashed ? (Math.random() - 0.5) * 6 : serverShake * (Math.random() - 0.5) * 3;
@@ -573,39 +390,34 @@
       glow.addColorStop(0, color + '33');
       glow.addColorStop(1, 'transparent');
       ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(sx, sy, 55, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(sx, sy, 55, 0, Math.PI * 2); ctx.fill();
     }
 
     ctx.save();
     ctx.translate(sx, sy);
 
     const w = 64, h = 80;
-    ctx.fillStyle = crashed ? '#1a0d0f' : '#0d1e2e';
+    ctx.fillStyle = crashed ? '#141414' : '#1F1F1F';
     ctx.strokeStyle = crashed ? COLORS.red : color;
     ctx.lineWidth = 2;
     roundRect(ctx, -w/2, -h/2, w, h, 8);
     ctx.fill(); ctx.stroke();
 
     for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = crashed ? '#2a1215' : '#071018';
+      ctx.fillStyle = '#0A0A0A';
       ctx.strokeStyle = crashed ? '#4a2030' : COLORS.border;
       ctx.lineWidth = 1;
       roundRect(ctx, -w/2 + 6, -h/2 + 8 + i * 22, w - 12, 16, 3);
       ctx.fill(); ctx.stroke();
 
       ctx.fillStyle = crashed ? COLORS.red : (i === 0 ? color : (load > 60 ? COLORS.orange : COLORS.green));
-      ctx.beginPath();
-      ctx.arc(w/2 - 12, -h/2 + 16 + i * 22, 3, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(w/2 - 12, -h/2 + 16 + i * 22, 3, 0, Math.PI * 2); ctx.fill();
     }
 
     ctx.fillStyle = crashed ? COLORS.red : COLORS.muted;
     ctx.font = '10px Public Sans, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(crashed ? 'OFFLINE' : 'SERVER', 0, h/2 - 6);
-
     ctx.restore();
 
     if (!crashed) {
@@ -613,140 +425,64 @@
       ctx.translate(sx, sy - 58);
       ctx.beginPath();
       ctx.arc(0, 0, 10, -Math.PI/2, -Math.PI/2 + (load/100) * Math.PI * 2);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
-      ctx.stroke();
+      ctx.strokeStyle = color; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.stroke();
       ctx.restore();
     }
   }
 
   function drawAttacker(x, y) {
-    ctx.save();
-    ctx.translate(x, y);
-
-    ctx.fillStyle = '#071018';
-    ctx.strokeStyle = COLORS.blue;
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, -22, -16, 44, 30, 5);
-    ctx.fill(); ctx.stroke();
-
-    ctx.fillStyle = '#040c14';
-    roundRect(ctx, -17, -12, 34, 20, 3);
-    ctx.fill();
-
-    if (Math.floor(Date.now() / 500) % 2 === 0) {
-      ctx.fillStyle = COLORS.blue;
-      ctx.fillRect(-13, -9, 4, 8);
-    }
-
-    ctx.fillStyle = '#1e3a4a';
-    ctx.fillRect(-8, 14, 16, 4);
-    ctx.fillRect(-14, 18, 28, 3);
-
-    ctx.fillStyle = COLORS.blue;
-    ctx.font = '9px Public Sans, sans-serif';
-    ctx.textAlign = 'center';
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = '#1F1F1F'; ctx.strokeStyle = COLORS.blue; ctx.lineWidth = 1.5;
+    roundRect(ctx, -22, -16, 44, 30, 5); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#0A0A0A'; roundRect(ctx, -17, -12, 34, 20, 3); ctx.fill();
+    
+    if (Math.floor(Date.now() / 500) % 2 === 0) { ctx.fillStyle = COLORS.blue; ctx.fillRect(-13, -9, 4, 8); }
+    
+    ctx.fillStyle = '#2A2A2A'; ctx.fillRect(-8, 14, 16, 4); ctx.fillRect(-14, 18, 28, 3);
+    ctx.fillStyle = COLORS.blue; ctx.font = '9px Public Sans, sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('ATACANTE', 0, 30);
-
     ctx.restore();
   }
 
   function drawBot(bot) {
     if (bot.opacity <= 0) return;
-
-    ctx.save();
-    ctx.globalAlpha = bot.opacity;
-    ctx.translate(bot.x, bot.y);
-    ctx.scale(bot.scale, bot.scale);
-
-    ctx.fillStyle = '#130820';
-    ctx.strokeStyle = COLORS.purple;
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, -18, -13, 36, 24, 4);
-    ctx.fill(); ctx.stroke();
-
-    ctx.fillStyle = '#080512';
-    roundRect(ctx, -13, -9, 26, 15, 2);
-    ctx.fill();
-
-    ctx.fillStyle = COLORS.purple;
-    ctx.font = '10px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('💀', 0, 0);
-
-    ctx.fillStyle = '#2a1040';
-    ctx.fillRect(-6, 11, 12, 3);
-    ctx.fillRect(-10, 14, 20, 2);
-
-    ctx.restore();
-    ctx.globalAlpha = 1;
+    ctx.save(); ctx.globalAlpha = bot.opacity; ctx.translate(bot.x, bot.y); ctx.scale(bot.scale, bot.scale);
+    ctx.fillStyle = '#141414'; ctx.strokeStyle = COLORS.purple; ctx.lineWidth = 1.5;
+    roundRect(ctx, -18, -13, 36, 24, 4); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#0A0A0A'; roundRect(ctx, -13, -9, 26, 15, 2); ctx.fill();
+    ctx.fillStyle = COLORS.purple; ctx.font = '10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('💀', 0, 0);
+    ctx.fillStyle = '#2A2A2A'; ctx.fillRect(-6, 11, 12, 3); ctx.fillRect(-10, 14, 20, 2);
+    ctx.restore(); ctx.globalAlpha = 1;
   }
 
   function drawPacket(p) {
-    ctx.save();
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.shadowColor = p.color;
-    ctx.shadowBlur = 6;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    ctx.save(); ctx.globalAlpha = p.life; ctx.fillStyle = p.color; ctx.shadowColor = p.color; ctx.shadowBlur = 6;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
 
   function drawQueue(load) {
-    const sv = serverPos();
-    const qx = sv.x + 60;
-    const qy = sv.y + 10;
-    const slots = 8;
+    const sv = serverPos(); const qx = sv.x + 60; const qy = sv.y + 10; const slots = 8;
     const filled = Math.round((load / 100) * slots);
-
-    ctx.fillStyle = COLORS.muted;
-    ctx.font = '9px Public Sans, monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('COLA', qx, qy - 14);
-
+    ctx.fillStyle = COLORS.muted; ctx.font = '9px Public Sans, monospace'; ctx.textAlign = 'left'; ctx.fillText('COLA', qx, qy - 14);
     for (let i = 0; i < slots; i++) {
-      const bx = qx + i * 12;
-      let color = 'rgba(255,255,255,0.08)';
+      const bx = qx + i * 12; let color = 'rgba(255,255,255,0.08)';
       if (i < filled) {
-        if (load > 85) color = COLORS.red;
-        else if (load > 65) color = COLORS.orange;
-        else if (load > 40) color = COLORS.yellow;
-        else color = COLORS.green;
+        if (load > 85) color = COLORS.red; else if (load > 65) color = COLORS.orange;
+        else if (load > 40) color = COLORS.yellow; else color = COLORS.green;
       }
-      ctx.fillStyle = color;
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      roundRect(ctx, bx, qy, 9, 14, 2);
-      ctx.fill();
-      ctx.stroke();
+      ctx.fillStyle = color; ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1;
+      ctx.beginPath(); roundRect(ctx, bx, qy, 9, 14, 2); ctx.fill(); ctx.stroke();
     }
   }
 
   function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
   }
 
-  // ── UPDATE ──
   function update(ts) {
-    if (crashed) {
-      draw();
-      animFrame = requestAnimationFrame(update);
-      return;
-    }
+    if (crashed) { draw(); animFrame = requestAnimationFrame(update); return; }
 
     const dosRate = dosLevel / 100;
     const interval = dosLevel > 0 ? Math.max(20, 300 - dosLevel * 2.5) : Infinity;
@@ -761,95 +497,61 @@
       bots.forEach(bot => {
         if (bot.opacity < 1) return;
         bot.timer -= 0.016;
-        if (bot.timer <= 0) {
-          spawnPacket(bot.x, bot.y, COLORS.red, 1.5);
-          bot.timer = bot.fireRate;
-        }
+        if (bot.timer <= 0) { spawnPacket(bot.x, bot.y, COLORS.red, 1.5); bot.timer = bot.fireRate; }
       });
     }
 
     if (botnetPhase === 1) {
       let allReady = true;
-      bots.forEach((bot, i) => {
-        const target = 1;
-        bot.opacity += 0.025;
-        bot.scale += 0.025;
-        if (bot.opacity < target || bot.scale < target) allReady = false;
-        bot.opacity = Math.min(1, bot.opacity);
-        bot.scale = Math.min(1, bot.scale);
+      bots.forEach((bot) => {
+        bot.opacity += 0.025; bot.scale += 0.025;
+        if (bot.opacity < 1 || bot.scale < 1) allReady = false;
+        bot.opacity = Math.min(1, bot.opacity); bot.scale = Math.min(1, bot.scale);
       });
       if (allReady) botnetPhase = 2;
     }
 
     const sv = serverPos();
     packets = packets.filter(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-
-      const dx = sv.x - p.x;
-      const dy = sv.y - p.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-
-      if (dist < 36) {
-        serverShake = Math.min(3, serverShake + 0.3);
-        return false;
-      }
-
-      p.life -= 0.008;
-      return p.life > 0;
+      p.x += p.vx; p.y += p.vy;
+      const dx = sv.x - p.x; const dy = sv.y - p.y;
+      if (Math.sqrt(dx*dx + dy*dy) < 36) { serverShake = Math.min(3, serverShake + 0.3); return false; }
+      p.life -= 0.008; return p.life > 0;
     });
 
     let dosContrib = dosLevel * 0.55;
     let botnetContrib = botnetPhase === 2 ? 52 : 0;
-    let targetLoad = Math.min(100, dosContrib + botnetContrib);
-    load += (targetLoad - load) * 0.04;
-
+    load += (Math.min(100, dosContrib + botnetContrib) - load) * 0.04;
     serverShake *= 0.92;
 
-    if (load > 95 && !crashed) {
-      triggerCrash();
-    }
+    if (load > 95 && !crashed) triggerCrash();
 
-    updateUI();
-    draw();
-    animFrame = requestAnimationFrame(update);
+    updateUI(); draw(); animFrame = requestAnimationFrame(update);
   }
 
   function triggerCrash() {
-    crashed = true;
-    packets = [];
+    crashed = true; packets = [];
     document.getElementById('crashOverlay').classList.add('visible');
     updateUI();
   }
 
   function updateUI() {
     const loadPct = Math.round(load);
-    let color = 'var(--green)';
+    let color = 'var(--hb-mint)';
     let statusText = '🟢 Normal';
     let alert = false;
 
-    if (load > 85 || crashed) {
-      color = 'var(--red)';
-      statusText = crashed ? '🔴 OFFLINE' : '🔴 Crítico';
-      alert = true;
-    } else if (load > 65) {
-      color = 'var(--orange)';
-      statusText = '🟠 Saturado';
-      alert = true;
-    } else if (load > 40) {
-      color = 'var(--yellow)';
-      statusText = '🟡 Bajo estrés';
-    }
+    if (load > 85 || crashed) { color = 'var(--color-error)'; statusText = crashed ? '🔴 OFFLINE' : '🔴 Crítico'; alert = true; } 
+    else if (load > 65) { color = 'var(--hb-pink)'; statusText = '🟠 Saturado'; alert = true; } 
+    else if (load > 40) { color = 'var(--hb-yellow)'; statusText = '🟡 Bajo estrés'; }
 
     document.getElementById('statusText').textContent = statusText;
     document.getElementById('statusText').style.color = color;
     document.getElementById('cardStatus').classList.toggle('alert', alert);
 
-    const rps = Math.round(
-      (dosLevel / 100) * 80 + (botnetPhase === 2 ? 240 : 0)
-    );
+    const rps = Math.round((dosLevel / 100) * 80 + (botnetPhase === 2 ? 240 : 0));
     document.getElementById('rpsText').textContent = rps.toLocaleString();
-    document.getElementById('rpsText').style.color = rps > 100 ? 'var(--red)' : 'var(--blue)';
+    document.getElementById('rpsText').style.color = rps > 100 ? 'var(--color-error)' : 'var(--hb-bright-aqua)';
 
     document.getElementById('loadText').textContent = loadPct + '%';
     document.getElementById('loadText').style.color = color;
@@ -859,36 +561,20 @@
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // BG grid
-    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-    ctx.lineWidth = 0.5;
-    for (let x = 0; x < canvas.width; x += 40) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-    }
-    for (let y = 0; y < canvas.height; y += 40) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-    }
-
-    bots.forEach(drawBot);
-    packets.forEach(drawPacket);
-
-    const atk = attackerPos();
-    drawAttacker(atk.x, atk.y);
-
-    drawQueue(load);
-    drawServer();
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 0.5;
+    for (let x = 0; x < canvas.width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+    for (let y = 0; y < canvas.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+    
+    bots.forEach(drawBot); packets.forEach(drawPacket);
+    const atk = attackerPos(); drawAttacker(atk.x, atk.y);
+    drawQueue(load); drawServer();
 
     if (crashed) {
-      ctx.fillStyle = 'rgba(255,107,126,0.04)';
-      for (let i = 0; i < 5; i++) {
-        const y = Math.random() * canvas.height;
-        ctx.fillRect(0, y, canvas.width, 1 + Math.random() * 2);
-      }
+      ctx.fillStyle = 'rgba(255,107,122,0.04)';
+      for (let i = 0; i < 5; i++) { ctx.fillRect(0, Math.random() * canvas.height, canvas.width, 1 + Math.random() * 2); }
     }
   }
 
-  // ── CONTROLS ──
   const dosSlider = document.getElementById('dosSlider');
   dosSlider.addEventListener('input', () => {
     dosLevel = parseInt(dosSlider.value);
@@ -897,33 +583,19 @@
 
   function activateBotnet() {
     if (crashed || botnetPhase > 0) return;
-    createBots();
-    botnetPhase = 1;
+    createBots(); botnetPhase = 1;
     document.getElementById('botnetBtn').disabled = true;
     document.getElementById('botnetBtn').textContent = '🤖 Botnet activa...';
   }
 
   function resetAll() {
-    crashed = false;
-    dosLevel = 0;
-    botnetActive = false;
-    botnetPhase = 0;
-    load = 0;
-    packets = [];
-    bots = [];
-    serverShake = 0;
-
-    dosSlider.value = 0;
-    document.getElementById('dosVal').textContent = '0';
-    document.getElementById('botnetBtn').disabled = false;
-    document.getElementById('botnetBtn').textContent = '🤖 Activar Botnet (DDoS)';
-    document.getElementById('crashOverlay').classList.remove('visible');
-    document.getElementById('cardStatus').classList.remove('alert');
-
+    crashed = false; dosLevel = 0; botnetActive = false; botnetPhase = 0; load = 0; packets = []; bots = []; serverShake = 0;
+    dosSlider.value = 0; document.getElementById('dosVal').textContent = '0';
+    document.getElementById('botnetBtn').disabled = false; document.getElementById('botnetBtn').textContent = '🤖 Activar Botnet';
+    document.getElementById('crashOverlay').classList.remove('visible'); document.getElementById('cardStatus').classList.remove('alert');
     updateUI();
   }
 
-  // ── START ──
   animFrame = requestAnimationFrame(update);
 </script>
 </body>
