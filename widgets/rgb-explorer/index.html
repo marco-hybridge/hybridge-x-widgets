@@ -3,372 +3,334 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RGB Explorer</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>RGB Explorer · Hybridge X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    /* =========================================================================
+       HYBRIDGE DESIGN TOKENS (v2)
+       ========================================================================= */
     :root {
-      --bg: #0a0e13;
-      --surface: #111820;
-      --border: #1e2d3d;
-      --text: #cdd9e5;
-      --muted: #4d6275;
+      --hb-black: #0D0D0D; 
+      --hb-white: #FFFFFF; 
+      --hb-yellow: #E2F897; 
+      --hb-navy: #0C1821;
+      --hb-pink: #FFB1D2; 
+      --hb-mint: #2EE6A0;
+      --hb-bright-aqua: #A9F8FB;
+      --hb-purple: #C07CFF;
+      
+      --hb-gray-950: #0A0A0A;
+      --hb-gray-900: #141414; 
+      --hb-gray-850: #1F1F1F; 
+      --hb-gray-800: #2A2A2A; 
+      --hb-gray-700: #3F3F3F;
+      --hb-gray-400: #A0A0A0;
+
+      --color-bg: var(--hb-black);
+      --color-surface: var(--hb-gray-900);
+      --color-text: var(--hb-white);
+      --color-text-muted: var(--hb-gray-400);
+      --color-accent: var(--hb-yellow);
+      --color-border: rgba(255, 255, 255, 0.12);
+      --color-border-strong: rgba(255, 255, 255, 0.24);
+
+      --font-display: "Public Sans";
+      --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      
+      --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
+      
+      --fs-h2: 2rem;
+      --fs-h3: 1.5rem;
+      --fs-body-l: 1.125rem;
+      --fs-body: 1rem;
+      --fs-caption: 0.875rem;
+      --fs-label: 0.75rem;
+      
+      --lh-tight: 1.1; 
+      --lh-base: 1.6;
+      --tracking-tight: -0.01em;
+      --tracking-label: 0.14em;
+
+      --radius-chip: 9999px; 
+      --radius-card: 16px;
+      --radius-md: 12px;
+      
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
+      --space-6: 1.5rem; --space-8: 2rem;
+
+      --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
+
+      /* Variables dinámicas para los sliders */
       --r: 255;
       --g: 100;
       --b: 50;
     }
 
+    /* =========================================================================
+       BASE & LAYOUT
+       ========================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-base);
+      -webkit-font-smoothing: antialiased;
+      padding: var(--space-8) 0;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 520px;
-      box-shadow: 0 0 60px rgba(0,0,0,0.6);
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .dot-row {
-      display: flex;
-      gap: 6px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--border);
-    }
-
-    .title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-
-    /* Color preview */
-    .preview {
-      width: 100%;
-      height: 140px;
-      border-radius: 12px;
-      margin-bottom: 28px;
-      transition: background 0.08s ease;
       position: relative;
-      overflow: hidden;
     }
 
-    .preview-pixels {
+    /* Ambient Lighting (Pink & Yellow mix) */
+    body::before {
+      content: "";
       position: absolute;
       inset: 0;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      opacity: 0.08;
+      z-index: -1;
+      background:
+        radial-gradient(40% 60% at 80% 20%, rgba(255, 177, 210, 0.15), transparent 60%),
+        radial-gradient(50% 70% at 20% 80%, rgba(226, 248, 151, 0.10), transparent 60%);
       pointer-events: none;
     }
 
-    .px {
-      border: 0.5px solid rgba(255,255,255,0.3);
+    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
     }
 
+    .nav-back {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      color: var(--color-text-muted); text-decoration: none;
+      font-size: var(--fs-caption); font-weight: var(--fw-bold);
+      margin-bottom: var(--space-6); transition: color 0.15s;
+    }
+    .nav-back:hover { color: var(--color-text); }
+
+    /* =========================================================================
+       HEADER
+       ========================================================================= */
+    .header { margin-bottom: var(--space-8); text-align: left; }
+    .hb-overline { display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-3); }
+    .hb-h2 { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); margin-bottom: var(--space-3); }
+    .hb-lead { font-size: var(--fs-body-l); font-weight: var(--fw-light); color: var(--color-text-muted); max-width: 65ch; }
+
+    /* =========================================================================
+       APP CARD & GRID
+       ========================================================================= */
+    .hb-app-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 0;
+    }
+    @media (max-width: 768px) {
+      .app-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Columna Izquierda: Visual */
+    .app-visuals {
+      padding: var(--space-6);
+      border-right: 1px solid var(--color-border);
+      background: var(--hb-gray-950);
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 768px) {
+      .app-visuals { border-right: none; border-bottom: 1px solid var(--color-border); }
+    }
+
+    .preview {
+      width: 100%;
+      height: 180px;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-6);
+      transition: background 0.08s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .preview-pixels {
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(4, 1fr);
+      opacity: 0.08; pointer-events: none;
+    }
+    .px { border: 0.5px solid rgba(255,255,255,0.3); }
+
     .preview-label {
-      position: absolute;
-      bottom: 12px;
-      right: 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: rgba(255,255,255,0.6);
-      background: rgba(0,0,0,0.35);
-      padding: 4px 10px;
-      border-radius: 6px;
-      backdrop-filter: blur(4px);
+      position: absolute; bottom: 12px; right: 14px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: var(--fw-semibold);
+      color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.35);
+      padding: 4px 10px; border-radius: var(--radius-sm); backdrop-filter: blur(4px);
+    }
+
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);
+      margin-top: auto;
+    }
+    .info-cell {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 12px 14px;
+    }
+    .info-cell-label {
+      font-size: var(--fs-label); font-weight: var(--fw-semibold); letter-spacing: var(--tracking-label);
+      color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px;
+    }
+    .info-cell-value { font-family: var(--font-mono); font-size: 0.95rem; color: var(--color-text); font-weight: var(--fw-bold); }
+
+    /* Columna Derecha: Controles */
+    .app-controls {
+      padding: var(--space-6) var(--space-8);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-label {
+      font-size: var(--fs-label); font-weight: var(--fw-semibold); letter-spacing: var(--tracking-label);
+      color: var(--color-text-muted); text-transform: uppercase; margin-bottom: var(--space-4);
+      display: block;
     }
 
     /* Sliders */
-    .sliders {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 28px;
-    }
+    .sliders { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; }
+    .slider-row { display: grid; grid-template-columns: 20px 1fr 40px; align-items: center; gap: 16px; }
+    
+    .channel-label { font-family: var(--font-mono); font-size: 1rem; font-weight: var(--fw-bold); }
+    .channel-label.r { color: #FF6B7A; } /* Coral v2 */
+    .channel-label.g { color: #2EE6A0; } /* Mint v2 */
+    .channel-label.b { color: #A9F8FB; } /* Aqua v2 */
 
-    .slider-row {
-      display: grid;
-      grid-template-columns: 24px 1fr 48px;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .channel-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .channel-label.r { color: #ff6b6b; }
-    .channel-label.g { color: #6bffb8; }
-    .channel-label.b { color: #6bb8ff; }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    input[type="range"].r-track {
-      background: linear-gradient(to right,
-        rgb(0, var(--g), var(--b)),
-        rgb(255, var(--g), var(--b)));
-    }
-    input[type="range"].g-track {
-      background: linear-gradient(to right,
-        rgb(var(--r), 0, var(--b)),
-        rgb(var(--r), 255, var(--b)));
-    }
-    input[type="range"].b-track {
-      background: linear-gradient(to right,
-        rgb(var(--r), var(--g), 0),
-        rgb(var(--r), var(--g), 255));
-    }
-
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 9999px; outline: none; cursor: pointer; }
+    
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.5);
-      transition: transform 0.1s;
+      -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--hb-white);
+      box-shadow: 0 0 0 2px var(--hb-gray-900), 0 0 0 4px rgba(255,255,255,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: var(--focus-ring); transform: scale(1.15); }
 
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
+    .channel-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--color-text-muted); text-align: right; }
+
+    /* Presets & Chips */
+    .presets-container { margin-bottom: 32px; }
+    .presets { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .hb-chip-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; border: 1.5px solid var(--color-border-strong);
+      border-radius: var(--radius-chip); padding: 0.4rem 0.8rem;
+      font-family: var(--font-sans); font-size: var(--fs-caption); font-weight: var(--fw-bold);
+      color: var(--color-text); cursor: pointer; transition: all 0.15s;
     }
+    .hb-chip-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--color-text); }
+    
+    .preset-swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); }
 
-    .channel-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--muted);
-      text-align: right;
-    }
+    /* Brand Colors section */
+    .brand-section { margin-top: auto; padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
 
-    /* Info panel */
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .info-cell {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-
-    .info-cell-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .info-cell-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    /* Presets */
-    .presets-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .presets {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .preset-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 7px 12px;
-      cursor: pointer;
-      transition: border-color 0.15s, transform 0.1s;
-      color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .preset-btn:hover {
-      border-color: rgba(255,255,255,0.2);
-      transform: translateY(-1px);
-    }
-
-    .preset-swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-
-    /* Hybridge badge */
-    .hybridge-badge {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .hybridge-colors {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .hb-chip {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 5px 10px;
-      cursor: pointer;
-      transition: border-color 0.15s;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .hb-chip:hover { border-color: rgba(255,255,255,0.25); }
-
-    .hb-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-    }
-
-    .badge-label {
-      font-size: 11px;
-      color: var(--muted);
-    }
   </style>
 </head>
 <body>
 
-<div class="card">
+<div class="wrap">
+  <a href="../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
 
-  <div class="header">
-    <div class="dot-row">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <span class="title">rgb-explorer.html</span>
-  </div>
+  <header class="header">
+    <span class="hb-overline">🖼️ Imágenes Digitales</span>
+    <h2 class="hb-h2">RGB Explorer</h2>
+    <p class="hb-lead">Comprende cómo las pantallas mezclan luz Roja, Verde y Azul para crear más de 16 millones de colores mediante síntesis aditiva.</p>
+  </header>
 
-  <div class="preview" id="preview">
-    <div class="preview-pixels" id="pixels"></div>
-    <span class="preview-label" id="previewLabel">rgb(255, 100, 50)</span>
-  </div>
-
-  <div class="sliders">
-    <div class="slider-row">
-      <span class="channel-label r">R</span>
-      <input type="range" class="r-track" id="rSlider" min="0" max="255" value="255">
-      <span class="channel-value" id="rVal">255</span>
-    </div>
-    <div class="slider-row">
-      <span class="channel-label g">G</span>
-      <input type="range" class="g-track" id="gSlider" min="0" max="255" value="100">
-      <span class="channel-value" id="gVal">100</span>
-    </div>
-    <div class="slider-row">
-      <span class="channel-label b">B</span>
-      <input type="range" class="b-track" id="bSlider" min="0" max="255" value="50">
-      <span class="channel-value" id="bVal">50</span>
-    </div>
-  </div>
-
-  <div class="info-grid">
-    <div class="info-cell">
-      <div class="info-cell-label">RGB</div>
-      <div class="info-cell-value" id="infoRgb">rgb(255, 100, 50)</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">HEX</div>
-      <div class="info-cell-value" id="infoHex">#FF6432</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">Bits por canal</div>
-      <div class="info-cell-value">8 bits</div>
-    </div>
-    <div class="info-cell">
-      <div class="info-cell-label">Colores posibles</div>
-      <div class="info-cell-value">16,777,216</div>
-    </div>
-  </div>
-
-  <div class="presets-label">Colores rápidos</div>
-  <div class="presets" id="presets"></div>
-
-  <div class="hybridge-badge">
-    <span class="badge-label">Colores Hybridge →</span>
-    <div class="hybridge-colors">
-      <div class="hb-chip" onclick="setColor(12,24,33)">
-        <div class="hb-dot" style="background:rgb(12,24,33);border:1px solid #333"></div>
-        Azul
+  <div class="hb-app-card">
+    <div class="app-layout">
+      
+      <div class="app-visuals">
+        <div class="preview" id="preview">
+          <div class="preview-pixels" id="pixels"></div>
+          <span class="preview-label" id="previewLabel">rgb(255, 100, 50)</span>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-cell">
+            <div class="info-cell-label">RGB</div>
+            <div class="info-cell-value" id="infoRgb">rgb(255, 100, 50)</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-cell-label">HEX</div>
+            <div class="info-cell-value" id="infoHex">#FF6432</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-cell-label">Bits / Canal</div>
+            <div class="info-cell-value">8 bits</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-cell-label">Colores Posibles</div>
+            <div class="info-cell-value">16,777,216</div>
+          </div>
+        </div>
       </div>
-      <div class="hb-chip" onclick="setColor(226,248,151)">
-        <div class="hb-dot" style="background:rgb(226,248,151)"></div>
-        Amarillo
+
+      <div class="app-controls">
+        
+        <span class="section-label">Mezclador de canales</span>
+        <div class="sliders">
+          <div class="slider-row">
+            <span class="channel-label r">R</span>
+            <input type="range" id="rSlider" min="0" max="255" value="255" aria-label="Canal Rojo">
+            <span class="channel-value" id="rVal">255</span>
+          </div>
+          <div class="slider-row">
+            <span class="channel-label g">G</span>
+            <input type="range" id="gSlider" min="0" max="255" value="100" aria-label="Canal Verde">
+            <span class="channel-value" id="gVal">100</span>
+          </div>
+          <div class="slider-row">
+            <span class="channel-label b">B</span>
+            <input type="range" id="bSlider" min="0" max="255" value="50" aria-label="Canal Azul">
+            <span class="channel-value" id="bVal">50</span>
+          </div>
+        </div>
+
+        <div class="presets-container">
+          <span class="section-label">Colores Base</span>
+          <div class="presets" id="presets"></div>
+        </div>
+
+        <div class="brand-section">
+          <span class="section-label">Paleta Hybridge</span>
+          <div class="presets" id="brandPresets"></div>
+        </div>
+
       </div>
+
     </div>
   </div>
-
 </div>
 
 <script>
+  // ── LÓGICA PRESERVADA DEL WIDGET ORIGINAL ──
   const rSlider = document.getElementById('rSlider');
   const gSlider = document.getElementById('gSlider');
   const bSlider = document.getElementById('bSlider');
@@ -381,7 +343,7 @@
   const infoHex = document.getElementById('infoHex');
   const root    = document.documentElement;
 
-  // Build pixel grid
+  // Renderizar cuadrícula de píxeles decorativa
   const pixelsEl = document.getElementById('pixels');
   for (let i = 0; i < 48; i++) {
     const px = document.createElement('div');
@@ -389,24 +351,39 @@
     pixelsEl.appendChild(px);
   }
 
+  // Preajustes Generales
   const presets = [
-    { name: 'Rojo',     r: 220, g: 38,  b: 38  },
-    { name: 'Verde',    r: 34,  g: 197, b: 94  },
-    { name: 'Azul',     r: 59,  g: 130, b: 246 },
-    { name: 'Amarillo', r: 250, g: 204, b: 21  },
+    { name: 'Rojo',     r: 255, g: 107, b: 122 }, // Ajustados levemente a la estética dark
+    { name: 'Verde',    r: 46,  g: 230, b: 160 },
+    { name: 'Azul',     r: 169, g: 248, b: 251 },
     { name: 'Blanco',   r: 255, g: 255, b: 255 },
-    { name: 'Negro',    r: 0,   g: 0,   b: 0   },
-    { name: 'Cyan',     r: 6,   g: 182, b: 212 },
-    { name: 'Naranja',  r: 249, g: 115, b: 22  },
+    { name: 'Negro',    r: 0,   g: 0,   b: 0   }
   ];
 
   const presetsEl = document.getElementById('presets');
   presets.forEach(p => {
     const btn = document.createElement('button');
-    btn.className = 'preset-btn';
+    btn.className = 'hb-chip-btn';
     btn.innerHTML = `<span class="preset-swatch" style="background:rgb(${p.r},${p.g},${p.b})"></span>${p.name}`;
     btn.addEventListener('click', () => setColor(p.r, p.g, p.b));
     presetsEl.appendChild(btn);
+  });
+
+  // Preajustes Oficiales Hybridge v2
+  const brandColors = [
+    { name: 'Yellow', r: 226, g: 248, b: 151 },
+    { name: 'Navy',   r: 12,  g: 24,  b: 33  },
+    { name: 'Mint',   r: 46,  g: 230, b: 160 },
+    { name: 'Pink',   r: 255, g: 177, b: 210 }
+  ];
+
+  const brandPresetsEl = document.getElementById('brandPresets');
+  brandColors.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'hb-chip-btn';
+    btn.innerHTML = `<span class="preset-swatch" style="background:rgb(${p.r},${p.g},${p.b})"></span>${p.name}`;
+    btn.addEventListener('click', () => setColor(p.r, p.g, p.b));
+    brandPresetsEl.appendChild(btn);
   });
 
   function toHex(n) { return n.toString(16).toUpperCase().padStart(2, '0'); }
@@ -432,15 +409,15 @@
     root.style.setProperty('--g', g);
     root.style.setProperty('--b', b);
 
-    // Update gradient tracks
+    // Actualizar gradientes de las pistas (Tracks)
     rSlider.style.background = `linear-gradient(to right, rgb(0,${g},${b}), rgb(255,${g},${b}))`;
     gSlider.style.background = `linear-gradient(to right, rgb(${r},0,${b}), rgb(${r},255,${b}))`;
     bSlider.style.background = `linear-gradient(to right, rgb(${r},${g},0), rgb(${r},${g},255))`;
 
-    // Adaptive label color
+    // Etiqueta adaptativa basada en luminancia
     const luminance = 0.299*r + 0.587*g + 0.114*b;
-    previewLabel.style.color = luminance > 180 ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)';
-    previewLabel.style.background = luminance > 180 ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.35)';
+    previewLabel.style.color = luminance > 180 ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)';
+    previewLabel.style.background = luminance > 180 ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.35)';
   }
 
   function setColor(r, g, b) {
@@ -454,7 +431,9 @@
   gSlider.addEventListener('input', update);
   bSlider.addEventListener('input', update);
 
+  // Inicialización
   update();
 </script>
+
 </body>
 </html>
