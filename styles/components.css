@@ -301,6 +301,9 @@
   pointer-events: none;
   user-select:    none;
 }
+
+/* -------------------------------------------------------------------------
+   NAVEGACIÓN — Volver atrás
    Reutilizable en todos los widgets
    ------------------------------------------------------------------------- */
 
