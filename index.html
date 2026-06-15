@@ -4,298 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hybridge X — Laboratorio de Widgets</title>
+
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <style>
-    /* =========================================================================
-       HYBRIDGE DESIGN TOKENS (v2)
-       ========================================================================= */
-    :root {
-      /* Core */
-      --hb-black: #0D0D0D; 
-      --hb-white: #FFFFFF; 
-      --hb-yellow: #E2F897; 
-      --hb-navy: #0C1821;
-      
-      /* Secundaria & Marketing */
-      --hb-pink: #FFB1D2; 
-      --hb-mint: #2EE6A0;
-      --hb-steel-blue: #1E3A5F;
-      --hb-purple: #C07CFF;
-      
-      /* Neutros */
-      --hb-gray-900: #141414; 
-      --hb-gray-850: #1F1F1F; 
-      --hb-gray-800: #2A2A2A; 
-      --hb-gray-400: #A0A0A0;
 
-      /* Roles Semánticos */
-      --color-bg: var(--hb-black);
-      --color-surface: var(--hb-gray-900);
-      --color-text: var(--hb-white);
-      --color-text-muted: var(--hb-gray-400);
-      --color-accent: var(--hb-yellow);
-      --color-border: rgba(255, 255, 255, 0.12);
-      --color-border-strong: rgba(255, 255, 255, 0.24);
-
-      /* Tipografía */
-      --font-display: "Public Sans";
-      --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
-      --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
-      
-      --fs-hero: clamp(2.2rem, 5vw, 3.5rem);
-      --fs-h3: 1.5rem;
-      --fs-body-l: 1.125rem;
-      --fs-caption: 0.875rem;
-      --fs-label: 0.75rem;
-      
-      --lh-tight: 1.1; 
-      --lh-snug: 1.2;
-      --lh-base: 1.6;
-      --tracking-tight: -0.01em;
-      --tracking-label: 0.14em;
-
-      /* Radios y Espaciado */
-      --radius-chip: 9999px; 
-      --radius-card: 16px;
-      --radius-md: 12px;
-      
-      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
-      --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem;
-
-      /* Sombras y Focus */
-      --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
-      --shadow-chip: 0 2px 8px rgba(0, 0, 0, 0.30);
-      --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
-      --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
-    }
-
-    /* =========================================================================
-       BASE & LAYOUT
-       ========================================================================= */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--color-bg);
-      color: var(--color-text);
-      font-family: var(--font-sans);
-      font-weight: var(--fw-regular);
-      line-height: var(--lh-base);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
-    
-    .wrap {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 0 var(--space-6);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* =========================================================================
-       BRANDING
-       ========================================================================= */
-    .brand-header {
-      /* Área de protección (Clear space) - Sección 2.3 del DESIGN.md */
-      margin-bottom: var(--space-8);
-      display: inline-block;
-    }
-
-    /* =========================================================================
-       HERO (AMBIENT LIGHTING)
-       ========================================================================= */
-    .hero {
-      position: relative;
-      padding: var(--space-16) 0 var(--space-12);
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(50% 80% at 80% 10%, rgba(192, 124, 255, 0.12), transparent 60%),
-        radial-gradient(40% 70% at 10% 90%, rgba(30, 58, 95, 0.30), transparent 60%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      font-size: var(--fs-label);
-      font-weight: var(--fw-semibold);
-      text-transform: uppercase;
-      letter-spacing: var(--tracking-label);
-      color: var(--color-accent);
-      margin-bottom: var(--space-4);
-    }
-
-    h1 {
-      font-size: var(--fs-hero);
-      font-weight: var(--fw-black);
-      text-transform: uppercase;
-      letter-spacing: var(--tracking-tight);
-      line-height: var(--lh-tight);
-      margin-bottom: var(--space-4);
-    }
-
-    .lead {
-      font-size: var(--fs-body-l);
-      font-weight: var(--fw-light);
-      color: var(--color-text-muted);
-      max-width: 55ch;
-    }
-
-    /* =========================================================================
-       BOTONES (HERO CTA)
-       ========================================================================= */
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      margin-top: var(--space-8);
-    }
-
-    .hb-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-      font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: 1rem;
-      padding: var(--space-3) var(--space-6);
-      border-radius: var(--radius-chip);
-      border: none; cursor: pointer; text-decoration: none;
-      transition: background-color .15s ease, transform .12s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-
-    .hb-btn-primary { 
-      background: var(--hb-yellow); 
-      color: var(--hb-black); 
-    }
-    .hb-btn-primary:hover, .hb-btn-primary:focus-visible { 
-      background: #D4F07A; 
-      transform: translateY(-1px); 
-      box-shadow: var(--shadow-lift); 
-    }
-    .hb-btn-primary:active { 
-      background: #C7E86A; 
-      transform: translateY(0); 
-      box-shadow: none; 
-    }
-
-    .hb-btn-ghost { 
-      background: transparent; 
-      color: var(--hb-white); 
-      border: 1.5px solid var(--color-border-strong); 
-    }
-    .hb-btn-ghost:hover, .hb-btn-ghost:focus-visible { 
-      background: rgba(255, 255, 255, 0.08); 
-      border-color: var(--hb-white); 
-    }
-    .hb-btn-ghost:active { 
-      background: rgba(255, 255, 255, 0.14); 
-    }
-
-    /* =========================================================================
-       GRID Y TARJETAS (ESTILO 'PROGRAM')
-       ========================================================================= */
-    .widget-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: var(--space-6);
-      padding: var(--space-12) 0;
-    }
-
-    .widget-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-card);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .widget-card:hover,
-    .widget-card:focus-visible {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lift);
-      border-color: var(--color-border-strong);
-    }
-
-    .widget-media {
-      height: 140px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.5rem;
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .media-pink { background: radial-gradient(70% 70% at 30% 20%, rgba(255, 177, 210, 0.25), transparent 60%), var(--hb-gray-850); }
-    .media-cyber { background: radial-gradient(70% 70% at 80% 20%, rgba(46, 230, 160, 0.15), transparent 60%), radial-gradient(70% 70% at 20% 80%, rgba(30, 58, 95, 0.4), transparent 60%), var(--hb-gray-850); }
-
-    .widget-tags { position: absolute; top: var(--space-3); left: var(--space-3); display: flex; gap: var(--space-2); }
-
-    .widget-body { padding: var(--space-6); display: flex; flex-direction: column; flex: 1; }
-    .widget-meta { font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-text-muted); margin-bottom: var(--space-2); }
-    .widget-name { font-size: var(--fs-h3); font-weight: var(--fw-bold); line-height: var(--lh-snug); margin-bottom: var(--space-2); }
-    .widget-route { font-size: var(--fs-caption); color: var(--color-text-muted); font-family: ui-monospace, monospace; margin-bottom: var(--space-6); flex: 1; }
-
-    .widget-footer { display: flex; align-items: center; justify-content: flex-end; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: var(--space-4); margin-top: auto; }
-
-    .hb-btn-ghost-sm {
-      display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--fs-caption); font-weight: var(--fw-bold);
-      padding: 0.4rem 0.8rem; border-radius: var(--radius-chip); border: 1.5px solid var(--color-border-strong);
-      color: var(--hb-white); transition: background 0.15s;
-    }
-    .widget-card:hover .hb-btn-ghost-sm { background: rgba(255, 255, 255, 0.08); border-color: var(--hb-white); }
-
-    /* =========================================================================
-       CHIPS / BADGES
-       ========================================================================= */
-    .hb-chip {
-      display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem;
-      border-radius: var(--radius-chip); font-size: 0.7rem; font-weight: var(--fw-bold);
-      box-shadow: var(--shadow-chip); white-space: nowrap;
-    }
-    .hb-chip--pink { background: var(--hb-pink); color: var(--hb-black); }
-    .hb-chip--dark { background: var(--hb-gray-850); color: var(--hb-white); border: 1px solid var(--color-border); }
-
-  </style>
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
 
+  <!-- ===== HERO ===== -->
   <header class="hero">
     <div class="wrap">
-      
+
       <div class="brand-header">
         <hybridge-logo fill="#FFFFFF" width="180px"></hybridge-logo>
       </div>
 
       <h1>Laboratorio<br>de Widgets</h1>
-      <p class="lead">Simuladores y herramientas interactivas diseñadas para enriquecer la experiencia de clase en la plataforma.</p>
-      
+
+      <p class="lead">
+        Simuladores y herramientas interactivas diseñadas para enriquecer
+        la experiencia de clase en la plataforma.
+      </p>
+
       <div class="hero-actions">
-        <a href="https://hub.hybridge.education/collection/hybridgex-20-5PmmSdBmWJ" target="_blank" rel="noopener noreferrer" class="hb-btn hb-btn-primary">
+        <a
+          href="https://hub.hybridge.education/collection/hybridgex-20-5PmmSdBmWJ"
+          target="_blank" rel="noopener noreferrer"
+          class="hb-btn hb-btn-primary"
+        >
           💻 Cuaderno de Hybridge X 2.0
         </a>
-        <a href="https://hub.hybridge.education/recordings/02e3129a-7e65-475d-a61c-158a155627cf" target="_blank" rel="noopener noreferrer" class="hb-btn hb-btn-ghost">
+        <a
+          href="https://hub.hybridge.education/recordings/02e3129a-7e65-475d-a61c-158a155627cf"
+          target="_blank" rel="noopener noreferrer"
+          class="hb-btn hb-btn-ghost"
+        >
           📼 Grabaciones pasadas
         </a>
       </div>
+
     </div>
   </header>
 
+  <!-- ===== GRID DE WIDGETS ===== -->
   <main class="wrap">
     <div class="widget-grid">
 
+      <!-- RGB Explorer -->
       <a class="widget-card" href="widgets/rgb-explorer/">
         <div class="widget-media media-pink">
           <div class="widget-tags">
@@ -313,6 +74,7 @@
         </div>
       </a>
 
+      <!-- Detector de Phishing -->
       <a class="widget-card" href="widgets/phishing-detector/">
         <div class="widget-media media-cyber">
           <div class="widget-tags">
@@ -330,6 +92,7 @@
         </div>
       </a>
 
+      <!-- Simulador de Estrés (DoS) -->
       <a class="widget-card" href="widgets/dos-simulator/">
         <div class="widget-media media-cyber">
           <div class="widget-tags">
@@ -347,6 +110,7 @@
         </div>
       </a>
 
+      <!-- La Batalla del Ranking (SEO Poisoning) -->
       <a class="widget-card" href="widgets/seo-poisoning/">
         <div class="widget-media media-cyber">
           <div class="widget-tags">
@@ -364,6 +128,7 @@
         </div>
       </a>
 
+      <!-- Identifica al Hacker -->
       <a class="widget-card" href="widgets/cual-es-mi-sombrero/">
         <div class="widget-media media-cyber">
           <div class="widget-tags">
@@ -381,6 +146,7 @@
         </div>
       </a>
 
+      <!-- Simulador de Pentesting -->
       <a class="widget-card" href="widgets/ethical_hacking_challenge/">
         <div class="widget-media media-cyber">
           <div class="widget-tags">
@@ -401,6 +167,8 @@
     </div>
   </main>
 
-  <script src="hybridge-logo.js"></script>
+  <!-- Web Component del logo -->
+  <script src="scripts/hybridge-logo.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,72 @@
+/* =========================================================================
+   HYBRIDGE INDEX — Estilos de página
+   Específicos del index principal (hero, branding).
+   Requiere tokens.css + base.css + components.css.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   BRANDING — Logo header
+   ------------------------------------------------------------------------- */
+
+.brand-header {
+  /* Clear space (Sección 2.3 del DESIGN.md) */
+  margin-bottom: var(--space-8);
+  display:       inline-block;
+}
+
+/* -------------------------------------------------------------------------
+   HERO — Ambient lighting
+   ------------------------------------------------------------------------- */
+
+.hero {
+  position:      relative;
+  padding:       var(--space-16) 0 var(--space-12);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Gradientes de ambiente decorativos */
+.hero::before {
+  content:        "";
+  position:       absolute;
+  inset:          0;
+  z-index:        0;
+  background:
+    radial-gradient(50% 80% at 80% 10%, rgba(192, 124, 255, 0.12), transparent 60%),
+    radial-gradient(40% 70% at 10% 90%, rgba(30, 58, 95, 0.30), transparent 60%);
+  pointer-events: none;
+}
+
+/* Eyebrow label sobre el H1 */
+.eyebrow {
+  display:        inline-block;
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-accent);
+  margin-bottom:  var(--space-4);
+}
+
+h1 {
+  font-size:      var(--fs-hero);
+  font-weight:    var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  line-height:    var(--lh-tight);
+  margin-bottom:  var(--space-4);
+}
+
+.lead {
+  font-size:   var(--fs-body-l);
+  font-weight: var(--fw-light);
+  color:       var(--color-text-muted);
+  max-width:   55ch;
+}
+
+/* CTAs del hero */
+.hero-actions {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        var(--space-4);
+  margin-top: var(--space-8);
+}
