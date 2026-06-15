@@ -98,6 +98,15 @@
     }
 
     /* =========================================================================
+       BRANDING
+       ========================================================================= */
+    .brand-header {
+      /* Área de protección (Clear space) - Sección 2.3 del DESIGN.md */
+      margin-bottom: var(--space-8);
+      display: inline-block;
+    }
+
+    /* =========================================================================
        HERO (AMBIENT LIGHTING)
        ========================================================================= */
     .hero {
@@ -265,7 +274,11 @@
 
   <header class="hero">
     <div class="wrap">
-      <span class="eyebrow">Hybridge X 2.0 — Marco</span>
+      
+      <div class="brand-header">
+        <hybridge-logo fill="#FFFFFF" width="180px"></hybridge-logo>
+      </div>
+
       <h1>Laboratorio<br>de Widgets</h1>
       <p class="lead">Simuladores y herramientas interactivas diseñadas para enriquecer la experiencia de clase en la plataforma.</p>
       
@@ -388,5 +401,6 @@
     </div>
   </main>
 
+  <script src="hybridge-logo.js"></script>
 </body>
 </html>
