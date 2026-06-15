@@ -137,6 +137,18 @@ function renderOptions(s) {
   });
 }
 
+function showErrorPopup(text, onClose) {
+  const overlay = document.getElementById('feedback-overlay');
+  document.getElementById('feedback-popup-text').textContent = text;
+  overlay.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('visible');
+  setTimeout(() => {
+    overlay.classList.remove('visible');
+    overlay.setAttribute('aria-hidden', 'true');
+    onClose();
+  }, 2800);
+}
+
 function selectOption(opt, idx, s) {
   if (answered) return;
   answered = true;
@@ -164,21 +176,21 @@ function selectOption(opt, idx, s) {
 
   term.scrollTop = term.scrollHeight;
 
-  // Esperar un momento antes de avanzar o resetear
-  setTimeout(() => {
-    if (opt.correct) {
+  if (opt.correct) {
+    setTimeout(() => {
       current++;
       if (current < steps.length) {
         renderStep(current);
       } else {
         showFinal();
       }
-    } else {
-      // Si falló, reseteamos el estado de las opciones para que lo intente de nuevo
+    }, 2500);
+  } else {
+    showErrorPopup(opt.feedback, () => {
       answered = false;
       btns.forEach(b => { b.disabled = false; b.classList.remove('wrong'); });
-    }
-  }, opt.correct ? 2500 : 2000);
+    });
+  }
 }
 
 function showFinal() {
