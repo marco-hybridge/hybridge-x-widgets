@@ -1,0 +1,220 @@
+/* =========================================================================
+   HYBRIDGE DESIGN TOKENS (v2)
+   ========================================================================= */
+:root {
+  --hb-black: #0D0D0D; 
+  --hb-white: #FFFFFF; 
+  --hb-yellow: #E2F897; 
+  --hb-navy: #0C1821;
+  --hb-pink: #FFB1D2; 
+  --hb-mint: #2EE6A0;
+  --hb-bright-aqua: #A9F8FB;
+  --hb-purple: #C07CFF;
+  
+  --hb-gray-950: #0A0A0A;
+  --hb-gray-900: #141414; 
+  --hb-gray-850: #1F1F1F; 
+  --hb-gray-800: #2A2A2A; 
+  --hb-gray-400: #A0A0A0;
+
+  --color-bg: var(--hb-black);
+  --color-surface: var(--hb-gray-900);
+  --color-surface-raised: var(--hb-gray-800);
+  --color-text: var(--hb-white);
+  --color-text-muted: var(--hb-gray-400);
+  --color-accent: var(--hb-yellow);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-strong: rgba(255, 255, 255, 0.24);
+  --color-error: #FF6B7A;
+  --color-success: var(--hb-mint);
+
+  --font-display: "Public Sans";
+  --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  
+  --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
+  
+  --fs-h2: 2rem;
+  --fs-body-l: 1.125rem;
+  --fs-caption: 0.875rem;
+  --fs-label: 0.75rem;
+  
+  --lh-tight: 1.1; --lh-base: 1.6;
+  --tracking-tight: -0.01em; --tracking-label: 0.14em;
+
+  --radius-chip: 9999px; --radius-card: 16px; --radius-md: 12px;
+  
+  --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
+  --space-6: 1.5rem; --space-8: 2rem;
+
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
+}
+
+/* =========================================================================
+   BASE & LAYOUT
+   ========================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  padding: var(--space-8) 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Iluminación Ambiental (Estética Cypherpunk sutil) */
+body::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(40% 60% at 80% 20%, rgba(46, 230, 160, 0.1), transparent 60%),
+    radial-gradient(50% 70% at 20% 80%, rgba(192, 124, 255, 0.1), transparent 60%);
+  pointer-events: none;
+}
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--space-6); }
+
+.nav-back {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--color-text-muted); text-decoration: none;
+  font-size: var(--fs-caption); font-weight: var(--fw-bold);
+  margin-bottom: var(--space-6); transition: color 0.15s;
+}
+.nav-back:hover { color: var(--color-text); }
+
+/* =========================================================================
+   HEADER
+   ========================================================================= */
+.header { margin-bottom: var(--space-8); text-align: left; }
+.hb-overline { display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-3); }
+.hb-h2 { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); margin-bottom: var(--space-3); }
+.hb-lead { font-size: var(--fs-body-l); font-weight: var(--fw-light); color: var(--color-text-muted); max-width: 65ch; }
+
+/* =========================================================================
+   APP CARD & PROGRESS
+   ========================================================================= */
+.hb-app-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-6);
+  display: flex; flex-direction: column; gap: var(--space-6);
+}
+
+.progress-header { display: flex; flex-direction: column; gap: 8px; }
+.step-label { font-size: var(--fs-caption); font-weight: var(--fw-bold); color: var(--color-text); text-transform: uppercase; letter-spacing: 0.05em; }
+.progress-bar-wrap { height: 6px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--hb-yellow); border-radius: 9999px; transition: width 0.4s ease; }
+
+/* =========================================================================
+   TERMINAL UI
+   ========================================================================= */
+.terminal {
+  background: var(--hb-gray-950);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.terminal-bar {
+  background: var(--hb-gray-850);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+.terminal-dots { display: flex; gap: 6px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+
+.terminal-title {
+  font-size: 0.75rem; font-weight: var(--fw-bold);
+  color: var(--color-text-muted); font-family: var(--font-mono);
+}
+
+.terminal-body {
+  padding: 16px; min-height: 200px; max-height: 280px;
+  overflow-y: auto; font-family: var(--font-mono); scrollbar-width: thin; scrollbar-color: var(--color-border-strong) transparent;
+}
+
+/* Colores Semánticos de la Terminal Mapeados a Hybridge */
+.line { font-size: 0.85rem; line-height: 1.6; margin: 0; }
+.line.prompt  { color: var(--hb-mint); font-weight: var(--fw-bold); }
+.line.output  { color: var(--color-text-muted); }
+.line.error   { color: var(--color-error); }
+.line.success { color: var(--hb-bright-aqua); }
+.line.warning { color: var(--hb-pink); }
+
+/* =========================================================================
+   HINT BOX (MENTOR AI)
+   ========================================================================= */
+.hint-box {
+  background: rgba(255, 177, 210, 0.08); /* Pink tint */
+  border: 1px solid rgba(255, 177, 210, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.hint-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.hint-icon { font-size: 1.1rem; }
+.hint-label { font-size: var(--fs-label); font-weight: var(--fw-bold); color: var(--hb-pink); text-transform: uppercase; letter-spacing: var(--tracking-label); }
+.hint-text { font-size: var(--fs-caption); color: var(--color-text); line-height: 1.5; }
+
+/* =========================================================================
+   OPCIONES INTERACTIVAS
+   ========================================================================= */
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .options-grid { grid-template-columns: 1fr; } }
+
+.option-btn {
+  background: var(--hb-gray-850);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px; text-align: left;
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: var(--fw-medium);
+  color: var(--color-text); cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: var(--color-surface-raised); border-color: var(--color-border-strong);
+  transform: translateY(-2px); box-shadow: var(--shadow-soft);
+}
+
+.option-btn.correct { background: rgba(46, 230, 160, 0.12); border-color: var(--color-success); color: var(--color-success); }
+.option-btn.wrong   { background: rgba(255, 107, 122, 0.12); border-color: var(--color-error); color: var(--color-error); opacity: 0.7; }
+.option-btn:disabled { cursor: default; }
+.option-btn:disabled:not(.correct):not(.wrong) { opacity: 0.4; }
+
+/* =========================================================================
+   PANTALLA FINAL
+   ========================================================================= */
+.final-card {
+  background: var(--hb-gray-950);
+  border: 1.5px solid var(--color-success);
+  border-radius: var(--radius-card);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  animation: slideUp 0.6s ease forwards;
+}
+
+.final-icon { font-size: 3rem; margin-bottom: var(--space-3); }
+.final-title { font-size: var(--fs-h2); font-weight: var(--fw-black); color: var(--color-success); margin-bottom: var(--space-2); line-height: 1.1; }
+.final-sub { font-size: var(--fs-body); color: var(--color-text-muted); margin-bottom: var(--space-6); line-height: 1.5; max-width: 500px; margin-inline: auto; }
+
+.badges-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.hb-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: var(--radius-chip); background: var(--color-surface-raised); border: 1px solid var(--color-border); font-size: var(--fs-caption); font-weight: var(--fw-bold); color: var(--color-text); }
+.hb-badge.mint { border-color: var(--color-success); color: var(--color-success); background: rgba(46, 230, 160, 0.08); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }

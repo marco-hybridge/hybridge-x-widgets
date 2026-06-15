@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Pentesting · Hybridge X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <a href="../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
+
+  <header class="header">
+    <span class="hb-overline">🛡️ Ciberseguridad</span>
+    <h2 class="hb-h2">Simulador de Pentesting</h2>
+    <p class="hb-lead">Infiltra un servidor ficticio resolviendo pistas lógicas paso a paso. Aprende a pensar como un atacante, pero actuando con la ética de un profesional.</p>
+  </header>
+
+  <div class="hb-app-card">
+    
+    <div class="progress-header">
+      <p class="step-label" id="step-label">Fase 1 de 4 — Reconocimiento</p>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="prog" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dots">
+          <div class="dot" style="background:#FF6B7A"></div>
+          <div class="dot" style="background:#E2F897"></div>
+          <div class="dot" style="background:#2EE6A0"></div>
+        </div>
+        <span class="terminal-title">kali@hybridge-sec ~ lab/pentesting</span>
+      </div>
+      <div class="terminal-body" id="term">
+        </div>
+    </div>
+
+    <div class="hint-box" id="hint-box">
+      <div class="hint-header">
+        <span class="hint-icon">💡</span>
+        <span class="hint-label">Análisis del sistema</span>
+      </div>
+      <p class="hint-text" id="hint-text">Cargando telemetría...</p>
+    </div>
+
+    <div class="options-grid" id="options">
+      </div>
+
+    <div id="final-container"></div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
