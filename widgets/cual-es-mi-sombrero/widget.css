@@ -1,0 +1,272 @@
+/* =========================================================================
+   CUAL ES MI SOMBRERO — Estilos del widget
+   Depende de: tokens.css + base.css + components.css
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   MARCA DE AGUA — Logo Hybridge
+   ------------------------------------------------------------------------- */
+
+.card-watermark {
+  position:       absolute;
+  bottom:         var(--space-4);
+  right:          var(--space-6);
+  opacity:        0.15;
+  pointer-events: none;
+  user-select:    none;
+}
+
+/* -------------------------------------------------------------------------
+   LAYOUT DE PÁGINA
+   ------------------------------------------------------------------------- */
+
+body {
+  padding:    var(--space-8) 0;
+  min-height: 100vh;
+  position:   relative;
+}
+
+/* Iluminación ambiental (purple → mint) */
+body::before {
+  content:        "";
+  position:       absolute;
+  inset:          0;
+  z-index:        -1;
+  background:
+    radial-gradient(50% 60% at 20% 10%, rgba(192, 124, 255, 0.12), transparent 60%),
+    radial-gradient(60% 70% at 80% 90%, rgba(46, 230, 160, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.wrap { max-width: 800px; }
+
+/* -------------------------------------------------------------------------
+   TOPBAR — Score y Vidas
+   ------------------------------------------------------------------------- */
+
+.game-topbar {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   var(--space-6);
+  flex-wrap:       wrap;
+  gap:             var(--space-4);
+}
+
+.score-num {
+  font-size:           1.1rem;
+  color:               var(--hb-yellow);
+  font-variant-numeric:tabular-nums;
+}
+
+.lives-container { display: flex; gap: 4px; }
+.life-emoji {
+  font-size:  1.2rem;
+  filter:     drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition: transform 0.3s;
+}
+
+/* -------------------------------------------------------------------------
+   BARRA DE PROGRESO
+   ------------------------------------------------------------------------- */
+
+.progress-track {
+  display:       flex;
+  gap:           6px;
+  margin-bottom: var(--space-8);
+}
+
+.prog-segment {
+  flex:          1;
+  height:        6px;
+  border-radius: 9999px;
+  background:    rgba(255, 255, 255, 0.08);
+  transition:    background 0.3s, transform 0.2s;
+}
+.prog-segment.active      { background: var(--hb-yellow); transform: scaleY(1.3); }
+.prog-segment.done-correct{ background: var(--color-success); }
+.prog-segment.done-wrong  { background: var(--color-error); }
+
+/* -------------------------------------------------------------------------
+   ÁREA DE JUEGO — Escenario
+   ------------------------------------------------------------------------- */
+
+#game-area {
+  min-height:     380px;
+  display:        flex;
+  flex-direction: column;
+}
+
+.scenario-box {
+  margin-bottom: var(--space-8);
+  text-align:    center;
+}
+
+.scenario-lbl {
+  display:        inline-block;
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  color:          var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  margin-bottom:  var(--space-4);
+}
+
+.scenario-text {
+  font-size:   var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  color:       var(--color-text);
+  margin:      0;
+}
+
+/* -------------------------------------------------------------------------
+   BOTONES DE SOMBRERO
+   ------------------------------------------------------------------------- */
+
+.hat-grid {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   var(--space-4);
+  margin-bottom:         var(--space-6);
+}
+@media (max-width: 640px) {
+  .hat-grid { grid-template-columns: 1fr; }
+}
+
+.hat-btn {
+  background:    var(--hb-gray-850);
+  border:        2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding:       var(--space-4) var(--space-2);
+  display:       flex;
+  flex-direction:column;
+  align-items:   center;
+  gap:           8px;
+  cursor:        pointer;
+  transition:    all 0.2s ease;
+  font-family:   var(--font-sans);
+  color:         var(--color-text);
+}
+.hat-btn:hover:not(:disabled) {
+  background:   var(--color-surface-raised);
+  border-color: var(--color-border-strong);
+  transform:    translateY(-2px);
+  box-shadow:   var(--shadow-soft);
+}
+.hat-btn:disabled { cursor: default; }
+
+.hat-icon {
+  font-size:     2.5rem;
+  line-height:   1;
+  filter:        drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  margin-bottom: 4px;
+}
+.hat-name { font-size: var(--fs-body-l); font-weight: var(--fw-bold); }
+.hat-desc {
+  font-size:  0.75rem;
+  color:      var(--color-text-muted);
+  text-align: center;
+  line-height:1.3;
+  padding:    0 8px;
+}
+
+/* Estados post-selección */
+.hat-btn.is-correct { background: rgba(46, 230, 160, 0.08); border-color: var(--color-success); }
+.hat-btn.is-correct .hat-name { color: var(--color-success); }
+
+.hat-btn.is-wrong   { background: rgba(255, 107, 122, 0.08); border-color: var(--color-error); opacity: 0.6; }
+.hat-btn.is-wrong .hat-name   { color: var(--color-error); }
+
+.hat-btn.is-dimmed  { opacity: 0.3; filter: grayscale(1); }
+
+/* -------------------------------------------------------------------------
+   FEEDBACK
+   ------------------------------------------------------------------------- */
+
+.feedback-zone {
+  animation: slideUp 0.4s ease forwards;
+  margin-top: auto;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------
+   PANTALLA DE RESULTADOS
+   ------------------------------------------------------------------------- */
+
+.results-view {
+  text-align: center;
+  animation:  slideUp 0.5s ease forwards;
+}
+
+.results-score-big {
+  font-size:     var(--fs-hero);
+  font-weight:   var(--fw-black);
+  color:         var(--hb-yellow);
+  line-height:   1;
+  margin-bottom: 8px;
+}
+
+.results-lbl {
+  font-size:      var(--fs-caption);
+  color:          var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  font-weight:    var(--fw-bold);
+  margin-bottom:  var(--space-6);
+  display:        block;
+}
+
+.results-rank {
+  font-size:     var(--fs-h2);
+  font-weight:   var(--fw-black);
+  margin-bottom: 8px;
+  line-height:   1.1;
+}
+
+.results-sub {
+  font-size:     var(--fs-body-l);
+  color:         var(--color-text-muted);
+  margin-bottom: var(--space-8);
+}
+
+/* Lista de revisión */
+.review-list {
+  text-align:    left;
+  background:    var(--hb-gray-950);
+  border:        1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding:       0 16px;
+  margin-bottom: var(--space-8);
+}
+
+.review-item {
+  display:     flex;
+  align-items: flex-start;
+  gap:         12px;
+  padding:     16px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size:   0.85rem;
+}
+.review-item:last-child { border-bottom: none; }
+
+.review-badge {
+  flex-shrink:     0;
+  width:           24px;
+  height:          24px;
+  border-radius:   50%;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       12px;
+  font-weight:     bold;
+}
+.review-badge.ok { background: rgba(46,230,160,0.2);  color: var(--color-success); border: 1px solid var(--color-success); }
+.review-badge.no { background: rgba(255,107,122,0.2); color: var(--color-error);   border: 1px solid var(--color-error); }
+
+.review-text   { color: var(--color-text-muted); line-height: 1.4; flex: 1; }
+.review-answer { display: block; font-weight: var(--fw-bold); color: var(--color-text); margin-top: 4px; }

@@ -4,299 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Identifica al Hacker · Hybridge X</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <style>
-    /* =========================================================================
-       HYBRIDGE DESIGN TOKENS (v2)
-       ========================================================================= */
-    :root {
-      --hb-black: #0D0D0D; 
-      --hb-white: #FFFFFF; 
-      --hb-yellow: #E2F897; 
-      --hb-navy: #0C1821;
-      --hb-pink: #FFB1D2; 
-      --hb-mint: #2EE6A0;
-      --hb-bright-aqua: #A9F8FB;
-      --hb-purple: #C07CFF;
-      --hb-steel-blue: #1E3A5F;
-      
-      --hb-gray-950: #0A0A0A;
-      --hb-gray-900: #141414; 
-      --hb-gray-850: #1F1F1F; 
-      --hb-gray-800: #2A2A2A; 
-      --hb-gray-400: #A0A0A0;
 
-      --color-bg: var(--hb-black);
-      --color-surface: var(--hb-gray-900);
-      --color-surface-raised: var(--hb-gray-800);
-      --color-text: var(--hb-white);
-      --color-text-muted: var(--hb-gray-400);
-      --color-accent: var(--hb-yellow);
-      --color-border: rgba(255, 255, 255, 0.12);
-      --color-border-strong: rgba(255, 255, 255, 0.24);
-      --color-error: #FF6B7A;
-      --color-success: var(--hb-mint);
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
 
-      --font-display: "Public Sans";
-      --font-sans: var(--font-display), system-ui, -apple-system, sans-serif;
-      
-      --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 900;
-      
-      --fs-hero: clamp(2.5rem, 5vw, 4rem);
-      --fs-h2: 2rem;
-      --fs-h3: 1.5rem;
-      --fs-body-l: 1.125rem;
-      --fs-caption: 0.875rem;
-      --fs-label: 0.75rem;
-      
-      --lh-tight: 1.1; 
-      --lh-base: 1.6;
-      --tracking-tight: -0.01em;
-      --tracking-label: 0.14em;
-
-      --radius-chip: 9999px; 
-      --radius-card: 16px;
-      --radius-md: 12px;
-      
-      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; 
-      --space-6: 1.5rem; --space-8: 2rem;
-
-      --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
-      --shadow-chip: 0 2px 8px rgba(0, 0, 0, 0.30);
-      --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.45);
-      --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--hb-yellow);
-    }
-
-    /* =========================================================================
-       BASE & LAYOUT
-       ========================================================================= */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--color-bg);
-      color: var(--color-text);
-      font-family: var(--font-sans);
-      font-weight: var(--fw-regular);
-      line-height: var(--lh-base);
-      -webkit-font-smoothing: antialiased;
-      padding: var(--space-8) 0;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    /* Iluminación Ambiental */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(50% 60% at 20% 10%, rgba(192, 124, 255, 0.12), transparent 60%),
-        radial-gradient(60% 70% at 80% 90%, rgba(46, 230, 160, 0.12), transparent 60%);
-      pointer-events: none;
-    }
-
-    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: inherit; }
-
-    .wrap {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 var(--space-6);
-    }
-
-    .nav-back {
-      display: inline-flex; align-items: center; gap: var(--space-2);
-      color: var(--color-text-muted); text-decoration: none;
-      font-size: var(--fs-caption); font-weight: var(--fw-bold);
-      margin-bottom: var(--space-6); transition: color 0.15s;
-    }
-    .nav-back:hover { color: var(--color-text); }
-
-    /* =========================================================================
-       HEADER
-       ========================================================================= */
-    .header { margin-bottom: var(--space-8); text-align: left; }
-    .hb-overline { display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-3); }
-    .hb-h2 { font-size: var(--fs-h2); font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: var(--lh-tight); margin-bottom: var(--space-3); }
-    .hb-lead { font-size: var(--fs-body-l); font-weight: var(--fw-light); color: var(--color-text-muted); max-width: 65ch; }
-
-    /* =========================================================================
-       APP CARD (CONTENEDOR DEL JUEGO)
-       ========================================================================= */
-    .hb-app-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-soft);
-      padding: var(--space-6) var(--space-8);
-      position: relative;
-    }
-    @media (max-width: 640px) {
-      .hb-app-card { padding: var(--space-4); }
-    }
-
-    /* Top Bar (Score & Lives) */
-    .game-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-6);
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .hb-chip {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px; border-radius: var(--radius-chip);
-      background: var(--hb-gray-850); border: 1px solid var(--color-border);
-      font-size: var(--fs-caption); font-weight: var(--fw-bold);
-    }
-    .score-num { font-size: 1.1rem; color: var(--hb-yellow); font-variant-numeric: tabular-nums; }
-    
-    .lives-container { display: flex; gap: 4px; font-size: 1.2rem; }
-    .life-emoji { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: transform 0.3s; }
-
-    /* Progress Bar */
-    .progress-track {
-      display: flex; gap: 6px; margin-bottom: var(--space-8);
-    }
-    .prog-segment {
-      flex: 1; height: 6px; border-radius: 9999px;
-      background: rgba(255,255,255,0.08); transition: background 0.3s, transform 0.2s;
-    }
-    .prog-segment.active { background: var(--hb-yellow); transform: scaleY(1.3); }
-    .prog-segment.done-correct { background: var(--color-success); }
-    .prog-segment.done-wrong { background: var(--color-error); }
-
-    /* =========================================================================
-       ESCENARIO Y CONTROLES (GAME AREA)
-       ========================================================================= */
-    #game-area { min-height: 380px; display: flex; flex-direction: column; }
-
-    .scenario-box {
-      margin-bottom: var(--space-8);
-      text-align: center;
-    }
-    .scenario-lbl {
-      display: inline-block; font-size: var(--fs-label); font-weight: var(--fw-bold);
-      color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-label);
-      margin-bottom: var(--space-4);
-    }
-    .scenario-text {
-      font-size: var(--fs-h3); font-weight: var(--fw-semibold); line-height: 1.4;
-      color: var(--color-text); margin: 0;
-    }
-
-    /* Botones de Sombreros (Grid) */
-    .hat-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);
-      margin-bottom: var(--space-6);
-    }
-    @media (max-width: 640px) {
-      .hat-grid { grid-template-columns: 1fr; }
-    }
-
-    .hat-btn {
-      background: var(--hb-gray-850);
-      border: 2px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: var(--space-4) var(--space-2);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      cursor: pointer; transition: all 0.2s ease;
-      font-family: var(--font-sans); color: var(--color-text);
-    }
-    .hat-btn:hover:not(:disabled) {
-      background: var(--color-surface-raised); border-color: var(--color-border-strong);
-      transform: translateY(-2px); box-shadow: var(--shadow-soft);
-    }
-    .hat-btn:disabled { cursor: default; }
-
-    .hat-icon { font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-bottom: 4px; }
-    .hat-name { font-size: var(--fs-body); font-weight: var(--fw-bold); }
-    .hat-desc { font-size: 0.75rem; color: var(--color-text-muted); text-align: center; line-height: 1.3; padding: 0 8px; }
-
-    /* Estados Post-Selección */
-    .hat-btn.is-correct {
-      background: rgba(46, 230, 160, 0.08); border-color: var(--color-success);
-    }
-    .hat-btn.is-correct .hat-name { color: var(--color-success); }
-    
-    .hat-btn.is-wrong {
-      background: rgba(255, 107, 122, 0.08); border-color: var(--color-error);
-      opacity: 0.6;
-    }
-    .hat-btn.is-wrong .hat-name { color: var(--color-error); }
-    
-    .hat-btn.is-dimmed { opacity: 0.3; filter: grayscale(1); }
-
-    /* Feedback Box */
-    .feedback-zone { animation: slideUp 0.4s ease forwards; margin-top: auto; }
-    
-    .hb-alert {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: var(--space-4); border-radius: var(--radius-md);
-      font-size: var(--fs-caption); line-height: 1.5; margin-bottom: var(--space-6);
-      border: 1px solid transparent;
-    }
-    .hb-alert .ico { font-size: 1.25rem; line-height: 1; }
-    .hb-alert strong { display: block; font-size: 1rem; margin-bottom: 4px; }
-    
-    .hb-alert--success { background: rgba(46, 230, 160, 0.12); border-color: var(--color-success); }
-    .hb-alert--success strong { color: var(--color-success); }
-    .hb-alert--error { background: rgba(255, 107, 122, 0.12); border-color: var(--color-error); }
-    .hb-alert--error strong { color: var(--color-error); }
-
-    /* CTA Next */
-    .hb-btn-primary {
-      display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 8px;
-      padding: 14px 24px; border-radius: var(--radius-chip); border: none;
-      background: var(--hb-yellow); color: var(--hb-black);
-      font-family: var(--font-sans); font-size: 1rem; font-weight: var(--fw-bold);
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .hb-btn-primary:hover { background: #D4F07A; transform: translateY(-2px); box-shadow: var(--shadow-lift); }
-    .hb-btn-primary:active { transform: translateY(0); box-shadow: none; }
-
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* =========================================================================
-       PANTALLA DE RESULTADOS
-       ========================================================================= */
-    .results-view { text-align: center; animation: slideUp 0.5s ease forwards; }
-    .results-score-big { font-size: var(--fs-hero); font-weight: var(--fw-black); color: var(--hb-yellow); line-height: 1; margin-bottom: 8px; }
-    .results-lbl { font-size: var(--fs-caption); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-label); font-weight: var(--fw-bold); margin-bottom: var(--space-6); display: block; }
-    .results-rank { font-size: var(--fs-h2); font-weight: var(--fw-black); margin-bottom: 8px; line-height: 1.1; }
-    .results-sub { font-size: var(--fs-body); color: var(--color-text-muted); margin-bottom: var(--space-8); }
-
-    .review-list { text-align: left; background: var(--hb-gray-950); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0 16px; margin-bottom: var(--space-8); }
-    .review-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--color-border); font-size: 0.85rem; }
-    .review-item:last-child { border-bottom: none; }
-    
-    .review-badge { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
-    .review-badge.ok { background: rgba(46,230,160,0.2); color: var(--color-success); border: 1px solid var(--color-success); }
-    .review-badge.no { background: rgba(255,107,122,0.2); color: var(--color-error); border: 1px solid var(--color-error); }
-    
-    .review-text { color: var(--color-text-muted); line-height: 1.4; flex: 1; }
-    .review-answer { display: block; font-weight: var(--fw-bold); color: var(--color-text); margin-top: 4px; }
-
-  </style>
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
 </head>
 <body>
 
 <div class="wrap">
+
+  <!-- Navegación de regreso -->
   <a href="../../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
 
-  <header class="header">
+  <!-- Encabezado del widget -->
+  <header class="widget-header">
     <span class="hb-overline">🛡️ Ciberseguridad</span>
     <h2 class="hb-h2">Identifica al Hacker</h2>
     <p class="hb-lead">Analiza las motivaciones y métodos en 5 escenarios reales para determinar si el actor es un sombrero blanco, gris o negro.</p>
   </header>
 
+  <!-- Contenedor principal del juego -->
   <div class="hb-app-card">
-    
+    <hybridge-logo fill="#FFFFFF" width="90px" class="card-watermark"></hybridge-logo>
+
     <div class="game-topbar" id="game-topbar">
       <div class="hb-chip">
         🛡️ Puntos de defensa <span class="score-num" id="score-display">0</span>
@@ -309,17 +43,19 @@
     <div id="game-area"></div>
 
   </div>
+
 </div>
 
 <script>
-// ── DATOS ORIGINALES PRESERVADOS ──
+// ── DATOS ──────────────────────────────────────────────────────────────────
+
 const QUESTIONS = [
   {
     scenario: "Después de hackear los sistemas de cajeros automáticos de forma remota usando una laptop, este atacante trabajó con los fabricantes para resolver las vulnerabilidades de seguridad que encontró.",
     correct: "grey",
     feedback: {
       correct: "¡Correcto! Sombrero gris. Entró sin permiso (eso lo saca del white hat), pero luego reportó las fallas para que fueran corregidas — eso lo distingue del black hat. Zona gris total.",
-      wrong: "Incorrecto. La clave está en el combo: hackeo sin permiso + después colaboró para arreglarlo. Eso es terreno de sombrero gris — ni héroe ni villano."
+      wrong:   "Incorrecto. La clave está en el combo: hackeo sin permiso + después colaboró para arreglarlo. Eso es terreno de sombrero gris — ni héroe ni villano."
     }
   },
   {
@@ -327,7 +63,7 @@ const QUESTIONS = [
     correct: "black",
     feedback: {
       correct: "¡Exacto! Sombrero negro. Robo de credenciales + transferencia ilegal de fondos = delito claro. Motivación 100% maliciosa, cero autorización.",
-      wrong: "Te equivocaste. Aquí no hay ambigüedad: robar $10 millones con credenciales ajenas es un crimen. Este es el sombrero negro más clásico que existe."
+      wrong:   "Te equivocaste. Aquí no hay ambigüedad: robar $10 millones con credenciales ajenas es un crimen. Este es el sombrero negro más clásico que existe."
     }
   },
   {
@@ -335,7 +71,7 @@ const QUESTIONS = [
     correct: "white",
     feedback: {
       correct: "¡Bien hecho! Sombrero blanco. La palabra clave es 'trabajo' — tiene un contrato, un empleador, y hace esto dentro de la ley. Es un pentester profesional.",
-      wrong: "Incorrecto. La diferencia está en que es su trabajo — tiene autorización explícita. Eso es exactamente lo que define al white hat: hackear con permiso y de forma legal."
+      wrong:   "Incorrecto. La diferencia está en que es su trabajo — tiene autorización explícita. Eso es exactamente lo que define al white hat: hackear con permiso y de forma legal."
     }
   },
   {
@@ -343,7 +79,7 @@ const QUESTIONS = [
     correct: "black",
     feedback: {
       correct: "¡Correcto! Sombrero negro. Malware + robo de datos + venta en mercado negro = motivación puramente criminal. Sin permiso, sin reporte, sin ética.",
-      wrong: "Incorrecto. Malware + venta de datos robados no deja margen de duda. Este es el perfil del criminal cibernético clásico: sombrero negro."
+      wrong:   "Incorrecto. Malware + venta de datos robados no deja margen de duda. Este es el perfil del criminal cibernético clásico: sombrero negro."
     }
   },
   {
@@ -351,62 +87,72 @@ const QUESTIONS = [
     correct: "white",
     feedback: {
       correct: "¡Excelente! Sombrero blanco. Aunque el descubrimiento fue accidental, la clave es que estaba autorizado a acceder a esa red. Reportar lo encontrado es lo que hace un white hat.",
-      wrong: "Te equivocaste. La palabra crucial es 'autorizado'. Tenía permiso para estar ahí. Cuando encuentras algo de forma legítima y lo reportas, eso es sombrero blanco."
+      wrong:   "Te equivocaste. La palabra crucial es 'autorizado'. Tenía permiso para estar ahí. Cuando encuentras algo de forma legítima y lo reportas, eso es sombrero blanco."
     }
   }
 ];
 
-// Emojis actualizados según lineamientos EdTech / Juvenil
 const HATS = [
   { id: "white", label: "Sombrero Blanco", sub: "Hacker ético con permiso", icon: "🛡️" },
-  { id: "grey",  label: "Sombrero Gris",   sub: "Sin permiso, sin daño", icon: "🕵️" },
-  { id: "black", label: "Sombrero Negro",  sub: "Atacante malicioso", icon: "☠️" }
+  { id: "grey",  label: "Sombrero Gris",   sub: "Sin permiso, sin daño",    icon: "🕵️" },
+  { id: "black", label: "Sombrero Negro",  sub: "Atacante malicioso",       icon: "☠️" }
 ];
 
 const POINTS_PER_Q = 200;
 
-let current = 0;
-let score = 0;
-let lives = 3;
+// ── ESTADO ─────────────────────────────────────────────────────────────────
+
+let current  = 0;
+let score    = 0;
+let lives    = 3;
 let answered = false;
-let results = [];
+let results  = [];
+
+// ── RENDER: VIDAS ──────────────────────────────────────────────────────────
 
 function buildLives() {
   const el = document.getElementById('lives-display');
-  if(!el) return;
+  if (!el) return;
   el.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     const d = document.createElement('span');
-    d.className = 'life-emoji';
+    d.className   = 'life-emoji';
     d.textContent = i < lives ? '💚' : '💀';
     if (i >= lives) d.style.opacity = '0.5';
     el.appendChild(d);
   }
 }
 
+// ── RENDER: BARRA DE PROGRESO ──────────────────────────────────────────────
+
 function buildProgress() {
   const el = document.getElementById('progress-track');
-  if(!el) return;
+  if (!el) return;
   el.innerHTML = '';
   QUESTIONS.forEach((_, i) => {
     const d = document.createElement('div');
-    d.className = 'prog-segment' + (i === current && !answered ? ' active' : '') +
-      (i < current || (i === current && answered) ? (results[i] ? ' done-correct' : ' done-wrong') : '');
+    const isDone    = i < current || (i === current && answered);
+    const isActive  = i === current && !answered;
+    d.className = 'prog-segment'
+      + (isActive ? ' active' : '')
+      + (isDone   ? (results[i] ? ' done-correct' : ' done-wrong') : '');
     el.appendChild(d);
   });
 }
 
+// ── RENDER: PREGUNTA ───────────────────────────────────────────────────────
+
 function renderQuestion() {
   answered = false;
-  document.getElementById('game-topbar').style.display = 'flex';
+  document.getElementById('game-topbar').style.display    = 'flex';
   document.getElementById('progress-track').style.display = 'flex';
-  
+
   buildProgress();
   buildLives();
-  
-  const q = QUESTIONS[current];
+
+  const q    = QUESTIONS[current];
   const area = document.getElementById('game-area');
-  
+
   area.innerHTML = `
     <div class="scenario-box">
       <span class="scenario-lbl">Escenario ${current + 1} de ${QUESTIONS.length}</span>
@@ -425,29 +171,25 @@ function renderQuestion() {
   `;
 }
 
+// ── LÓGICA: SELECCIONAR SOMBRERO ───────────────────────────────────────────
+
 function selectHat(id) {
   if (answered) return;
   answered = true;
-  const q = QUESTIONS[current];
+
+  const q         = QUESTIONS[current];
   const isCorrect = id === q.correct;
 
-  // Actualizar UI de los botones
+  // Actualizar estados visuales de los botones
   document.querySelectorAll('.hat-btn').forEach(btn => {
     btn.disabled = true;
-    const btnId = btn.dataset.id;
-    
-    if (btnId === id) {
-      if (isCorrect) btn.classList.add('is-correct');
-      else btn.classList.add('is-wrong');
-    } else if (btnId === q.correct) {
-      // Mostrar siempre cuál era la correcta si se equivocó
-      btn.classList.add('is-correct');
-    } else {
-      btn.classList.add('is-dimmed');
-    }
+    const btnId  = btn.dataset.id;
+    if (btnId === id)        btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+    else if (btnId === q.correct) btn.classList.add('is-correct');
+    else                     btn.classList.add('is-dimmed');
   });
 
-  // Lógica de Puntuación
+  // Puntuación
   if (isCorrect) {
     score += POINTS_PER_Q;
     document.getElementById('score-display').textContent = score;
@@ -458,9 +200,9 @@ function selectHat(id) {
     results.push(false);
   }
 
-  buildProgress(); // Actualiza la barra con el color actual
+  buildProgress();
 
-  // Mostrar Feedback
+  // Feedback
   const fb = document.getElementById('feedback-area');
   fb.innerHTML = `
     <div class="feedback-zone">
@@ -471,36 +213,37 @@ function selectHat(id) {
           ${isCorrect ? q.feedback.correct : q.feedback.wrong}
         </div>
       </div>
-      <button class="hb-btn-primary" onclick="advance()">
+      <button class="hb-btn hb-btn-primary" onclick="advance()">
         ${current < QUESTIONS.length - 1 ? 'Siguiente escenario &rarr;' : 'Ver reporte final &rarr;'}
       </button>
     </div>
   `;
 }
 
+// ── LÓGICA: AVANZAR ────────────────────────────────────────────────────────
+
 function advance() {
   current++;
-  if (current >= QUESTIONS.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
+  if (current >= QUESTIONS.length) showResults();
+  else renderQuestion();
 }
 
+// ── RENDER: RESULTADOS FINALES ─────────────────────────────────────────────
+
 function showResults() {
-  document.getElementById('game-topbar').style.display = 'none';
+  document.getElementById('game-topbar').style.display    = 'none';
   document.getElementById('progress-track').style.display = 'none';
-  
+
   const correct = results.filter(Boolean).length;
-  const total = QUESTIONS.length;
+  const total   = QUESTIONS.length;
 
   let rank, rankSub;
-  if (correct === 5)      { rank = "Maestro Sombrero Blanco"; rankSub = "Identificaste a todos los actores correctamente. Estás listo para unirte al equipo Red Team."; }
-  else if (correct >= 3)  { rank = "Analista en Formación"; rankSub = "Buen ojo para los patrones. Con un poco más de práctica serás un analista de seguridad excelente."; }
-  else                    { rank = "Usuario en Riesgo"; rankSub = "Cuidado. La clave está en fijarse en los permisos y la motivación. Inténtalo de nuevo."; }
+  if (correct === 5)     { rank = "Maestro Sombrero Blanco"; rankSub = "Identificaste a todos los actores correctamente. Estás listo para unirte al equipo Red Team."; }
+  else if (correct >= 3) { rank = "Analista en Formación";   rankSub = "Buen ojo para los patrones. Con un poco más de práctica serás un analista de seguridad excelente."; }
+  else                   { rank = "Usuario en Riesgo";       rankSub = "Cuidado. La clave está en fijarse en los permisos y la motivación. Inténtalo de nuevo."; }
 
   const reviewHTML = QUESTIONS.map((q, i) => {
-    const ok = results[i];
+    const ok         = results[i];
     const correctHat = HATS.find(h => h.id === q.correct);
     return `
       <div class="review-item">
@@ -517,34 +260,38 @@ function showResults() {
     <div class="results-view">
       <div class="results-score-big">${score}</div>
       <span class="results-lbl">Puntos de Defensa Finales</span>
-      
+
       <div class="results-rank">${rank}</div>
       <p class="results-sub">Aciertos: ${correct} de ${total} &nbsp;·&nbsp; ${rankSub}</p>
-      
-      <div class="review-list">
-        ${reviewHTML}
-      </div>
 
-      <button class="hb-btn-primary" onclick="restartGame()">
+      <div class="review-list">${reviewHTML}</div>
+
+      <button class="hb-btn hb-btn-primary" onclick="restartGame()">
         🔄 Repetir Simulación
       </button>
     </div>
   `;
 }
 
+// ── LÓGICA: REINICIAR ──────────────────────────────────────────────────────
+
 function restartGame() {
-  current = 0;
-  score = 0;
-  lives = 3;
+  current  = 0;
+  score    = 0;
+  lives    = 3;
   answered = false;
-  results = [];
+  results  = [];
   document.getElementById('score-display').textContent = 0;
   renderQuestion();
 }
 
-// Iniciar
+// ── INIT ───────────────────────────────────────────────────────────────────
+
 renderQuestion();
 </script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
 
 </body>
 </html>

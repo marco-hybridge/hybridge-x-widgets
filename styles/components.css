@@ -233,3 +233,159 @@
   background:   rgba(255, 255, 255, 0.08);
   border-color: var(--hb-white);
 }
+
+/* -------------------------------------------------------------------------
+   BADGES
+   Variante ligera de .hb-chip con soporte de color semántico.
+   ------------------------------------------------------------------------- */
+
+.hb-badge {
+  display:      inline-flex;
+  align-items:  center;
+  gap:          6px;
+  padding:      6px 14px;
+  border-radius:var(--radius-chip);
+  background:   var(--color-surface-raised);
+  border:       1px solid var(--color-border);
+  font-size:    var(--fs-caption);
+  font-weight:  var(--fw-bold);
+  color:        var(--color-text);
+}
+.hb-badge.mint   { border-color: var(--color-success); color: var(--color-success); background: rgba(46, 230, 160, 0.08); }
+.hb-badge.yellow { border-color: var(--hb-yellow);     color: var(--hb-yellow);     background: rgba(226, 248, 151, 0.08); }
+.hb-badge.pink   { border-color: var(--hb-pink);       color: var(--hb-pink);       background: rgba(255, 177, 210, 0.08); }
+
+/* -------------------------------------------------------------------------
+   BARRA DE PROGRESO LINEAL
+   Reutilizable en widgets multi-fase.
+   ------------------------------------------------------------------------- */
+
+.progress-header {
+  display:        flex;
+  flex-direction: column;
+  gap:            8px;
+}
+
+.step-label {
+  font-size:      var(--fs-caption);
+  font-weight:    var(--fw-bold);
+  color:          var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-bar-wrap {
+  height:       6px;
+  background:   rgba(255, 255, 255, 0.08);
+  border-radius:9999px;
+  overflow:     hidden;
+}
+
+.progress-bar-fill {
+  height:       100%;
+  background:   var(--hb-yellow);
+  border-radius:9999px;
+  transition:   width 0.4s ease;
+}
+
+/* -------------------------------------------------------------------------
+   MARCA DE AGUA — Logo Hybridge
+   Compartido por todos los widgets que lo usen dentro de .hb-app-card.
+   ------------------------------------------------------------------------- */
+
+.card-watermark {
+  position:       absolute;
+  bottom:         var(--space-4);
+  right:          var(--space-6);
+  opacity:        0.15;
+  pointer-events: none;
+  user-select:    none;
+}
+   Reutilizable en todos los widgets
+   ------------------------------------------------------------------------- */
+
+.nav-back {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             var(--space-2);
+  color:           var(--color-text-muted);
+  text-decoration: none;
+  font-size:       var(--fs-caption);
+  font-weight:     var(--fw-bold);
+  margin-bottom:   var(--space-6);
+  transition:      color 0.15s;
+}
+.nav-back:hover { color: var(--color-text); }
+
+/* -------------------------------------------------------------------------
+   TIPOGRAFÍA DE ENCABEZADO DE WIDGET
+   .hb-overline + .hb-h2 + .hb-lead
+   ------------------------------------------------------------------------- */
+
+.widget-header { margin-bottom: var(--space-8); }
+
+.hb-overline {
+  display:        inline-block;
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-accent);
+  margin-bottom:  var(--space-3);
+}
+
+.hb-h2 {
+  font-size:      var(--fs-h2);
+  font-weight:    var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  line-height:    var(--lh-tight);
+  margin-bottom:  var(--space-3);
+}
+
+.hb-lead {
+  font-size:   var(--fs-body-l);
+  font-weight: var(--fw-light);
+  color:       var(--color-text-muted);
+  max-width:   65ch;
+}
+
+/* -------------------------------------------------------------------------
+   APP CARD — Contenedor principal de widgets interactivos
+   ------------------------------------------------------------------------- */
+
+.hb-app-card {
+  background:    var(--color-surface);
+  border:        1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow:    var(--shadow-soft);
+  padding:       var(--space-6) var(--space-8);
+  position:      relative;
+}
+@media (max-width: 640px) {
+  .hb-app-card { padding: var(--space-4); }
+}
+
+/* -------------------------------------------------------------------------
+   ALERTS — Feedback de respuesta (success / error)
+   ------------------------------------------------------------------------- */
+
+.hb-alert {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           12px;
+  padding:       var(--space-4);
+  border-radius: var(--radius-md);
+  font-size:     var(--fs-caption);
+  line-height:   1.5;
+  margin-bottom: var(--space-6);
+  border:        1px solid transparent;
+}
+.hb-alert .ico        { font-size: 1.25rem; line-height: 1; }
+.hb-alert strong      { display: block; font-size: 1rem; margin-bottom: 4px; }
+
+.hb-alert--success    { background: rgba(46, 230, 160, 0.12); border-color: var(--color-success); }
+.hb-alert--success strong { color: var(--color-success); }
+
+.hb-alert--error      { background: rgba(255, 107, 122, 0.12); border-color: var(--color-error); }
+.hb-alert--error strong { color: var(--color-error); }

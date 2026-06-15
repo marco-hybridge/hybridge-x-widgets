@@ -4,25 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Pentesting · Hybridge X</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
 </head>
 <body>
 
 <div class="wrap">
+
+  <!-- Navegación de regreso -->
   <a href="../../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
 
-  <header class="header">
+  <!-- Encabezado del widget -->
+  <header class="widget-header">
     <span class="hb-overline">🛡️ Ciberseguridad</span>
     <h2 class="hb-h2">Simulador de Pentesting</h2>
     <p class="hb-lead">Infiltra un servidor ficticio resolviendo pistas lógicas paso a paso. Aprende a pensar como un atacante, pero actuando con la ética de un profesional.</p>
   </header>
 
+  <!-- Contenedor principal del juego -->
   <div class="hb-app-card">
-    
+
+    <!-- Marca de agua del logo -->
+    <hybridge-logo fill="#FFFFFF" width="90px" class="card-watermark"></hybridge-logo>
+
+    <!-- Barra de progreso -->
     <div class="progress-header">
       <p class="step-label" id="step-label">Fase 1 de 4 — Reconocimiento</p>
       <div class="progress-bar-wrap">
@@ -30,6 +41,7 @@
       </div>
     </div>
 
+    <!-- Terminal -->
     <div class="terminal">
       <div class="terminal-bar">
         <div class="terminal-dots">
@@ -39,10 +51,10 @@
         </div>
         <span class="terminal-title">kali@hybridge-sec ~ lab/pentesting</span>
       </div>
-      <div class="terminal-body" id="term">
-        </div>
+      <div class="terminal-body" id="term"></div>
     </div>
 
+    <!-- Hint box -->
     <div class="hint-box" id="hint-box">
       <div class="hint-header">
         <span class="hint-icon">💡</span>
@@ -51,11 +63,13 @@
       <p class="hint-text" id="hint-text">Cargando telemetría...</p>
     </div>
 
-    <div class="options-grid" id="options">
-      </div>
+    <!-- Opciones -->
+    <div class="options-grid" id="options"></div>
 
+    <!-- Pantalla final -->
     <div id="final-container"></div>
 
+    <!-- Popup de respuesta incorrecta -->
     <div class="feedback-overlay" id="feedback-overlay" aria-hidden="true">
       <div class="feedback-popup" id="feedback-popup">
         <p class="feedback-popup-icon" id="feedback-popup-icon">✖</p>
@@ -67,6 +81,11 @@
   </div>
 </div>
 
+<!-- Lógica del widget -->
 <script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
 </body>
 </html>

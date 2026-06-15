@@ -14,6 +14,7 @@
   /* --- Paleta secundaria & marketing --- */
   --hb-pink:       #FFB1D2;
   --hb-mint:       #2EE6A0;
+  --hb-bright-aqua:#A9F8FB;
   --hb-steel-blue: #1E3A5F;
   --hb-purple:     #C07CFF;
 
@@ -23,18 +24,25 @@
   --hb-gray-800: #2A2A2A;
   --hb-gray-400: #A0A0A0;
 
+  /* --- Neutros adicionales --- */
+  --hb-gray-950: #0A0A0A;
+
   /* --- Roles semánticos --- */
-  --color-bg:           var(--hb-black);
-  --color-surface:      var(--hb-gray-900);
-  --color-text:         var(--hb-white);
-  --color-text-muted:   var(--hb-gray-400);
-  --color-accent:       var(--hb-yellow);
-  --color-border:       rgba(255, 255, 255, 0.12);
-  --color-border-strong:rgba(255, 255, 255, 0.24);
+  --color-bg:            var(--hb-black);
+  --color-surface:       var(--hb-gray-900);
+  --color-surface-raised:var(--hb-gray-800);
+  --color-text:          var(--hb-white);
+  --color-text-muted:    var(--hb-gray-400);
+  --color-accent:        var(--hb-yellow);
+  --color-border:        rgba(255, 255, 255, 0.12);
+  --color-border-strong: rgba(255, 255, 255, 0.24);
+  --color-error:         #FF6B7A;
+  --color-success:       var(--hb-mint);
 
   /* --- Tipografía --- */
   --font-display: "Public Sans";
   --font-sans:    var(--font-display), system-ui, -apple-system, sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --fw-light:    300;
   --fw-regular:  400;
@@ -44,6 +52,7 @@
   --fw-black:    900;
 
   --fs-hero:    clamp(2.2rem, 5vw, 3.5rem);
+  --fs-h2:      2rem;
   --fs-h3:      1.5rem;
   --fs-body-l:  1.125rem;
   --fs-caption: 0.875rem;
