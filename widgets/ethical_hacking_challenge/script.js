@@ -154,6 +154,14 @@ function selectOption(opt, idx, s) {
   fb.className = 'line ' + (opt.correct ? 'success' : 'error');
   fb.textContent = (opt.correct ? '✔ ' : '✖ ') + opt.feedback;
   term.appendChild(fb);
+
+  if (!opt.correct) {
+    const retry = document.createElement('p');
+    retry.className = 'line warning';
+    retry.textContent = '↩ Inténtalo de nuevo...';
+    term.appendChild(retry);
+  }
+
   term.scrollTop = term.scrollHeight;
 
   // Esperar un momento antes de avanzar o resetear
@@ -170,7 +178,7 @@ function selectOption(opt, idx, s) {
       answered = false;
       btns.forEach(b => { b.disabled = false; b.classList.remove('wrong'); });
     }
-  }, opt.correct ? 2500 : 1500);
+  }, opt.correct ? 2500 : 2000);
 }
 
 function showFinal() {
