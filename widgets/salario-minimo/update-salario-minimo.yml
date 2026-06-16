@@ -1,0 +1,81 @@
+name: Actualizar Salario Mínimo (Banxico)
+
+on:
+  schedule:
+    # Corre el día 1 de cada mes a las 08:00 UTC (02:00 Ciudad de México)
+    - cron: '0 8 1 * *'
+  # Permite correrlo manualmente desde GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-salario-minimo:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Consultar API de Banxico
+        id: banxico
+        run: |
+          BMX_TOKEN="${{ secrets.BMX_TOKEN }}"
+
+          # Serie SL11298 — Salario mínimo general (Resto del país)
+          GENERAL=$(curl -s \
+            -H "Bmx-Token: $BMX_TOKEN" \
+            -H "Accept: application/json" \
+            "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SL11298/datos/oportuno")
+
+          # Serie SL11299 — Zona Libre de la Frontera Norte
+          ZLFN=$(curl -s \
+            -H "Bmx-Token: $BMX_TOKEN" \
+            -H "Accept: application/json" \
+            "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SL11299/datos/oportuno")
+
+          echo "general_response=$GENERAL" >> $GITHUB_OUTPUT
+          echo "zlfn_response=$ZLFN" >> $GITHUB_OUTPUT
+
+      - name: Generar data.json
+        run: |
+          GENERAL='${{ steps.banxico.outputs.general_response }}'
+          ZLFN='${{ steps.banxico.outputs.zlfn_response }}'
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # Extraer dato y fecha con python (disponible en ubuntu-latest)
+          python3 - <<EOF
+          import json, sys
+          from datetime import datetime
+
+          general = json.loads('''$GENERAL''')
+          zlfn    = json.loads('''$ZLFN''')
+
+          g_dato  = general['bmx']['series'][0]['datos'][0]['dato']
+          g_fecha = general['bmx']['series'][0]['datos'][0]['fecha']
+          z_dato  = zlfn['bmx']['series'][0]['datos'][0]['dato']
+          z_fecha = zlfn['bmx']['series'][0]['datos'][0]['fecha']
+
+          output = {
+            "general": { "dato": g_dato, "fecha": g_fecha },
+            "zlfn":    { "dato": z_dato, "fecha": z_fecha },
+            "actualizadoEn": "$TIMESTAMP",
+            "fuente": "Banco de México — SIE API (SL11298, SL11299)"
+          }
+
+          path = "widgets/salario-minimo/data.json"
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+
+          print(f"✅ General: {g_dato} (vigente {g_fecha})")
+          print(f"✅ ZLFN:    {z_dato} (vigente {z_fecha})")
+          EOF
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add widgets/salario-minimo/data.json
+          # Solo hace commit si el archivo cambió
+          git diff --staged --quiet || git commit -m "data: actualizar salario mínimo $(date +'%Y-%m')"
+          git push
