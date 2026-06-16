@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salario Mínimo en México · Hybridge X</title>
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Navegación -->
+  <a href="../../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">💼 Economía Laboral</span>
+    <h2 class="hb-h2">Salario Mínimo en México</h2>
+    <p class="hb-lead">Datos oficiales en tiempo real del Banco de México (CONASAMI). Cuánto se paga hoy por día, semana, quincena y mes en todo el país.</p>
+  </header>
+
+  <!-- App Card -->
+  <div class="hb-app-card">
+
+    <!-- Marca de agua -->
+    <hybridge-logo fill="#FFFFFF" width="90px" class="card-watermark"></hybridge-logo>
+
+    <!-- Estado de carga -->
+    <div class="loading-state" id="loading">
+      <div class="spinner"></div>
+      Consultando Banco de México...
+    </div>
+
+    <!-- Contenido (oculto hasta que cargue) -->
+    <div id="content" style="display:none;">
+
+      <!-- Tarjetas principales -->
+      <div class="salary-grid">
+        <div class="salary-card primary">
+          <span class="salary-card-label">🇲🇽 Resto del país</span>
+          <div class="salary-amount" id="general-amount">—</div>
+          <span class="salary-unit">pesos por día</span>
+          <div class="salary-badge">
+            <span class="hb-badge mint">General</span>
+          </div>
+        </div>
+
+        <div class="salary-card secondary">
+          <span class="salary-card-label">🏙️ Zona Frontera Norte</span>
+          <div class="salary-amount" id="zlfn-amount">—</div>
+          <span class="salary-unit">pesos por día</span>
+          <div class="salary-badge">
+            <span class="hb-badge" style="border-color:var(--hb-bright-aqua); color:var(--hb-bright-aqua); background:rgba(169,248,251,0.08)">ZLFN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proyecciones temporales -->
+      <div class="projections">
+        <span class="projections-title">📊 Equivalencias — Salario General</span>
+        <table class="proj-table">
+          <thead>
+            <tr>
+              <th>Período</th>
+              <th>Días</th>
+              <th class="amount-col primary-col">Monto</th>
+            </tr>
+          </thead>
+          <tbody id="proj-body">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pie de página -->
+      <div class="widget-footer-meta">
+        <span class="source-badge">
+          <span class="live-dot"></span>
+          Fuente: Banco de México — SIE API
+        </span>
+        <span id="update-date" style="font-size: var(--fs-label);"></span>
+        <span class="fallback-notice" id="fallback-notice">⚠ Datos estáticos (API no disponible)</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIGURACIÓN ──────────────────────────────────────────────────────────
+
+const BMX_TOKEN  = 'dfc7dff9d66f41cb62418e83bb292009f4bead0f7d0d51fdafb61053e60d6262';
+
+// IDs del cuadro CL289 del SIE (Sector Laboral — Salarios Mínimos)
+const SERIE_GENERAL = 'SL11298'; // Salario mínimo general — Resto del país
+const SERIE_ZLFN    = 'SL11299'; // Salario mínimo — Zona Libre de la Frontera Norte
+
+// Fallback 2026 confirmado (CONASAMI, DOF 19-dic-2024)
+const FALLBACK = {
+  general: { dato: '315.04', fecha: '01/01/2026' },
+  zlfn:    { dato: '440.87', fecha: '01/01/2026' }
+};
+
+// ── PERÍODOS DE PROYECCIÓN ─────────────────────────────────────────────────
+
+const PERIODOS = [
+  { label: 'Diario',     dias: 1   },
+  { label: 'Semanal',    dias: 7   },
+  { label: 'Quincenal',  dias: 15  },
+  { label: 'Mensual',    dias: 30  },
+  { label: 'Anual',      dias: 365 },
+];
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+
+const fmt = (n) =>
+  new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 }).format(n);
+
+function parseDato(str) {
+  // Banxico devuelve números con coma decimal o punto — normalizar
+  return parseFloat(String(str).replace(/,/g, ''));
+}
+
+function formatFecha(str) {
+  // str viene como "01/01/2026" → "1 de enero de 2026"
+  const [d, m, y] = str.split('/');
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${parseInt(d)} de ${meses[parseInt(m) - 1]} de ${y}`;
+}
+
+// ── FETCH API BANXICO ──────────────────────────────────────────────────────
+
+async function fetchSerie(idSerie) {
+  const url = `https://www.banxico.org.mx/SieAPIRest/service/v1/series/${idSerie}/datos/oportuno`;
+  const res  = await fetch(url, {
+    headers: { 'Bmx-Token': BMX_TOKEN, 'Accept': 'application/json' }
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+  return json.bmx.series[0].datos[0]; // { fecha, dato }
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+
+function renderWidget(general, zlfn, usedFallback = false) {
+  const genVal  = parseDato(general.dato);
+  const zlfnVal = parseDato(zlfn.dato);
+
+  // Tarjetas
+  document.getElementById('general-amount').textContent = fmt(genVal);
+  document.getElementById('zlfn-amount').textContent    = fmt(zlfnVal);
+
+  // Proyecciones
+  const tbody = document.getElementById('proj-body');
+  tbody.innerHTML = PERIODOS.map(p => `
+    <tr>
+      <td>${p.label}</td>
+      <td style="color:var(--color-text-muted)">${p.dias}</td>
+      <td class="amount-col primary-col">${fmt(genVal * p.dias)}</td>
+    </tr>
+  `).join('');
+
+  // Fecha de actualización
+  document.getElementById('update-date').textContent = `Vigente desde: ${formatFecha(general.fecha)}`;
+
+  // Aviso de fallback
+  if (usedFallback) {
+    document.getElementById('fallback-notice').classList.add('visible');
+  }
+
+  // Mostrar contenido
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+
+async function init() {
+  try {
+    const [general, zlfn] = await Promise.all([
+      fetchSerie(SERIE_GENERAL),
+      fetchSerie(SERIE_ZLFN)
+    ]);
+    renderWidget(general, zlfn, false);
+  } catch (err) {
+    console.warn('Banxico API no disponible, usando fallback:', err.message);
+    renderWidget(FALLBACK.general, FALLBACK.zlfn, true);
+  }
+}
+
+init();
+</script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>
