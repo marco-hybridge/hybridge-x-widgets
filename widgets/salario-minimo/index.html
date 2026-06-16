@@ -89,6 +89,9 @@
         <span id="update-date" style="font-size: var(--fs-label);"></span>
         <span class="fallback-notice" id="fallback-notice">⚠ Datos estáticos (API no disponible)</span>
       </div>
+      <div style="padding-top: var(--space-2); font-size: var(--fs-label); color: var(--color-text-muted); opacity: 0.6;">
+        Última actualización: <span id="last-updated">—</span>
+      </div>
 
     </div>
   </div>
@@ -146,7 +149,7 @@ async function fetchData() {
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
 
-function renderWidget(general, zlfn, usedFallback = false) {
+function renderWidget(general, zlfn, usedFallback = false, actualizadoEn = null) {
   const genVal  = parseDato(general.dato);
   const zlfnVal = parseDato(zlfn.dato);
 
@@ -164,8 +167,20 @@ function renderWidget(general, zlfn, usedFallback = false) {
     </tr>
   `).join('');
 
-  // Fecha de actualización
+  // Fecha de vigencia del salario
   document.getElementById('update-date').textContent = `Vigente desde: ${formatFecha(general.fecha)}`;
+
+  // Fecha de última actualización del Action (viene de data.json)
+  const lastUpdatedEl = document.getElementById('last-updated');
+  if (actualizadoEn) {
+    const d = new Date(actualizadoEn);
+    lastUpdatedEl.textContent = d.toLocaleDateString('es-MX', {
+      day: 'numeric', month: 'long', year: 'numeric',
+      timeZone: 'America/Mexico_City'
+    });
+  } else {
+    lastUpdatedEl.textContent = 'desconocida';
+  }
 
   // Aviso de fallback
   if (usedFallback) {
@@ -182,7 +197,7 @@ function renderWidget(general, zlfn, usedFallback = false) {
 async function init() {
   try {
     const data = await fetchData();
-    renderWidget(data.general, data.zlfn, false);
+    renderWidget(data.general, data.zlfn, false, data.actualizadoEn);
   } catch (err) {
     console.warn('data.json no disponible, usando fallback:', err.message);
     renderWidget(FALLBACK.general, FALLBACK.zlfn, true);
