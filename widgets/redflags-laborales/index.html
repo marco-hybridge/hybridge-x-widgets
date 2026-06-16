@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detector de Red Flags Laborales · Hybridge X</title>
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Navegación -->
+  <!-- <a href="../../index.html" class="nav-back">&larr; Volver al Laboratorio</a> -->
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">💼 Derechos Laborales</span>
+    <h2 class="hb-h2">Detector de Red Flags</h2>
+    <p class="hb-lead">Analiza 5 ofertas de trabajo reales y detecta las cláusulas que violan la Ley Federal del Trabajo. Toca las que te parezcan sospechosas.</p>
+  </header>
+
+  <!-- Topbar -->
+  <div class="game-topbar">
+    <span class="score-display">
+      📋 <span id="offer-counter">Oferta 1 de 5</span>
+    </span>
+    <div style="display:flex; gap: var(--space-2); align-items:center;">
+      <span class="hb-chip hb-chip--dark">🚩 Toca las red flags</span>
+    </div>
+  </div>
+
+  <!-- Área del juego -->
+  <div id="game-area"></div>
+
+</div>
+
+<!-- Lógica del widget -->
+<script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>
