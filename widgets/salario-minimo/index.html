@@ -98,13 +98,12 @@
 <script>
 // ── CONFIGURACIÓN ──────────────────────────────────────────────────────────
 
-const BMX_TOKEN  = 'dfc7dff9d66f41cb62418e83bb292009f4bead0f7d0d51fdafb61053e60d6262';
-
-// IDs del cuadro CL289 del SIE (Sector Laboral — Salarios Mínimos)
-const SERIE_GENERAL = 'SL11298'; // Salario mínimo general — Resto del país
-const SERIE_ZLFN    = 'SL11299'; // Salario mínimo — Zona Libre de la Frontera Norte
+// data.json es generado mensualmente por GitHub Actions desde la API de Banxico.
+// Sin CORS, sin servidor — solo un fetch al mismo origen de GitHub Pages.
+const DATA_URL = './data.json';
 
 // Fallback 2026 confirmado (CONASAMI, DOF 19-dic-2024)
+// Usado solo si data.json tampoco está disponible.
 const FALLBACK = {
   general: { dato: '315.04', fecha: '01/01/2026' },
   zlfn:    { dato: '440.87', fecha: '01/01/2026' }
@@ -137,16 +136,12 @@ function formatFecha(str) {
   return `${parseInt(d)} de ${meses[parseInt(m) - 1]} de ${y}`;
 }
 
-// ── FETCH API BANXICO ──────────────────────────────────────────────────────
+// ── FETCH data.json ────────────────────────────────────────────────────────
 
-async function fetchSerie(idSerie) {
-  const url = `https://www.banxico.org.mx/SieAPIRest/service/v1/series/${idSerie}/datos/oportuno`;
-  const res  = await fetch(url, {
-    headers: { 'Bmx-Token': BMX_TOKEN, 'Accept': 'application/json' }
-  });
+async function fetchData() {
+  const res = await fetch(DATA_URL);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const json = await res.json();
-  return json.bmx.series[0].datos[0]; // { fecha, dato }
+  return res.json(); // { general: {dato, fecha}, zlfn: {dato, fecha}, actualizadoEn }
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
@@ -186,13 +181,10 @@ function renderWidget(general, zlfn, usedFallback = false) {
 
 async function init() {
   try {
-    const [general, zlfn] = await Promise.all([
-      fetchSerie(SERIE_GENERAL),
-      fetchSerie(SERIE_ZLFN)
-    ]);
-    renderWidget(general, zlfn, false);
+    const data = await fetchData();
+    renderWidget(data.general, data.zlfn, false);
   } catch (err) {
-    console.warn('Banxico API no disponible, usando fallback:', err.message);
+    console.warn('data.json no disponible, usando fallback:', err.message);
     renderWidget(FALLBACK.general, FALLBACK.zlfn, true);
   }
 }
