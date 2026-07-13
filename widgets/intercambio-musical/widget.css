@@ -1,0 +1,253 @@
+/* =========================================================================
+   INTERCAMBIO MUSICAL — Estilos del widget
+   Depende de: tokens.css + base.css + components.css
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   LAYOUT DE PÁGINA
+   ------------------------------------------------------------------------- */
+
+body {
+  padding:    var(--space-8) 0;
+  min-height: 100vh;
+  position:   relative;
+}
+
+/* Iluminación ambiental */
+body::before {
+  content:        "";
+  position:       absolute;
+  inset:          0;
+  z-index:        -1;
+  background:
+    radial-gradient(50% 70% at 15% 10%, rgba(226, 248, 151, 0.10), transparent 60%),
+    radial-gradient(40% 60% at 85% 85%, rgba(192, 124, 255, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.wrap { max-width: 560px; }
+
+/* -------------------------------------------------------------------------
+   VISTAS — cada una es una pantalla completa dentro de la app card
+   ------------------------------------------------------------------------- */
+
+.im-view--center {
+  text-align: center;
+  padding:    var(--space-8) var(--space-2);
+  animation:  slideUp 0.4s ease forwards;
+}
+
+/* -------------------------------------------------------------------------
+   SPINNER DE CARGA
+   ------------------------------------------------------------------------- */
+
+.im-spinner {
+  width:         32px;
+  height:        32px;
+  margin:        0 auto var(--space-4);
+  border:        3px solid var(--color-border);
+  border-top-color: var(--hb-yellow);
+  border-radius: 50%;
+  animation:     im-spin 0.8s linear infinite;
+}
+
+.im-loading-text {
+  font-size: var(--fs-caption);
+  color:     var(--color-text-muted);
+}
+
+@keyframes im-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* -------------------------------------------------------------------------
+   FORMULARIO DE ENVÍO
+   ------------------------------------------------------------------------- */
+
+.im-form {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-4);
+  animation:      slideUp 0.4s ease forwards;
+}
+
+.im-field {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2);
+}
+
+.im-label {
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+}
+
+.im-input {
+  width:         100%;
+  padding:       var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border:        1.5px solid var(--color-border);
+  background:    var(--hb-gray-850);
+  color:         var(--color-text);
+  font-family:   var(--font-sans);
+  font-size:     1rem;
+  transition:    border-color 0.15s ease, background 0.15s ease;
+}
+
+.im-input::placeholder { color: var(--hb-gray-400); }
+
+.im-input:focus-visible {
+  outline:      none;
+  border-color: var(--hb-yellow);
+  background:   var(--hb-gray-800);
+}
+
+.im-form-error {
+  font-size: var(--fs-caption);
+  color:     var(--color-error);
+}
+
+.im-submit-btn {
+  width:      100%;
+  margin-top: var(--space-2);
+}
+
+.im-submit-btn:disabled {
+  opacity:        0.6;
+  cursor:         default;
+  transform:      none !important;
+  box-shadow:     none !important;
+}
+
+/* -------------------------------------------------------------------------
+   PANTALLAS DE ESTADO (esperando / cerrado / revelación)
+   ------------------------------------------------------------------------- */
+
+.im-status-icon {
+  font-size:     3rem;
+  display:       block;
+  margin-bottom: var(--space-4);
+}
+
+.im-status-title {
+  font-size:      var(--fs-h3);
+  font-weight:    var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom:  var(--space-3);
+}
+
+.im-status-text {
+  font-size:   var(--fs-body-l);
+  font-weight: var(--fw-light);
+  color:       var(--color-text-muted);
+  max-width:   40ch;
+  margin:      0 auto;
+  line-height: 1.6;
+}
+
+/* -------------------------------------------------------------------------
+   TARJETA DE REVELACIÓN
+   ------------------------------------------------------------------------- */
+
+.im-reveal-card {
+  margin-top:    var(--space-6);
+  padding:       var(--space-6);
+  border-radius: var(--radius-card);
+  border:        1.5px solid var(--hb-yellow);
+  background:    rgba(226, 248, 151, 0.06);
+}
+
+.im-reveal-label {
+  display:        block;
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+  margin-bottom:  var(--space-2);
+}
+
+.im-reveal-name {
+  font-size:     var(--fs-h3);
+  font-weight:   var(--fw-black);
+  color:         var(--hb-yellow);
+  line-height:   1.2;
+  margin-bottom: var(--space-6);
+  word-break:    break-word;
+}
+
+.im-reveal-link {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------------
+   VISTA HOST
+   ------------------------------------------------------------------------- */
+
+.im-host-badge {
+  margin-bottom: var(--space-6);
+}
+
+.im-host-counter {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  margin-bottom:  var(--space-8);
+}
+
+.im-host-count {
+  font-size:   clamp(3rem, 12vw, 4.5rem);
+  font-weight: var(--fw-black);
+  color:       var(--hb-yellow);
+  line-height: 1;
+}
+
+.im-host-count-label {
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+  margin-top:     var(--space-2);
+}
+
+.im-host-btn {
+  width:     100%;
+  font-size: 1.05rem;
+  padding:   var(--space-4) var(--space-6);
+}
+
+.im-host-btn:disabled {
+  opacity:    0.6;
+  cursor:     default;
+  transform:  none !important;
+  box-shadow: none !important;
+}
+
+.im-host-status {
+  margin-top: var(--space-4);
+  font-size:  var(--fs-caption);
+  color:      var(--color-text-muted);
+}
+
+/* -------------------------------------------------------------------------
+   ANIMACIONES
+   ------------------------------------------------------------------------- */
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE — mobile-first, ya optimizado por defecto
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .im-status-icon { font-size: 2.5rem; }
+  .im-reveal-name { font-size: var(--fs-body-l); }
+}
