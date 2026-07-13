@@ -123,19 +123,24 @@ body::before {
   background: rgba(255, 255, 255, 0.16);
 }
 
-/* Botón primario — degradado atardecer */
-.hb-btn-primary {
+/* Botón primario — degradado atardecer
+   (fija "background" en cada estado: la regla base de components.css
+   pone un color plano en :hover/:active que si no, tapa el degradado) */
+.hb-btn-primary,
+.hb-btn-primary:hover,
+.hb-btn-primary:focus-visible,
+.hb-btn-primary:active {
   background: linear-gradient(120deg, var(--sun-gold) 0%, var(--sun-orange) 55%, var(--sun-coral) 100%);
   color:      var(--sea-deep);
 }
 .hb-btn-primary:hover,
 .hb-btn-primary:focus-visible {
-  filter:     brightness(1.08);
+  filter:     brightness(1.1);
   transform:  translateY(-1px);
-  box-shadow: 0 10px 26px rgba(255, 159, 28, 0.35);
+  box-shadow: 0 10px 26px rgba(255, 159, 28, 0.4);
 }
 .hb-btn-primary:active {
-  filter:     brightness(0.96);
+  filter:     brightness(0.92);
   transform:  translateY(0);
   box-shadow: none;
 }
