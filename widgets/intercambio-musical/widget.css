@@ -1,31 +1,144 @@
 /* =========================================================================
    INTERCAMBIO MUSICAL — Estilos del widget
    Depende de: tokens.css + base.css + components.css
+
+   Tema especial "Verano / Océano" — SOLO para este widget. Reescribe los
+   tokens de color localmente (esta hoja únicamente se carga en esta página,
+   así que no afecta a ningún otro widget) y le da a las tarjetas un
+   tratamiento tipo "liquid glass": translúcidas, con blur y bordes de luz.
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
-   LAYOUT DE PÁGINA
+   PALETA — atardecer sobre el mar
+   ------------------------------------------------------------------------- */
+
+:root {
+  --sea-deep:    #073B4C;
+  --sea-mid:     #0B4F6C;
+  --sea-shallow: #1B7A8C;
+  --sun-gold:    #FFD166;
+  --sun-orange:  #FF9F1C;
+  --sun-coral:   #FF6B6B;
+  --sea-foam:    #4ECDC4;
+  --sea-mist:    #CFEFEF;
+
+  /* Reescritura de tokens del sistema — sólo dentro de este widget */
+  --hb-black:      var(--sea-deep);
+  --hb-navy:       var(--sea-deep);
+  --hb-yellow:     var(--sun-gold);
+  --hb-pink:       #FF9770;
+  --hb-mint:       var(--sea-foam);
+  --hb-bright-aqua:var(--sea-foam);
+  --hb-purple:     #5FA8D3;
+
+  --color-bg:            var(--sea-deep);
+  --color-surface:       rgba(255, 255, 255, 0.07);
+  --color-surface-raised:rgba(255, 255, 255, 0.13);
+  --color-text:          #FFFBF2;
+  --color-text-muted:    #BFE3E0;
+  --color-accent:        var(--sun-gold);
+  --color-border:        rgba(255, 255, 255, 0.18);
+  --color-border-strong: rgba(255, 255, 255, 0.34);
+  --color-error:         #FF7F6B;
+  --color-success:       var(--sea-foam);
+
+  --shadow-soft: 0 10px 30px rgba(3, 30, 40, 0.45);
+  --shadow-chip: 0 2px 10px rgba(3, 30, 40, 0.30);
+  --shadow-lift: 0 12px 32px rgba(3, 30, 40, 0.5);
+
+  --focus-ring: 0 0 0 2px var(--sea-deep), 0 0 0 4px var(--sun-gold);
+}
+
+/* -------------------------------------------------------------------------
+   LAYOUT DE PÁGINA — cielo de atardecer + mar de fondo
    ------------------------------------------------------------------------- */
 
 body {
   padding:    var(--space-8) 0;
   min-height: 100vh;
   position:   relative;
+  background:
+    radial-gradient(60% 45% at 18% 8%,  rgba(255, 209, 102, 0.30), transparent 62%),
+    radial-gradient(55% 45% at 85% 0%,  rgba(255, 111, 97, 0.18),  transparent 60%),
+    radial-gradient(80% 60% at 50% 100%, rgba(78, 205, 196, 0.22),  transparent 65%),
+    linear-gradient(180deg, #0B4F6C 0%, var(--sea-deep) 55%, #041F29 100%);
+  background-attachment: fixed;
 }
 
-/* Iluminación ambiental */
+/* Brillo ambiental extra, suave respiración tipo "sol de verano" */
 body::before {
   content:        "";
   position:       absolute;
   inset:          0;
   z-index:        -1;
   background:
-    radial-gradient(50% 70% at 15% 10%, rgba(226, 248, 151, 0.10), transparent 60%),
-    radial-gradient(40% 60% at 85% 85%, rgba(192, 124, 255, 0.08), transparent 60%);
+    radial-gradient(45% 35% at 22% 12%, rgba(255, 209, 102, 0.22), transparent 60%),
+    radial-gradient(35% 30% at 88% 90%, rgba(78, 205, 196, 0.18), transparent 60%);
   pointer-events: none;
+  animation:      im-sun-breathe 8s ease-in-out infinite;
+}
+
+@keyframes im-sun-breathe {
+  0%, 100% { opacity: 0.75; }
+  50%      { opacity: 1; }
 }
 
 .wrap { max-width: 560px; }
+
+/* -------------------------------------------------------------------------
+   APP CARD — vidrio esmerilado sobre el mar
+   ------------------------------------------------------------------------- */
+
+.hb-app-card {
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  border:            1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter:        blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* -------------------------------------------------------------------------
+   CHIPS / BADGES / BOTÓN GHOST — versión de vidrio
+   ------------------------------------------------------------------------- */
+
+.hb-chip--dark {
+  background:              rgba(255, 255, 255, 0.10);
+  backdrop-filter:         blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color:            rgba(255, 255, 255, 0.28);
+  color:                   var(--color-text);
+}
+
+.hb-btn-ghost {
+  background:              rgba(255, 255, 255, 0.08);
+  backdrop-filter:         blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color:            rgba(255, 255, 255, 0.32);
+}
+.hb-btn-ghost:hover,
+.hb-btn-ghost:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Botón primario — degradado atardecer */
+.hb-btn-primary {
+  background: linear-gradient(120deg, var(--sun-gold) 0%, var(--sun-orange) 55%, var(--sun-coral) 100%);
+  color:      var(--sea-deep);
+}
+.hb-btn-primary:hover,
+.hb-btn-primary:focus-visible {
+  filter:     brightness(1.08);
+  transform:  translateY(-1px);
+  box-shadow: 0 10px 26px rgba(255, 159, 28, 0.35);
+}
+.hb-btn-primary:active {
+  filter:     brightness(0.96);
+  transform:  translateY(0);
+  box-shadow: none;
+}
 
 /* -------------------------------------------------------------------------
    VISTAS — cada una es una pantalla completa dentro de la app card
@@ -46,7 +159,7 @@ body::before {
   height:        32px;
   margin:        0 auto var(--space-4);
   border:        3px solid var(--color-border);
-  border-top-color: var(--hb-yellow);
+  border-top-color: var(--sun-gold);
   border-radius: 50%;
   animation:     im-spin 0.8s linear infinite;
 }
@@ -87,28 +200,31 @@ body::before {
 
 .im-field-hint {
   font-size: 0.72rem;
-  color:     var(--hb-gray-400);
-  opacity:   0.8;
+  color:     var(--sea-mist);
+  opacity:   0.75;
 }
 
 .im-input {
   width:         100%;
   padding:       var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  border:        1.5px solid var(--color-border);
-  background:    var(--hb-gray-850);
+  border:        1.5px solid rgba(255, 255, 255, 0.22);
+  background:              rgba(255, 255, 255, 0.06);
+  backdrop-filter:         blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color:         var(--color-text);
   font-family:   var(--font-sans);
   font-size:     1rem;
-  transition:    border-color 0.15s ease, background 0.15s ease;
+  transition:    border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
-.im-input::placeholder { color: var(--hb-gray-400); }
+.im-input::placeholder { color: rgba(255, 251, 242, 0.45); }
 
 .im-input:focus-visible {
   outline:      none;
-  border-color: var(--hb-yellow);
-  background:   var(--hb-gray-800);
+  border-color: var(--sun-gold);
+  background:   rgba(255, 255, 255, 0.10);
+  box-shadow:   0 0 0 3px rgba(78, 205, 196, 0.22);
 }
 
 .im-form-error {
@@ -136,6 +252,7 @@ body::before {
   font-size:     3rem;
   display:       block;
   margin-bottom: var(--space-4);
+  filter:        drop-shadow(0 0 26px rgba(255, 209, 102, 0.55));
 }
 
 .im-status-title {
@@ -156,15 +273,21 @@ body::before {
 }
 
 /* -------------------------------------------------------------------------
-   TARJETA DE REVELACIÓN
+   TARJETA DE REVELACIÓN — postal de verano
    ------------------------------------------------------------------------- */
 
 .im-reveal-card {
   margin-top:    var(--space-6);
   padding:       var(--space-6);
   border-radius: var(--radius-card);
-  border:        1.5px solid var(--hb-yellow);
-  background:    rgba(226, 248, 151, 0.06);
+  position:      relative;
+  border:        1.5px solid transparent;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)) padding-box,
+    linear-gradient(120deg, var(--sun-gold), var(--sun-coral), var(--sea-foam)) border-box;
+  backdrop-filter:         blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(3, 30, 40, 0.35);
 }
 
 .im-reveal-label {
@@ -180,7 +303,7 @@ body::before {
 .im-reveal-name {
   font-size:     var(--fs-h3);
   font-weight:   var(--fw-black);
-  color:         var(--hb-yellow);
+  color:         var(--sun-gold);
   line-height:   1.2;
   margin-bottom: var(--space-6);
   word-break:    break-word;
@@ -208,8 +331,12 @@ body::before {
 .im-host-count {
   font-size:   clamp(3rem, 12vw, 4.5rem);
   font-weight: var(--fw-black);
-  color:       var(--hb-yellow);
   line-height: 1;
+  background:              linear-gradient(120deg, var(--sun-gold), var(--sun-orange), var(--sun-coral));
+  -webkit-background-clip: text;
+  background-clip:         text;
+  -webkit-text-fill-color: transparent;
+  color:                   var(--sun-gold); /* respaldo si no hay soporte de background-clip */
 }
 
 .im-host-count-label {
