@@ -119,11 +119,34 @@ function derangement(ids) {
 }
 
 // ── MODO HOST ────────────────────────────────────────────────────────────────
+// Sin backend no hay autenticación real: esto es una barrera contra curiosos,
+// no contra alguien que lea el código fuente. El token evita que un alumno
+// entre por accidente o adivinando "?host=true"; el PIN es una segunda capa
+// para que ver la URL en la pantalla del profe no baste. Cambia ambos valores
+// libremente si se filtran.
 
-const isHost = new URLSearchParams(location.search).get("host") === "true";
+const HOST_TOKEN = "YDD5xCBJ4SMq";
+const HOST_PIN = "8332";
+const HOST_UNLOCK_KEY = "intercambio-musical-host-unlocked";
 
-if (isHost) {
-  initHostView();
+const hostParam = new URLSearchParams(location.search).get("host");
+
+if (hostParam === HOST_TOKEN) {
+  const alreadyUnlocked = sessionStorage.getItem(HOST_UNLOCK_KEY) === "1";
+
+  if (alreadyUnlocked) {
+    initHostView();
+  } else {
+    const enteredPin = prompt("Modo profe — ingresa el PIN:");
+    if (enteredPin === HOST_PIN) {
+      sessionStorage.setItem(HOST_UNLOCK_KEY, "1");
+      initHostView();
+    } else {
+      // PIN incorrecto o cancelado: cae a la vista de alumno sin confirmar
+      // ni negar si el token era válido.
+      initStudentView();
+    }
+  }
 } else {
   initStudentView();
 }
