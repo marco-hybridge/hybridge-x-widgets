@@ -85,6 +85,12 @@ body::before {
   color:          var(--color-text-muted);
 }
 
+.im-field-hint {
+  font-size: 0.72rem;
+  color:     var(--hb-gray-400);
+  opacity:   0.8;
+}
+
 .im-input {
   width:         100%;
   padding:       var(--space-3) var(--space-4);

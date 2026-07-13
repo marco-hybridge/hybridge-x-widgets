@@ -26,6 +26,50 @@ const BASE = "intercambio-musical";
 const MIN_PARTICIPANTES = 3;
 const STUDENT_ID_KEY = "intercambio-musical-student-id";
 
+// ── VALIDACIÓN DE LINKS DE MÚSICA ───────────────────────────────────────────
+
+const MUSIC_DOMAINS = [
+  "spotify.com",
+  "spotify.link",
+  "tidal.com",
+  "music.youtube.com",
+  "youtube.com",
+  "youtu.be",
+  "music.apple.com",
+  "soundcloud.com",
+  "deezer.com",
+  "deezer.page.link",
+  "music.amazon.com",
+  "music.amazon.com.mx",
+  "music.yandex.com",
+  "music.yandex.ru",
+  "pandora.com",
+  "napster.com",
+  "audiomack.com",
+  "bandcamp.com",
+];
+
+function isValidMusicLink(rawUrl) {
+  let candidate = rawUrl.trim();
+  if (!/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(candidate)) {
+    candidate = `https://${candidate}`;
+  }
+
+  let url;
+  try {
+    url = new URL(candidate);
+  } catch {
+    return false;
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+
+  const hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+  return MUSIC_DOMAINS.some(
+    (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+  );
+}
+
 // ── HELPERS DE VISTA ─────────────────────────────────────────────────────────
 
 const views = {
@@ -255,6 +299,12 @@ function initStudentView() {
 
     if (!nombre || !cancion) {
       errorEl.textContent = "Completa tu nombre y el link de tu canción.";
+      errorEl.hidden = false;
+      return;
+    }
+
+    if (!isValidMusicLink(cancion)) {
+      errorEl.textContent = "Ese link no parece ser de una app de música. Pega un link de Spotify, YouTube, YouTube Music, Tidal, Apple Music u otra app similar.";
       errorEl.hidden = false;
       return;
     }
