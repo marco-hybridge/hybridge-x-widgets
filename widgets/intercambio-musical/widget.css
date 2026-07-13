@@ -97,7 +97,28 @@ body::before {
   -webkit-backdrop-filter:blur(22px) saturate(160%);
   box-shadow:
     var(--shadow-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(3, 30, 40, 0.25),
+    0 0 44px rgba(255, 209, 102, 0.07);
+}
+
+/* Liquid glass "real" — distorsión/refracción vía filtro SVG (feDisplacementMap),
+   igual que el Liquid Glass de Apple. Sólo el fondo detrás del card se distorsiona
+   (el texto/botones son contenido normal encima, así que la legibilidad no se toca).
+
+   Esto SOLO funciona bien en Chrome/Chromium hoy — Safari no renderiza distorsión
+   vía backdrop-filter todavía. Por eso va detrás de un @supports que excluye Safari
+   (-webkit-touch-callout es una propiedad exclusiva de WebKit/Safari, así que
+   "not" de esa condición es verdadero en todo lo demás). Safari e iOS se quedan
+   con el blur de arriba, que ya se ve bien por sí solo — es una mejora progresiva,
+   nadie se queda sin card. También limitado a un solo elemento (el card
+   principal) a propósito: es costoso en GPU y con varios se puede sentir lento
+   en celulares de gama baja. */
+@supports not (-webkit-touch-callout: none) {
+  .hb-app-card {
+    backdrop-filter:         url(#liquid-glass-filter) blur(18px) saturate(160%);
+    -webkit-backdrop-filter: url(#liquid-glass-filter) blur(18px) saturate(160%);
+  }
 }
 
 /* components.css no le da z-index al watermark, así que en cards bajitos
