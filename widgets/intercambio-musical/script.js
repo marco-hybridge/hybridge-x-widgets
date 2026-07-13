@@ -90,6 +90,7 @@ function initHostView() {
   const countEl = document.getElementById("host-count");
   const statusTextEl = document.getElementById("host-status-text");
   const closeBtn = document.getElementById("host-close-btn");
+  const resetBtn = document.getElementById("host-reset-btn");
 
   let submissionsCache = {};
   let currentStatus = "abierto";
@@ -148,6 +149,29 @@ function initHostView() {
       alert("Hubo un error al repartir las canciones. Intenta de nuevo.");
       closeBtn.disabled = false;
       statusTextEl.textContent = "";
+    }
+  });
+
+  resetBtn.addEventListener("click", async () => {
+    const confirmed = confirm(
+      "¿Seguro que quieres reiniciar la dinámica? Esto borrará todas las canciones enviadas y las asignaciones actuales. Los alumnos podrán volver a enviar su canción desde cero. Esta acción no se puede deshacer."
+    );
+    if (!confirmed) return;
+
+    resetBtn.disabled = true;
+    statusTextEl.textContent = "Reiniciando...";
+
+    try {
+      await update(ref(db, BASE), {
+        submissions: null,
+        assignments: null,
+        status: "abierto",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Hubo un error al reiniciar. Intenta de nuevo.");
+    } finally {
+      resetBtn.disabled = false;
     }
   });
 }

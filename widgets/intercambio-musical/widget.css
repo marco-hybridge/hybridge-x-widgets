@@ -228,6 +228,18 @@ body::before {
   box-shadow: none !important;
 }
 
+.im-host-reset-btn {
+  width:      100%;
+  margin-top: var(--space-3);
+}
+
+.im-host-reset-btn:disabled {
+  opacity:    0.6;
+  cursor:     default;
+  transform:  none !important;
+  box-shadow: none !important;
+}
+
 .im-host-status {
   margin-top: var(--space-4);
   font-size:  var(--fs-caption);
