@@ -1,0 +1,430 @@
+/* =========================================================================
+   INTERCAMBIO MUSICAL — Estilos del widget
+   Depende de: tokens.css + base.css + components.css
+
+   Tema especial "Verano / Océano" — SOLO para este widget. Reescribe los
+   tokens de color localmente (esta hoja únicamente se carga en esta página,
+   así que no afecta a ningún otro widget) y le da a las tarjetas un
+   tratamiento tipo "liquid glass": translúcidas, con blur y bordes de luz.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   PALETA — atardecer sobre el mar
+   ------------------------------------------------------------------------- */
+
+:root {
+  --sea-deep:    #073B4C;
+  --sea-mid:     #0B4F6C;
+  --sea-shallow: #1B7A8C;
+  --sun-gold:    #FFD166;
+  --sun-orange:  #FF9F1C;
+  --sun-coral:   #FF6B6B;
+  --sea-foam:    #4ECDC4;
+  --sea-mist:    #CFEFEF;
+
+  /* Reescritura de tokens del sistema — sólo dentro de este widget */
+  --hb-black:      var(--sea-deep);
+  --hb-navy:       var(--sea-deep);
+  --hb-yellow:     var(--sun-gold);
+  --hb-pink:       #FF9770;
+  --hb-mint:       var(--sea-foam);
+  --hb-bright-aqua:var(--sea-foam);
+  --hb-purple:     #5FA8D3;
+
+  --color-bg:            var(--sea-deep);
+  --color-surface:       rgba(255, 255, 255, 0.07);
+  --color-surface-raised:rgba(255, 255, 255, 0.13);
+  --color-text:          #FFFBF2;
+  --color-text-muted:    #BFE3E0;
+  --color-accent:        var(--sun-gold);
+  --color-border:        rgba(255, 255, 255, 0.18);
+  --color-border-strong: rgba(255, 255, 255, 0.34);
+  --color-error:         #FF7F6B;
+  --color-success:       var(--sea-foam);
+
+  --shadow-soft: 0 10px 30px rgba(3, 30, 40, 0.45);
+  --shadow-chip: 0 2px 10px rgba(3, 30, 40, 0.30);
+  --shadow-lift: 0 12px 32px rgba(3, 30, 40, 0.5);
+
+  --focus-ring: 0 0 0 2px var(--sea-deep), 0 0 0 4px var(--sun-gold);
+}
+
+/* -------------------------------------------------------------------------
+   LAYOUT DE PÁGINA — cielo de atardecer + mar de fondo
+   ------------------------------------------------------------------------- */
+
+body {
+  padding:    var(--space-8) 0;
+  min-height: 100vh;
+  position:   relative;
+  background:
+    radial-gradient(60% 45% at 18% 8%,  rgba(255, 209, 102, 0.30), transparent 62%),
+    radial-gradient(55% 45% at 85% 0%,  rgba(255, 111, 97, 0.18),  transparent 60%),
+    radial-gradient(80% 60% at 50% 100%, rgba(78, 205, 196, 0.22),  transparent 65%),
+    linear-gradient(180deg, #0B4F6C 0%, var(--sea-deep) 55%, #041F29 100%);
+  background-attachment: fixed;
+}
+
+/* Brillo ambiental extra, suave respiración tipo "sol de verano" */
+body::before {
+  content:        "";
+  position:       absolute;
+  inset:          0;
+  z-index:        -1;
+  background:
+    radial-gradient(45% 35% at 22% 12%, rgba(255, 209, 102, 0.22), transparent 60%),
+    radial-gradient(35% 30% at 88% 90%, rgba(78, 205, 196, 0.18), transparent 60%);
+  pointer-events: none;
+  animation:      im-sun-breathe 8s ease-in-out infinite;
+}
+
+@keyframes im-sun-breathe {
+  0%, 100% { opacity: 0.75; }
+  50%      { opacity: 1; }
+}
+
+.wrap { max-width: 560px; }
+
+/* -------------------------------------------------------------------------
+   APP CARD — vidrio esmerilado sobre el mar
+   ------------------------------------------------------------------------- */
+
+.hb-app-card {
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  border:            1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter:        blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(3, 30, 40, 0.25),
+    0 0 44px rgba(255, 209, 102, 0.07);
+}
+
+/* Liquid glass "real" — distorsión/refracción vía filtro SVG (feDisplacementMap),
+   igual que el Liquid Glass de Apple. Sólo el fondo detrás del card se distorsiona
+   (el texto/botones son contenido normal encima, así que la legibilidad no se toca).
+
+   Esto SOLO funciona bien en Chrome/Chromium hoy — Safari no renderiza distorsión
+   vía backdrop-filter todavía. Por eso va detrás de un @supports que excluye Safari
+   (-webkit-touch-callout es una propiedad exclusiva de WebKit/Safari, así que
+   "not" de esa condición es verdadero en todo lo demás). Safari e iOS se quedan
+   con el blur de arriba, que ya se ve bien por sí solo — es una mejora progresiva,
+   nadie se queda sin card. También limitado a un solo elemento (el card
+   principal) a propósito: es costoso en GPU y con varios se puede sentir lento
+   en celulares de gama baja. */
+@supports not (-webkit-touch-callout: none) {
+  .hb-app-card {
+    backdrop-filter:         url(#liquid-glass-filter) blur(18px) saturate(160%);
+    -webkit-backdrop-filter: url(#liquid-glass-filter) blur(18px) saturate(160%);
+  }
+}
+
+/* components.css no le da z-index al watermark, así que en cards bajitos
+   (como la del formulario) se pinta ENCIMA del botón en vez de detrás. */
+.card-watermark {
+  z-index: -1;
+}
+
+/* -------------------------------------------------------------------------
+   CHIPS / BADGES / BOTÓN GHOST — versión de vidrio
+   ------------------------------------------------------------------------- */
+
+.hb-chip--dark {
+  background:              rgba(255, 255, 255, 0.10);
+  backdrop-filter:         blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color:            rgba(255, 255, 255, 0.28);
+  color:                   var(--color-text);
+}
+
+.hb-btn-ghost {
+  background:              rgba(255, 255, 255, 0.08);
+  backdrop-filter:         blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color:            rgba(255, 255, 255, 0.32);
+}
+.hb-btn-ghost:hover,
+.hb-btn-ghost:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Botón primario — degradado atardecer
+   (fija "background" en cada estado: la regla base de components.css
+   pone un color plano en :hover/:active que si no, tapa el degradado) */
+.hb-btn-primary,
+.hb-btn-primary:hover,
+.hb-btn-primary:focus-visible,
+.hb-btn-primary:active {
+  background: linear-gradient(120deg, var(--sun-gold) 0%, var(--sun-orange) 55%, var(--sun-coral) 100%);
+  color:      var(--sea-deep);
+}
+.hb-btn-primary:hover,
+.hb-btn-primary:focus-visible {
+  filter:     brightness(1.1);
+  transform:  translateY(-1px);
+  box-shadow: 0 10px 26px rgba(255, 159, 28, 0.4);
+}
+.hb-btn-primary:active {
+  filter:     brightness(0.92);
+  transform:  translateY(0);
+  box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------
+   VISTAS — cada una es una pantalla completa dentro de la app card
+   ------------------------------------------------------------------------- */
+
+.im-view--center {
+  text-align: center;
+  padding:    var(--space-8) var(--space-2);
+  animation:  slideUp 0.4s ease forwards;
+}
+
+/* -------------------------------------------------------------------------
+   SPINNER DE CARGA
+   ------------------------------------------------------------------------- */
+
+.im-spinner {
+  width:         32px;
+  height:        32px;
+  margin:        0 auto var(--space-4);
+  border:        3px solid var(--color-border);
+  border-top-color: var(--sun-gold);
+  border-radius: 50%;
+  animation:     im-spin 0.8s linear infinite;
+}
+
+.im-loading-text {
+  font-size: var(--fs-caption);
+  color:     var(--color-text-muted);
+}
+
+@keyframes im-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* -------------------------------------------------------------------------
+   FORMULARIO DE ENVÍO
+   ------------------------------------------------------------------------- */
+
+.im-form {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-4);
+  animation:      slideUp 0.4s ease forwards;
+}
+
+.im-field {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2);
+}
+
+.im-label {
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+}
+
+.im-field-hint {
+  font-size: 0.72rem;
+  color:     var(--sea-mist);
+  opacity:   0.75;
+}
+
+.im-input {
+  width:         100%;
+  padding:       var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border:        1.5px solid rgba(255, 255, 255, 0.22);
+  background:              rgba(255, 255, 255, 0.06);
+  backdrop-filter:         blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color:         var(--color-text);
+  font-family:   var(--font-sans);
+  font-size:     1rem;
+  transition:    border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.im-input::placeholder { color: rgba(255, 251, 242, 0.45); }
+
+.im-input:focus-visible {
+  outline:      none;
+  border-color: var(--sun-gold);
+  background:   rgba(255, 255, 255, 0.10);
+  box-shadow:   0 0 0 3px rgba(78, 205, 196, 0.22);
+}
+
+.im-form-error {
+  font-size: var(--fs-caption);
+  color:     var(--color-error);
+}
+
+.im-submit-btn {
+  width:      100%;
+  margin-top: var(--space-2);
+}
+
+.im-submit-btn:disabled {
+  opacity:        0.6;
+  cursor:         default;
+  transform:      none !important;
+  box-shadow:     none !important;
+}
+
+/* -------------------------------------------------------------------------
+   PANTALLAS DE ESTADO (esperando / cerrado / revelación)
+   ------------------------------------------------------------------------- */
+
+.im-status-icon {
+  font-size:     3rem;
+  display:       block;
+  margin-bottom: var(--space-4);
+  filter:        drop-shadow(0 0 26px rgba(255, 209, 102, 0.55));
+}
+
+.im-status-title {
+  font-size:      var(--fs-h3);
+  font-weight:    var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom:  var(--space-3);
+}
+
+.im-status-text {
+  font-size:   var(--fs-body-l);
+  font-weight: var(--fw-light);
+  color:       var(--color-text-muted);
+  max-width:   40ch;
+  margin:      0 auto;
+  line-height: 1.6;
+}
+
+/* -------------------------------------------------------------------------
+   TARJETA DE REVELACIÓN — postal de verano
+   ------------------------------------------------------------------------- */
+
+.im-reveal-card {
+  margin-top:    var(--space-6);
+  padding:       var(--space-6);
+  border-radius: var(--radius-card);
+  position:      relative;
+  border:        1.5px solid transparent;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)) padding-box,
+    linear-gradient(120deg, var(--sun-gold), var(--sun-coral), var(--sea-foam)) border-box;
+  backdrop-filter:         blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(3, 30, 40, 0.35);
+}
+
+.im-reveal-label {
+  display:        block;
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+  margin-bottom:  var(--space-2);
+}
+
+.im-reveal-name {
+  font-size:     var(--fs-h3);
+  font-weight:   var(--fw-black);
+  color:         var(--sun-gold);
+  line-height:   1.2;
+  margin-bottom: var(--space-6);
+  word-break:    break-word;
+}
+
+.im-reveal-link {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------------
+   VISTA HOST
+   ------------------------------------------------------------------------- */
+
+.im-host-badge {
+  margin-bottom: var(--space-6);
+}
+
+.im-host-counter {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  margin-bottom:  var(--space-8);
+}
+
+.im-host-count {
+  font-size:   clamp(3rem, 12vw, 4.5rem);
+  font-weight: var(--fw-black);
+  line-height: 1;
+  background:              linear-gradient(120deg, var(--sun-gold), var(--sun-orange), var(--sun-coral));
+  -webkit-background-clip: text;
+  background-clip:         text;
+  -webkit-text-fill-color: transparent;
+  color:                   var(--sun-gold); /* respaldo si no hay soporte de background-clip */
+}
+
+.im-host-count-label {
+  font-size:      var(--fs-label);
+  font-weight:    var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color:          var(--color-text-muted);
+  margin-top:     var(--space-2);
+}
+
+.im-host-btn {
+  width:     100%;
+  font-size: 1.05rem;
+  padding:   var(--space-4) var(--space-6);
+}
+
+.im-host-btn:disabled {
+  opacity:    0.6;
+  cursor:     default;
+  transform:  none !important;
+  box-shadow: none !important;
+}
+
+.im-host-reset-btn {
+  width:      100%;
+  margin-top: var(--space-3);
+}
+
+.im-host-reset-btn:disabled {
+  opacity:    0.6;
+  cursor:     default;
+  transform:  none !important;
+  box-shadow: none !important;
+}
+
+.im-host-status {
+  margin-top: var(--space-4);
+  font-size:  var(--fs-caption);
+  color:      var(--color-text-muted);
+}
+
+/* -------------------------------------------------------------------------
+   ANIMACIONES
+   ------------------------------------------------------------------------- */
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE — mobile-first, ya optimizado por defecto
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .im-status-icon { font-size: 2.5rem; }
+  .im-reveal-name { font-size: var(--fs-body-l); }
+}
