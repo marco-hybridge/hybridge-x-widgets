@@ -100,6 +100,12 @@ body::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
+/* components.css no le da z-index al watermark, así que en cards bajitos
+   (como la del formulario) se pinta ENCIMA del botón en vez de detrás. */
+.card-watermark {
+  z-index: -1;
+}
+
 /* -------------------------------------------------------------------------
    CHIPS / BADGES / BOTÓN GHOST — versión de vidrio
    ------------------------------------------------------------------------- */
