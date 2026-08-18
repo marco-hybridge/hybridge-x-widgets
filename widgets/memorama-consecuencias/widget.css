@@ -43,6 +43,7 @@
 }
 
 .mem-card {
+  -webkit-perspective: 900px;
   perspective: 900px;
   height: 150px;
   cursor: pointer;
@@ -55,6 +56,7 @@
   position: relative;
   width: 100%;
   height: 100%;
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
@@ -70,6 +72,7 @@
 .mem-card-face {
   position: absolute;
   inset: 0;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: var(--radius-md);
   border: 1.5px solid var(--color-border);
@@ -83,6 +86,8 @@
 }
 
 .mem-card-back {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
   background: var(--color-surface-raised);
   font-size: 1.8rem;
   color: var(--color-text-muted);
@@ -94,7 +99,10 @@
 }
 
 .mem-card-front {
-  transform: rotateY(180deg);
+  /* translateZ(0) fuerza su propia capa de composición — sin esto, algunos
+     motores WebKit dejan "asomarse" la cara trasera durante la rotación. */
+  -webkit-transform: rotateY(180deg) translateZ(0);
+  transform: rotateY(180deg) translateZ(0);
   background: var(--hb-gray-850);
 }
 
@@ -144,21 +152,59 @@
 }
 
 /* -------------------------------------------------------------------------
-   MENSAJE DE VICTORIA
+   POPUP DE VICTORIA
    ------------------------------------------------------------------------- */
 
-.mem-win {
-  display: none;
+.mem-win-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.mem-win-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mem-win-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
   text-align: center;
-  max-width: 56ch;
-  margin: var(--space-8) auto 0;
   padding: var(--space-8);
   border-radius: var(--radius-card);
   border: 1px solid var(--color-success);
-  background: rgba(46, 230, 160, 0.08);
-  animation: eobFadeUp 0.5s ease both;
+  background: var(--hb-gray-900);
+  box-shadow: var(--shadow-lift);
+  transform: scale(0.9) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.mem-win.is-visible { display: block; }
+.mem-win-overlay.is-visible .mem-win-modal {
+  transform: scale(1) translateY(0);
+}
+
+.mem-win-close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+}
+.mem-win-close:hover { background: rgba(255, 255, 255, 0.16); color: var(--color-text); }
 
 .mem-win-icon {
   display: inline-block;
@@ -166,22 +212,22 @@
   animation: memBounce 1s ease infinite;
 }
 
-.mem-win h3 {
+.mem-win-modal h3 {
   font-size: var(--fs-h3);
   font-weight: var(--fw-bold);
   color: var(--color-success);
   margin: var(--space-2) 0;
 }
 
-.mem-win p {
+.mem-win-modal p {
   font-size: var(--fs-caption);
   color: var(--color-text-muted);
   line-height: var(--lh-base);
+  margin-bottom: var(--space-6);
 }
 
-@keyframes eobFadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+.mem-win-again {
+  width: 100%;
 }
 
 @keyframes memBounce {
@@ -204,10 +250,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mem-card, .mem-card-inner, .mem-win, .mem-win-icon {
+  /* .mem-card-inner NO fuerza transform:none — ahí vive el rotateY(180deg)
+     funcional que revela el contenido de la carta al voltearla. */
+  .mem-card {
     animation: none !important;
-    transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+  .mem-card-inner {
+    animation: none !important;
+    transition: none !important;
+  }
+  .mem-win-icon, .mem-win-modal {
+    animation: none !important;
+    transition: none !important;
   }
 }

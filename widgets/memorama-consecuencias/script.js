@@ -40,10 +40,12 @@ let flipped = [];
 let locked = false;
 let matchedCount = 0;
 
-const grid    = document.getElementById('memGrid');
-const counter = document.getElementById('memCounter');
-const winBox  = document.getElementById('memWin');
-const resetBtn = document.getElementById('memReset');
+const grid        = document.getElementById('memGrid');
+const counter     = document.getElementById('memCounter');
+const winOverlay  = document.getElementById('memWinOverlay');
+const winClose    = document.getElementById('memWinClose');
+const winAgainBtn = document.getElementById('memWinAgain');
+const resetBtn    = document.getElementById('memReset');
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 
@@ -127,7 +129,7 @@ function onCardClick(el) {
         locked = false;
 
         if (matchedCount === PAIRS.length) {
-          setTimeout(() => winBox.classList.add('is-visible'), 400);
+          setTimeout(() => winOverlay.classList.add('is-visible'), 400);
         }
       }, 350);
     } else {
@@ -149,11 +151,27 @@ function startGame() {
   flipped = [];
   locked = false;
   matchedCount = 0;
-  winBox.classList.remove('is-visible');
+  winOverlay.classList.remove('is-visible');
   updateCounter();
   renderBoard();
 }
 
+function closeWinOverlay() {
+  winOverlay.classList.remove('is-visible');
+}
+
 resetBtn.addEventListener('click', startGame);
+winClose.addEventListener('click', closeWinOverlay);
+winAgainBtn.addEventListener('click', startGame);
+
+// Cerrar al tocar el fondo (fuera del modal)
+winOverlay.addEventListener('click', (e) => {
+  if (e.target === winOverlay) closeWinOverlay();
+});
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && winOverlay.classList.contains('is-visible')) closeWinOverlay();
+});
 
 startGame();
