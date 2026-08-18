@@ -72,11 +72,15 @@
     <div class="mem-grid" id="memGrid"></div>
   </div>
 
-  <!-- Mensaje de victoria -->
-  <div class="mem-win" id="memWin">
-    <span class="mem-win-icon">🎉</span>
-    <h3>¡Encontraste los 5 pares!</h3>
-    <p>Estas son solo algunas de las consecuencias de que el Estado deje de cubrir vivienda, salud, educación, seguridad, empleo y medio ambiente.</p>
+  <!-- Popup de victoria -->
+  <div class="mem-win-overlay" id="memWinOverlay">
+    <div class="mem-win-modal" role="dialog" aria-modal="true" aria-labelledby="memWinTitle">
+      <button type="button" class="mem-win-close" id="memWinClose" aria-label="Cerrar">✕</button>
+      <span class="mem-win-icon">🎉</span>
+      <h3 id="memWinTitle">¡Encontraste los 5 pares!</h3>
+      <p>Estas son solo algunas de las consecuencias de que el Estado deje de cubrir vivienda, salud, educación, seguridad, empleo y medio ambiente.</p>
+      <button type="button" class="hb-btn hb-btn-primary mem-win-again" id="memWinAgain">🔄 Jugar de nuevo</button>
+    </div>
   </div>
 
 </div>
