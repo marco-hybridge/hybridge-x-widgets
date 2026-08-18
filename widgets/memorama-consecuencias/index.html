@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Situación → Consecuencia · Hybridge X</title>
+
+  <!-- SEO -->
+  <meta
+    name="description"
+    content="Memorama interactivo: encuentra los 5 pares de situaciones y sus consecuencias cuando el Estado deja de garantizar el bienestar social."
+  >
+
+  <link
+    rel="canonical"
+    href="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/memorama-consecuencias/"
+  >
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hybridge X">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Situación → Consecuencia">
+  <meta
+    property="og:description"
+    content="Memorama interactivo: encuentra los pares de situaciones y sus consecuencias cuando el Estado deja de garantizar el bienestar."
+  >
+  <meta
+    property="og:url"
+    content="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/memorama-consecuencias/"
+  >
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Situación → Consecuencia">
+  <meta
+    name="twitter:description"
+    content="Memorama interactivo sobre las consecuencias del cambio de modelo del Estado."
+  >
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">🇲🇽 Estado Mexicano</span>
+    <h2 class="hb-h2">Situación → Consecuencia</h2>
+    <p class="hb-lead">El Estado tiene el deber de cubrir tus necesidades básicas. Cuando deja de hacerlo, esto es lo que pasa. Encuentra los 5 pares.</p>
+  </header>
+
+  <!-- Topbar -->
+  <div class="game-topbar">
+    <span class="score-display">
+      🧩 <span id="memCounter">0 de 5 pares encontrados</span>
+    </span>
+    <button type="button" class="hb-chip hb-chip--dark mem-reset" id="memReset">🔄 Reiniciar</button>
+  </div>
+
+  <!-- Tablero -->
+  <div class="hb-app-card mem-board-card">
+    <hybridge-logo fill="#FFFFFF" width="70px" class="card-watermark"></hybridge-logo>
+    <div class="mem-grid" id="memGrid"></div>
+  </div>
+
+  <!-- Mensaje de victoria -->
+  <div class="mem-win" id="memWin">
+    <span class="mem-win-icon">🎉</span>
+    <h3>¡Encontraste los 5 pares!</h3>
+    <p>Estas son solo algunas de las consecuencias de que el Estado deje de cubrir vivienda, salud, educación, seguridad, empleo y medio ambiente.</p>
+  </div>
+
+</div>
+
+<!-- Lógica del widget -->
+<script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>
