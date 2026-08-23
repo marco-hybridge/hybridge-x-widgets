@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatea con Mini-ELIZA · Hybridge X</title>
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Navegación -->
+  <a href="../../index.html" class="nav-back">&larr; Volver al Laboratorio</a>
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">🤖 Antes de hablar de IA...</span>
+    <h2 class="hb-h2">Chatea con Mini-ELIZA</h2>
+    <p class="hb-lead">Escribe lo que quieras, como en cualquier chat. Tienes 6 mensajes — al final vas a descubrir algo interesante.</p>
+  </header>
+
+  <!-- App Card -->
+  <div class="hb-app-card">
+
+    <!-- Marca de agua -->
+    <hybridge-logo fill="#FFFFFF" width="90px" class="card-watermark"></hybridge-logo>
+
+    <div class="me-chat">
+
+      <!-- Header del chat -->
+      <div class="me-chat-header">
+        <span class="me-bot-avatar">🤖</span>
+        <div class="me-bot-info">
+          <span class="me-bot-name">Mini-ELIZA</span>
+          <span class="me-bot-status" id="me-status">en línea</span>
+        </div>
+        <span class="hb-chip hb-chip--dark me-counter" id="me-counter">0 / 6</span>
+      </div>
+
+      <!-- Mensajes -->
+      <div class="me-messages" id="me-messages"></div>
+
+      <!-- Revelación -->
+      <div class="me-reveal" id="me-reveal" hidden>
+        <span class="me-reveal-icon">🎭</span>
+        <h3 class="me-reveal-title">¡Sorpresa!</h3>
+        <p class="me-reveal-text">
+          Esto es literalmente todo lo que hacía ELIZA, el primer "chatbot" de
+          la historia, creado en 1966 por Joseph Weizenbaum. Nada de
+          inteligencia, nada de comprensión — solo detectar palabras clave
+          como <em>"mamá"</em>, <em>"triste"</em> o <em>"amigo"</em> y
+          regresarlas convertidas en preguntas.
+        </p>
+        <p class="me-reveal-text me-reveal-question">¿Te convenció por un momento?</p>
+        <button type="button" class="hb-btn hb-btn-primary" id="me-restart-btn">
+          🔄 Volver a intentar
+        </button>
+      </div>
+
+      <!-- Input -->
+      <form class="me-input-row" id="me-form">
+        <input
+          id="me-input"
+          class="me-input"
+          type="text"
+          placeholder="Escribe un mensaje..."
+          maxlength="200"
+          autocomplete="off"
+          required
+        >
+        <button type="submit" class="me-send-btn" id="me-send-btn" aria-label="Enviar mensaje">
+          ➤
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Lógica del widget -->
+<script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>
