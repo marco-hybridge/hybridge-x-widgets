@@ -2,6 +2,26 @@
    MEMORAMA — Situación → Consecuencia
    ========================================================================= */
 
+/* El embed en la plataforma usa <iframe height="100%">, y ese contenedor
+   suele ser más alto que el contenido — sin esto, el widget queda pegado
+   arriba dejando una franja vacía abajo. Se centra verticalmente dentro
+   del alto que la plataforma le dé, sin importar cuánto sea (vh se mide
+   contra el propio viewport del iframe, no el de la página que lo aloja). */
+body {
+  display: flex;
+  flex-direction: column;
+  /* "safe" evita que, si el contenido no cabe (pantallas muy bajas), el
+     centrado empuje la parte de arriba fuera de vista sin forma de verla. */
+  justify-content: safe center;
+  min-height: 100vh;
+  padding: var(--space-8) 0;
+}
+/* Como flex item, .wrap no se estira solo a su max-width — se lo forzamos
+   para que siga ocupando el mismo ancho que tenía como bloque normal. */
+body > .wrap {
+  width: 100%;
+}
+
 .game-topbar {
   display: flex;
   align-items: center;
