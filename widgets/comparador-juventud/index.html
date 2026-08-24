@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Entre Vulnerabilidad y Esperanza · Hybridge X</title>
+
+  <!-- SEO -->
+  <meta
+    name="description"
+    content="Comparador interactivo: arrastra el divisor para explorar los aspectos positivos y negativos del contexto actual de la juventud."
+  >
+
+  <link
+    rel="canonical"
+    href="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/comparador-juventud/"
+  >
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hybridge X">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Entre Vulnerabilidad y Esperanza">
+  <meta
+    property="og:description"
+    content="Comparador interactivo: arrastra el divisor para explorar los aspectos positivos y negativos del contexto actual de la juventud."
+  >
+  <meta
+    property="og:url"
+    content="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/comparador-juventud/"
+  >
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Entre Vulnerabilidad y Esperanza">
+  <meta
+    name="twitter:description"
+    content="Comparador interactivo sobre el contexto actual de la juventud."
+  >
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">🧭 Juventud y Contexto Actual</span>
+    <h2 class="hb-h2">Entre Vulnerabilidad y Esperanza</h2>
+    <p class="hb-lead">Arrastra el divisor de izquierda a derecha para comparar los aspectos positivos y negativos del contexto actual de la juventud.</p>
+  </header>
+
+  <!-- ===== COMPARADOR ===== -->
+  <section class="hb-app-card cmp-card" aria-label="Comparador de aspectos positivos y negativos de la juventud">
+
+    <hybridge-logo fill="#FFFFFF" width="70px" class="card-watermark"></hybridge-logo>
+
+    <div class="cmp-wrap" id="cmpWrap">
+
+      <!-- Panel base: negativos (siempre visible de fondo) -->
+      <div class="cmp-panel cmp-negative">
+        <span class="cmp-tag">⚠️ Aspectos negativos</span>
+        <ol class="cmp-list">
+          <li><span class="cmp-num c1">1</span><span class="cmp-pill c1">Exclusión social y desempleo juvenil.</span></li>
+          <li><span class="cmp-num c2">2</span><span class="cmp-pill c2">Violencia que afecta especialmente a jóvenes.</span></li>
+          <li><span class="cmp-num c3">3</span><span class="cmp-pill c3">Discriminación por edad, género o clase social.</span></li>
+        </ol>
+      </div>
+
+      <!-- Panel recortado: positivos (se revela al arrastrar) -->
+      <div class="cmp-clip" id="cmpClip">
+        <div class="cmp-panel cmp-positive" id="cmpPositive">
+          <span class="cmp-tag">✅ Aspectos positivos</span>
+          <ol class="cmp-list">
+            <li><span class="cmp-num c1">1</span><span class="cmp-pill c1">Conexión global gracias a la tecnología.</span></li>
+            <li><span class="cmp-num c2">2</span><span class="cmp-pill c2">Nuevas formas de activismo (digital y presencial).</span></li>
+            <li><span class="cmp-num c3">3</span><span class="cmp-pill c3">Crecimiento de la participación en causas sociales.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Divisor arrastrable -->
+      <div
+        class="cmp-divider"
+        id="cmpDivider"
+        role="slider"
+        tabindex="0"
+        aria-label="Comparar aspectos positivos y negativos de la juventud"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="50"
+      >
+        <span class="cmp-divider-line"></span>
+        <span class="cmp-divider-handle">◂▸</span>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<!-- Lógica del widget -->
+<script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>
