@@ -1,0 +1,180 @@
+/* =========================================================================
+   ENTRE VULNERABILIDAD Y ESPERANZA — Comparador con divisor arrastrable
+   ========================================================================= */
+
+.cmp-card {
+  overflow: hidden;
+  padding: 0;
+}
+.cmp-card .card-watermark {
+  z-index: 2;
+}
+
+.cmp-wrap {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  user-select: none;
+  touch-action: pan-y;
+}
+
+/* -------------------------------------------------------------------------
+   PANELES
+   ------------------------------------------------------------------------- */
+
+.cmp-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-8);
+}
+
+.cmp-negative {
+  background:
+    radial-gradient(70% 70% at 85% 15%, rgba(255, 107, 122, 0.10), transparent 60%),
+    var(--color-surface);
+}
+
+.cmp-positive {
+  background:
+    radial-gradient(70% 70% at 15% 15%, rgba(46, 230, 160, 0.12), transparent 60%),
+    var(--color-surface);
+}
+
+.cmp-tag {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+.cmp-negative .cmp-tag { color: var(--color-error); }
+.cmp-positive .cmp-tag { color: var(--color-success); }
+
+.cmp-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cmp-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.cmp-num {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-caption);
+  color: var(--hb-black);
+}
+
+.cmp-pill {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-body-l);
+  color: var(--hb-black);
+  line-height: var(--lh-snug);
+}
+
+.c1 { background: var(--hb-purple); }
+.c2 { background: var(--hb-pink); }
+.c3 { background: var(--hb-bright-aqua); }
+
+/* -------------------------------------------------------------------------
+   RECORTE (reveal)
+   Ancho de .cmp-clip lo controla script.js (0–100%). El panel interior
+   siempre mide el ancho completo de .cmp-wrap para no deformar el texto.
+   ------------------------------------------------------------------------- */
+
+.cmp-clip {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------------------------
+   DIVISOR
+   ------------------------------------------------------------------------- */
+
+.cmp-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  cursor: ew-resize;
+  z-index: 3;
+}
+
+.cmp-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: var(--hb-white);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.cmp-divider-handle {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--hb-white);
+  color: var(--hb-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: var(--fw-bold);
+  box-shadow: var(--shadow-lift);
+  transition: transform 0.15s ease;
+}
+.cmp-divider:hover .cmp-divider-handle,
+.cmp-divider:focus-visible .cmp-divider-handle {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.cmp-divider.is-dragging .cmp-divider-handle {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Pista de "muévelo" — se reproduce una vez al cargar */
+.cmp-wrap.is-demo .cmp-divider {
+  transition: left 0.6s ease-in-out;
+}
+.cmp-wrap.is-demo .cmp-clip {
+  transition: width 0.6s ease-in-out;
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .cmp-wrap { min-height: 460px; }
+  .cmp-panel { padding: var(--space-4) var(--space-5); }
+  .cmp-pill { font-size: var(--fs-caption); padding: var(--space-2) var(--space-3); }
+  .cmp-num { flex-basis: 26px; width: 26px; height: 26px; font-size: 0.7rem; }
+  .cmp-divider-handle { width: 38px; height: 38px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmp-divider.is-demo { transition: none; }
+}
