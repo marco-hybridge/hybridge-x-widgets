@@ -64,6 +64,7 @@ const resetBtn   = document.getElementById('cwReset');
 const winOverlay = document.getElementById('cwWinOverlay');
 const winClose   = document.getElementById('cwWinClose');
 const winAgainBtn = document.getElementById('cwWinAgain');
+const tooltip    = document.getElementById('cwTooltip');
 
 // ── RENDER DEL TABLERO ───────────────────────────────────────────────────
 
@@ -115,9 +116,47 @@ function renderGrid() {
       input.addEventListener('input', () => onInput(r, c));
       input.addEventListener('keydown', (e) => onKeyDown(e, r, c));
 
+      box.addEventListener('mouseenter', () => showTooltip(box, cell));
+      box.addEventListener('mouseleave', hideTooltip);
+
       grid.appendChild(box);
     }
   }
+}
+
+// ── TOOLTIP DE PISTA AL PASAR EL MOUSE ───────────────────────────────────
+
+function showTooltip(cellEl, cell) {
+  const parts = [];
+  if (cell.across !== null) {
+    const w = WORDS[cell.across];
+    parts.push(`<div class="cw-tooltip-part"><span class="cw-tooltip-dir cw-tooltip-dir--across">➡️ Horizontal ${w.num}</span><span class="cw-tooltip-text">${w.clue}</span></div>`);
+  }
+  if (cell.down !== null) {
+    const w = WORDS[cell.down];
+    parts.push(`<div class="cw-tooltip-part"><span class="cw-tooltip-dir cw-tooltip-dir--down">⬇️ Vertical ${w.num}</span><span class="cw-tooltip-text">${w.clue}</span></div>`);
+  }
+  if (!parts.length) return;
+
+  tooltip.innerHTML = parts.join('');
+  tooltip.classList.add('is-visible');
+
+  const cellRect = cellEl.getBoundingClientRect();
+  const tipRect = tooltip.getBoundingClientRect();
+  const margin = 8;
+
+  let left = cellRect.left + cellRect.width / 2 - tipRect.width / 2;
+  left = Math.max(margin, Math.min(left, window.innerWidth - tipRect.width - margin));
+
+  let top = cellRect.top - tipRect.height - margin;
+  if (top < margin) top = cellRect.bottom + margin; // no cabe arriba → abajo
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('is-visible');
 }
 
 // ── RENDER DE PISTAS ──────────────────────────────────────────────────────
@@ -219,6 +258,12 @@ function onInput(r, c) {
   const clean = (input.value || '').toUpperCase().replace(/[^A-ZÑ]/g, '').slice(-1);
   input.value = clean;
 
+  // Editar esta celda le quita su marca de "mal" — se re-evaluará abajo.
+  // Se limpia solo esta celda (no toda la palabra) para no pisar el rojo
+  // de una palabra cruzada que comparte una celda con esta pero sigue
+  // incompleta y por lo tanto no se está re-chequeando ahora mismo.
+  grid.querySelector(`.cw-cell[data-key="${key}"]`).classList.remove('is-wrong');
+
   if (clean) {
     const nextKey = stepKey(r, c, direction, 1);
     if (cellMap.has(nextKey)) selectCell(...nextKey.split(',').map(Number));
@@ -238,6 +283,7 @@ function onKeyDown(e, r, c) {
         selectCell(...prevKey.split(',').map(Number));
         const prevInput = inputAt(prevKey);
         prevInput.value = '';
+        grid.querySelector(`.cw-cell[data-key="${prevKey}"]`).classList.remove('is-wrong');
       }
     }
     return;
@@ -269,40 +315,49 @@ function wordCells(word) {
   return cells;
 }
 
-function checkWord(word, { silent = false } = {}) {
+function checkWord(word) {
   if (solved.has(word.num)) return;
   const cells = wordCells(word);
   const values = cells.map(({ key }) => (inputAt(key).value || ''));
-  if (values.some(v => !v)) return; // aún incompleta
+  if (values.some(v => !v)) return; // aún incompleta — no tocar el rojo:
+  // podría pertenecer a una palabra cruzada que sí sigue completa y mal.
 
   const guess = values.join('');
   if (guess === word.answer) {
     solved.add(word.num);
-    cells.forEach(({ key }) => {
+    // Barrido en cascada: cada casilla se pone verde con un pequeño retraso
+    // respecto a la anterior, en vez de cambiar todas de golpe — así se ve
+    // claramente la palabra completa "encendiéndose" en lugar de solo
+    // desaparecer el resaltado de selección.
+    cells.forEach(({ key }, i) => {
       const box = grid.querySelector(`.cw-cell[data-key="${key}"]`);
       const input = inputAt(key);
       input.readOnly = true;
       box.classList.remove('is-wrong');
-      box.classList.add('is-correct');
+      setTimeout(() => box.classList.add('is-correct'), i * 55);
     });
     const clueEl = [...acrossList.children, ...downList.children]
       .find(el => parseInt(el.dataset.num, 10) === word.num && word.dir === (el.parentElement === acrossList ? 'across' : 'down'));
     if (clueEl) clueEl.classList.add('is-solved');
     updateCounter();
-  } else if (!silent) {
+  } else {
+    // "is-wrong" se queda fijo (color rojo) hasta que se corrija la
+    // palabra; "is-shake" es solo el golpe de vibración y se retira solo.
     cells.forEach(({ key }) => {
       const box = grid.querySelector(`.cw-cell[data-key="${key}"]`);
       if (!box.classList.contains('is-correct')) {
-        box.classList.add('is-wrong');
-        setTimeout(() => box.classList.remove('is-wrong'), 500);
+        box.classList.add('is-wrong', 'is-shake');
+        setTimeout(() => box.classList.remove('is-shake'), 500);
       }
     });
   }
 }
 
 function checkCrossingWords(cell) {
-  if (cell.across !== null) checkWord(WORDS[cell.across], { silent: true });
-  if (cell.down !== null) checkWord(WORDS[cell.down], { silent: true });
+  // Sin "silent": en cuanto se completa una palabra (aunque sea al escribir
+  // la letra de un cruce) se comprueba sola, sin esperar al botón manual.
+  if (cell.across !== null) checkWord(WORDS[cell.across]);
+  if (cell.down !== null) checkWord(WORDS[cell.down]);
 }
 
 function checkAll() {
@@ -312,7 +367,9 @@ function checkAll() {
 function updateCounter() {
   counter.textContent = `${solved.size} de ${WORDS.length} correctas`;
   if (solved.size === WORDS.length) {
-    setTimeout(() => winOverlay.classList.add('is-visible'), 400);
+    // Un poco más de margen para que alcance a verse el barrido verde
+    // de la última palabra antes de que aparezca el popup.
+    setTimeout(() => winOverlay.classList.add('is-visible'), 600);
   }
 }
 
