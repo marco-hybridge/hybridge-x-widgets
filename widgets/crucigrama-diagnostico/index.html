@@ -51,6 +51,8 @@
 
 <div class="wrap">
 
+<div class="cw-interactive">
+
   <!-- Encabezado -->
   <header class="widget-header">
     <span class="hb-overline">🧩 Evaluación Diagnóstica</span>
@@ -64,8 +66,8 @@
       ✅ <span id="cwCounter">0 de 10 correctas</span>
     </span>
     <div class="cw-actions">
-      <button type="button" class="hb-chip hb-chip--dark cw-btn" id="cwCheck">🔎 Comprobar</button>
-      <button type="button" class="hb-chip hb-chip--dark cw-btn" id="cwReset">🔄 Reiniciar</button>
+      <button type="button" class="hb-btn hb-btn-ghost cw-btn cw-btn-print" id="cwPrint">🖨️ Imprimir</button>
+      <button type="button" class="hb-btn hb-btn-primary cw-btn cw-btn-reset" id="cwReset">🔄 Reiniciar</button>
     </div>
   </div>
 
@@ -100,8 +102,66 @@
       <span class="cw-win-icon">🎉</span>
       <h3 id="cwWinTitle">¡Crucigrama completo!</h3>
       <p>Resolviste las 10 palabras sobre el mundo digital. Buen diagnóstico.</p>
-      <button type="button" class="hb-btn hb-btn-primary cw-win-again" id="cwWinAgain">🔄 Jugar de nuevo</button>
+
+      <div class="cw-cert-form">
+        <label for="cwStudentName">Tu nombre (para el comprobante)</label>
+        <input type="text" id="cwStudentName" placeholder="Nombre y apellido" autocomplete="name" maxlength="60">
+        <button type="button" class="hb-btn hb-btn-primary cw-win-download" id="cwDownloadCert">⬇️ Descargar comprobante</button>
+        <p class="cw-cert-hint" id="cwCertHint"></p>
+      </div>
+
+      <button type="button" class="hb-btn hb-btn-ghost cw-win-again" id="cwWinAgain">🔄 Jugar de nuevo</button>
     </div>
+  </div>
+
+  <!-- Panel discreto para que el profesor verifique un comprobante entregado -->
+  <details class="cw-teacher-panel" id="cwTeacherPanel">
+    <summary>🔒 Panel del profesor — verificar un comprobante</summary>
+    <div class="cw-teacher-body">
+      <p>Escribe el nombre y la fecha que aparecen en el comprobante que te entregaron. Compara el código que se genera aquí contra el del archivo — deben ser idénticos.</p>
+      <div class="cw-teacher-row">
+        <div>
+          <label for="cwVerifyName">Nombre en el comprobante</label>
+          <input type="text" id="cwVerifyName" placeholder="Nombre y apellido">
+        </div>
+        <div>
+          <label for="cwVerifyDate">Fecha en el comprobante</label>
+          <input type="date" id="cwVerifyDate">
+        </div>
+      </div>
+      <button type="button" class="hb-btn hb-btn-ghost" id="cwVerifyBtn">Calcular código esperado</button>
+      <p class="cw-verify-result" id="cwVerifyResult"></p>
+    </div>
+  </details>
+
+</div>
+<!-- /.cw-interactive -->
+
+  <!-- Versión imprimible: oculta en pantalla, solo aparece con "Imprimir".
+       Siempre en blanco (para resolver a mano) en blanco y negro. -->
+  <div class="cw-print-only" id="cwPrintSheet">
+    <header class="cw-print-header">
+      <hybridge-logo fill="#000000" width="150px"></hybridge-logo>
+      <div>
+        <h1>Crucigrama Digital</h1>
+        <p>Evaluación Diagnóstica — Redes sociales, comercio en línea y herramientas educativas</p>
+      </div>
+    </header>
+
+    <div class="cw-print-grid" id="cwPrintGrid"></div>
+
+    <div class="cw-print-clues">
+      <div class="cw-print-clue-col">
+        <h3>➡️ Horizontales</h3>
+        <ol id="cwPrintAcross"></ol>
+      </div>
+      <div class="cw-print-clue-col">
+        <h3>⬇️ Verticales</h3>
+        <ol id="cwPrintDown"></ol>
+      </div>
+    </div>
+
+    <footer class="cw-print-footer">Hybridge X — hybridge.education</footer>
   </div>
 
 </div>

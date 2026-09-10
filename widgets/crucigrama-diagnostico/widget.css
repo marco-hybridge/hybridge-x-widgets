@@ -4,6 +4,7 @@
 
 :root {
   --cw-cell: 38px;
+  --cw-print-cell: 30px;
 }
 
 /* El embed en la plataforma usa <iframe height="100%">, y ese contenedor
@@ -53,13 +54,19 @@ body > .wrap {
 }
 
 .cw-btn {
-  border: none;
   cursor: pointer;
   font-family: var(--font-sans);
-  transition: background 0.15s, transform 0.12s;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
 }
 .cw-btn:hover { transform: translateY(-1px); }
 .cw-btn:active { transform: translateY(0); }
+
+/* Ya no compite con "Comprobar" al lado — se agranda para que se note
+   como la acción principal de la topbar. */
+.cw-btn-reset {
+  padding: var(--space-3) var(--space-8);
+  font-size: var(--fs-body-l);
+}
 
 /* -------------------------------------------------------------------------
    TABLERO
@@ -379,6 +386,128 @@ body > .wrap {
 }
 
 /* -------------------------------------------------------------------------
+   COMPROBANTE DESCARGABLE (dentro del popup de victoria)
+   ------------------------------------------------------------------------- */
+
+.cw-cert-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+
+.cw-cert-form label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-muted);
+}
+
+.cw-cert-form input[type="text"] {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-l);
+}
+.cw-cert-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--hb-yellow);
+}
+
+.cw-win-download {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.cw-cert-hint {
+  font-size: var(--fs-caption);
+  color: var(--color-success);
+  min-height: 1.2em;
+}
+.cw-cert-hint.is-error {
+  color: var(--color-error);
+}
+
+/* -------------------------------------------------------------------------
+   PANEL DEL PROFESOR — verificación (discreto, colapsado por defecto)
+   ------------------------------------------------------------------------- */
+
+.cw-teacher-panel {
+  max-width: 1024px;
+  margin: var(--space-8) auto 0;
+  padding: 0 var(--space-6);
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+}
+
+.cw-teacher-panel summary {
+  cursor: pointer;
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+  padding: var(--space-2) 0;
+  transition: color 0.15s ease;
+}
+.cw-teacher-panel summary:hover {
+  color: var(--color-text);
+}
+
+.cw-teacher-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.cw-teacher-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.cw-teacher-row label {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  margin-bottom: 4px;
+  color: var(--color-text-muted);
+}
+.cw-teacher-row input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+.cw-teacher-row input:focus {
+  outline: none;
+  border-color: var(--hb-yellow);
+}
+
+.cw-verify-result {
+  font-size: var(--fs-body-l);
+  min-height: 1.4em;
+}
+.cw-verify-result strong {
+  font-family: var(--font-mono);
+  color: var(--hb-yellow);
+  letter-spacing: 0.05em;
+}
+.cw-verify-result.is-error {
+  color: var(--color-error);
+}
+
+/* -------------------------------------------------------------------------
    RESPONSIVE
    ------------------------------------------------------------------------- */
 
@@ -387,6 +516,7 @@ body > .wrap {
   .cw-clues { grid-template-columns: 1fr; gap: var(--space-6); }
   .cw-cell-num { font-size: 0.5rem; }
   .cw-cell input { font-size: 0.85rem; }
+  .cw-teacher-row { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -401,5 +531,115 @@ body > .wrap {
   }
   .cw-tooltip {
     transition: none !important;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   HOJA IMPRIMIBLE
+   Oculta en pantalla — @media print apaga la parte interactiva y muestra
+   esta en su lugar. Siempre en blanco (para resolver a mano) y en blanco
+   y negro con bordes en vez de fondos, para que imprima bien sin depender
+   de que el navegador incluya los colores de fondo.
+   ------------------------------------------------------------------------- */
+
+.cw-print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: #FFFFFF;
+  }
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+  .cw-interactive {
+    display: none;
+  }
+  .cw-print-only {
+    display: block;
+    color: #000000;
+  }
+
+  .cw-print-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    border-bottom: 2px solid #000;
+    padding-bottom: var(--space-4);
+  }
+  .cw-print-header h1 {
+    font-size: 1.4rem;
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-tight);
+  }
+  .cw-print-header p {
+    font-size: 0.8rem;
+    color: #333333;
+  }
+
+  .cw-print-grid {
+    display: grid;
+    gap: 2px;
+    width: max-content;
+    margin-bottom: var(--space-8);
+  }
+  .cw-print-blank {
+    width: var(--cw-print-cell);
+    height: var(--cw-print-cell);
+  }
+  .cw-print-cell {
+    position: relative;
+    width: var(--cw-print-cell);
+    height: var(--cw-print-cell);
+    border: 1.5px solid #000000;
+  }
+  .cw-print-num {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-size: 0.5rem;
+    font-weight: var(--fw-bold);
+    color: #000000;
+  }
+
+  .cw-print-clues {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .cw-print-clue-col h3 {
+    font-size: 1rem;
+    font-weight: var(--fw-bold);
+    margin-bottom: var(--space-2);
+    border-bottom: 1px solid #000000;
+    padding-bottom: 4px;
+  }
+  .cw-print-clue-col ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .cw-print-footer {
+    margin-top: var(--space-8);
+    font-size: 0.7rem;
+    color: #666666;
+    text-align: center;
+    border-top: 1px solid #cccccc;
+    padding-top: var(--space-2);
+  }
+
+  @page {
+    margin: 1.5cm;
   }
 }
