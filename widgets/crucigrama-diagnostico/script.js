@@ -276,6 +276,33 @@ function onKeyDown(e, r, c) {
   const key = `${r},${c}`;
   const input = inputAt(key);
 
+  // Celda ya resuelta por la palabra cruzada (readOnly): no se puede
+  // reescribir, pero si tecleas la MISMA letra que ya tiene ahí, se deja
+  // avanzar igual — así no se corta el flujo de escribir la palabra actual
+  // solo por toparte con un cruce que ya quedó correcto.
+  if (input.readOnly) {
+    if (/^[a-zñ]$/i.test(e.key)) {
+      e.preventDefault();
+      if (e.key.toUpperCase() === input.value) {
+        const nextKey = stepKey(r, c, direction, 1);
+        if (cellMap.has(nextKey)) selectCell(...nextKey.split(',').map(Number));
+      } else {
+        // No coincide con la letra correcta — avisa sin dejar sobrescribir.
+        const box = grid.querySelector(`.cw-cell[data-key="${key}"]`);
+        box.classList.add('is-shake');
+        setTimeout(() => box.classList.remove('is-shake'), 400);
+      }
+      return;
+    }
+    if (e.key === 'Backspace') {
+      // No hay nada que borrar aquí — retrocede a la anterior, como si
+      // "pasara de largo" por la celda ya resuelta.
+      const prevKey = stepKey(r, c, direction, -1);
+      if (cellMap.has(prevKey)) selectCell(...prevKey.split(',').map(Number));
+      return;
+    }
+  }
+
   if (e.key === 'Backspace') {
     if (!input.value) {
       const prevKey = stepKey(r, c, direction, -1);
