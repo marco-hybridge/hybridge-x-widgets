@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Verificación de Comprobantes · Hybridge X</title>
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../../styles/tokens.css">
+  <link rel="stylesheet" href="../../../styles/base.css">
+  <link rel="stylesheet" href="../../../styles/components.css">
+
+  <style>
+    .wrap { max-width: 560px; padding-top: var(--space-12); padding-bottom: var(--space-12); }
+
+    .vf-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      padding: var(--space-8);
+    }
+
+    .vf-icon { font-size: 2rem; margin-bottom: var(--space-3); display: block; }
+    .vf-title { font-size: var(--fs-h3); font-weight: var(--fw-bold); margin-bottom: var(--space-2); }
+    .vf-sub { font-size: var(--fs-caption); color: var(--color-text-muted); line-height: var(--lh-base); margin-bottom: var(--space-6); }
+
+    .vf-field { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); }
+    .vf-field label {
+      font-size: var(--fs-label); font-weight: var(--fw-bold); text-transform: uppercase;
+      letter-spacing: var(--tracking-label); color: var(--color-text-muted);
+    }
+    .vf-field input {
+      padding: var(--space-3); border-radius: var(--radius-md);
+      border: 1.5px solid var(--color-border-strong); background: var(--color-surface-raised);
+      color: var(--color-text); font-family: var(--font-sans); font-size: var(--fs-body-l);
+      width: 100%;
+    }
+    .vf-field input:focus { outline: none; border-color: var(--hb-yellow); }
+
+    .vf-btn { width: 100%; }
+
+    .vf-error {
+      font-size: var(--fs-caption); color: var(--color-error); min-height: 1.2em; margin-top: var(--space-2);
+    }
+
+    .vf-tool { display: none; }
+    .vf-tool.is-visible { display: block; }
+    .vf-gate.is-hidden { display: none; }
+
+    .vf-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4); }
+    @media (max-width: 500px) { .vf-row { grid-template-columns: 1fr; } }
+
+    .vf-result {
+      margin-top: var(--space-4);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-raised);
+      font-size: var(--fs-body-l);
+      min-height: 1.4em;
+    }
+    .vf-result strong {
+      font-family: var(--font-mono);
+      color: var(--hb-yellow);
+      letter-spacing: 0.05em;
+    }
+    .vf-result.is-error { color: var(--color-error); }
+
+    .vf-signout {
+      display: block;
+      margin-top: var(--space-6);
+      font-size: var(--fs-label);
+      color: var(--color-text-muted);
+      text-decoration: underline;
+      background: none; border: none; cursor: pointer;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="hb-app-card vf-card">
+
+    <!-- Puerta de acceso -->
+    <div class="vf-gate" id="vfGate">
+      <span class="vf-icon">🔒</span>
+      <h2 class="vf-title">Acceso restringido</h2>
+      <p class="vf-sub">Esta herramienta es solo para verificar los comprobantes del Crucigrama Digital. Necesitas la contraseña para entrar.</p>
+
+      <form id="vfForm">
+        <div class="vf-field">
+          <label for="vfPassword">Contraseña</label>
+          <input type="password" id="vfPassword" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="hb-btn hb-btn-primary vf-btn" id="vfSubmit">Entrar</button>
+        <p class="vf-error" id="vfError"></p>
+      </form>
+    </div>
+
+    <!-- Herramienta de verificación (se construye tras autenticar) -->
+    <div class="vf-tool" id="vfTool">
+      <span class="vf-icon">🧩</span>
+      <h2 class="vf-title">Verificar comprobante</h2>
+      <p class="vf-sub">Escribe el nombre y la fecha que aparecen en el comprobante que te entregaron. Compara el código que se genera aquí contra el del archivo — deben ser idénticos.</p>
+
+      <div class="vf-row">
+        <div class="vf-field" style="margin-bottom:0;">
+          <label for="vfName">Nombre en el comprobante</label>
+          <input type="text" id="vfName" placeholder="Nombre y apellido">
+        </div>
+        <div class="vf-field" style="margin-bottom:0;">
+          <label for="vfDate">Fecha en el comprobante</label>
+          <input type="date" id="vfDate">
+        </div>
+      </div>
+      <button type="button" class="hb-btn hb-btn-ghost vf-btn" id="vfCalc">Calcular código esperado</button>
+      <p class="vf-result" id="vfResult"></p>
+
+      <button type="button" class="vf-signout" id="vfSignOut">Cerrar sesión en este navegador</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

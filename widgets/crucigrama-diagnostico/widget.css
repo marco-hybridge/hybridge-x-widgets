@@ -4,6 +4,7 @@
 
 :root {
   --cw-cell: 38px;
+  --cw-print-cell: 30px;
 }
 
 /* El embed en la plataforma usa <iframe height="100%">, y ese contenedor
@@ -53,13 +54,19 @@ body > .wrap {
 }
 
 .cw-btn {
-  border: none;
   cursor: pointer;
   font-family: var(--font-sans);
-  transition: background 0.15s, transform 0.12s;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
 }
 .cw-btn:hover { transform: translateY(-1px); }
 .cw-btn:active { transform: translateY(0); }
+
+/* Ya no compite con "Comprobar" al lado — se agranda para que se note
+   como la acción principal de la topbar. */
+.cw-btn-reset {
+  padding: var(--space-3) var(--space-8);
+  font-size: var(--fs-body-l);
+}
 
 /* -------------------------------------------------------------------------
    TABLERO
@@ -96,14 +103,20 @@ body > .wrap {
   border-radius: 6px;
   background: var(--color-surface-raised);
   border: 1.5px solid var(--color-border);
-  opacity: 0;
-  transform: scale(0.6);
-  animation: cwDeal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  /* Sin opacity/transform estáticos aquí a propósito: "cwDeal" (con
+     fill-mode "both") es quien los controla. Si fueran estáticos, en
+     cuanto otra clase (is-correct, is-shake) pusiera su propia
+     "animation" en la misma celda —reemplazando esta por completo,
+     "animation" no se combina entre reglas— se perdería el forwards que
+     sostenía opacity:1 y la celda volvería a opacity:0 (invisible) aun
+     con el color y la letra correctos por dentro. */
+  animation: cwDeal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 @keyframes cwDeal {
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .cw-cell-num {
@@ -146,8 +159,11 @@ body > .wrap {
 }
 
 .cw-cell.is-correct {
-  background: rgba(46, 230, 160, 0.16);
+  /* Queda así para siempre — no depende de selección ni hover, por eso
+     el "resaltado verde" de la fila/columna ya resuelta nunca se apaga. */
+  background: rgba(46, 230, 160, 0.28);
   border-color: var(--color-success);
+  box-shadow: 0 0 0 1px rgba(46, 230, 160, 0.45);
   animation: cwCorrectPop 0.4s ease;
 }
 .cw-cell.is-correct input {
@@ -157,12 +173,21 @@ body > .wrap {
 
 @keyframes cwCorrectPop {
   0%   { transform: scale(1); }
-  40%  { transform: scale(1.18); }
+  40%  { transform: scale(1.22); }
   100% { transform: scale(1); }
 }
 
+/* Persiste en rojo hasta que se corrija la palabra (no solo el golpe). */
 .cw-cell.is-wrong {
+  background: rgba(255, 107, 122, 0.14);
   border-color: var(--color-error);
+}
+.cw-cell.is-wrong input {
+  color: var(--color-error);
+}
+
+/* Solo el golpe de vibración — se retira solo tras la animación. */
+.cw-cell.is-shake {
   animation: cwShake 0.4s ease;
 }
 
@@ -170,6 +195,57 @@ body > .wrap {
   0%, 100% { transform: translateX(0); }
   25%      { transform: translateX(-4px); }
   75%      { transform: translateX(4px); }
+}
+
+/* -------------------------------------------------------------------------
+   TOOLTIP DE PISTA (hover sobre una casilla)
+   ------------------------------------------------------------------------- */
+
+.cw-tooltip {
+  position: fixed;
+  z-index: 200;
+  max-width: 260px;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--hb-gray-900);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-lift);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.cw-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.cw-tooltip-part {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cw-tooltip-part + .cw-tooltip-part {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.cw-tooltip-dir {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+.cw-tooltip-dir--across { color: var(--hb-bright-aqua); }
+.cw-tooltip-dir--down   { color: var(--hb-yellow); }
+
+.cw-tooltip-text {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-base);
+  color: var(--color-text);
 }
 
 /* -------------------------------------------------------------------------
@@ -310,6 +386,54 @@ body > .wrap {
 }
 
 /* -------------------------------------------------------------------------
+   COMPROBANTE DESCARGABLE (dentro del popup de victoria)
+   ------------------------------------------------------------------------- */
+
+.cw-cert-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+
+.cw-cert-form label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-muted);
+}
+
+.cw-cert-form input[type="text"] {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-l);
+}
+.cw-cert-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--hb-yellow);
+}
+
+.cw-win-download {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.cw-cert-hint {
+  font-size: var(--fs-caption);
+  color: var(--color-success);
+  min-height: 1.2em;
+}
+.cw-cert-hint.is-error {
+  color: var(--color-error);
+}
+
+/* -------------------------------------------------------------------------
    RESPONSIVE
    ------------------------------------------------------------------------- */
 
@@ -329,5 +453,118 @@ body > .wrap {
   .cw-win-icon, .cw-win-modal {
     animation: none !important;
     transition: none !important;
+  }
+  .cw-tooltip {
+    transition: none !important;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   HOJA IMPRIMIBLE
+   Oculta en pantalla — @media print apaga la parte interactiva y muestra
+   esta en su lugar. Siempre en blanco (para resolver a mano) y en blanco
+   y negro con bordes en vez de fondos, para que imprima bien sin depender
+   de que el navegador incluya los colores de fondo.
+   ------------------------------------------------------------------------- */
+
+.cw-print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: #FFFFFF;
+  }
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+  .cw-interactive {
+    display: none;
+  }
+  .cw-print-only {
+    display: block;
+    color: #000000;
+  }
+
+  .cw-print-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    border-bottom: 2px solid #000;
+    padding-bottom: var(--space-4);
+  }
+  .cw-print-header h1 {
+    font-size: 1.4rem;
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-tight);
+  }
+  .cw-print-header p {
+    font-size: 0.8rem;
+    color: #333333;
+  }
+
+  .cw-print-grid {
+    display: grid;
+    gap: 2px;
+    width: max-content;
+    margin-bottom: var(--space-8);
+  }
+  .cw-print-blank {
+    width: var(--cw-print-cell);
+    height: var(--cw-print-cell);
+  }
+  .cw-print-cell {
+    position: relative;
+    width: var(--cw-print-cell);
+    height: var(--cw-print-cell);
+    border: 1.5px solid #000000;
+  }
+  .cw-print-num {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-size: 0.5rem;
+    font-weight: var(--fw-bold);
+    color: #000000;
+  }
+
+  .cw-print-clues {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .cw-print-clue-col h3 {
+    font-size: 1rem;
+    font-weight: var(--fw-bold);
+    margin-bottom: var(--space-2);
+    border-bottom: 1px solid #000000;
+    padding-bottom: 4px;
+  }
+  .cw-print-clue-col ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .cw-print-footer {
+    margin-top: var(--space-8);
+    font-size: 0.7rem;
+    color: #666666;
+    text-align: center;
+    border-top: 1px solid #cccccc;
+    padding-top: var(--space-2);
+  }
+
+  @page {
+    margin: 1.5cm;
   }
 }
