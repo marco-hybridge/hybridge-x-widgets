@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Crucigrama: Evaluación Diagnóstica · Hybridge X</title>
+
+  <!-- SEO -->
+  <meta
+    name="description"
+    content="Crucigrama interactivo de evaluación diagnóstica sobre redes sociales, comercio electrónico y herramientas educativas digitales."
+  >
+
+  <link
+    rel="canonical"
+    href="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/crucigrama-diagnostico/"
+  >
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hybridge X">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Crucigrama: Evaluación Diagnóstica">
+  <meta
+    property="og:description"
+    content="Crucigrama interactivo sobre redes sociales, comercio electrónico y herramientas educativas digitales."
+  >
+  <meta
+    property="og:url"
+    content="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/crucigrama-diagnostico/"
+  >
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Crucigrama: Evaluación Diagnóstica">
+  <meta
+    name="twitter:description"
+    content="Crucigrama interactivo de evaluación diagnóstica."
+  >
+
+  <!-- Sistema de diseño Hybridge -->
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+
+  <!-- Estilos específicos del widget -->
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Encabezado -->
+  <header class="widget-header">
+    <span class="hb-overline">🧩 Evaluación Diagnóstica</span>
+    <h2 class="hb-h2">Crucigrama Digital</h2>
+    <p class="hb-lead">Resuelve las 10 pistas sobre redes sociales, comercio en línea y herramientas educativas. Toca una casilla para empezar.</p>
+  </header>
+
+  <!-- Topbar -->
+  <div class="game-topbar">
+    <span class="score-display">
+      ✅ <span id="cwCounter">0 de 10 correctas</span>
+    </span>
+    <div class="cw-actions">
+      <button type="button" class="hb-chip hb-chip--dark cw-btn" id="cwCheck">🔎 Comprobar</button>
+      <button type="button" class="hb-chip hb-chip--dark cw-btn" id="cwReset">🔄 Reiniciar</button>
+    </div>
+  </div>
+
+  <!-- Tablero -->
+  <div class="hb-app-card cw-board-card">
+    <hybridge-logo fill="#FFFFFF" width="70px" class="card-watermark"></hybridge-logo>
+
+    <div class="cw-scroll">
+      <div class="cw-grid" id="cwGrid"></div>
+    </div>
+  </div>
+
+  <!-- Pistas -->
+  <div class="cw-clues">
+    <div class="cw-clue-col">
+      <h3 class="cw-clue-title">➡️ Horizontales</h3>
+      <ol class="cw-clue-list" id="cwAcrossList"></ol>
+    </div>
+    <div class="cw-clue-col">
+      <h3 class="cw-clue-title">⬇️ Verticales</h3>
+      <ol class="cw-clue-list" id="cwDownList"></ol>
+    </div>
+  </div>
+
+  <!-- Popup de victoria -->
+  <div class="cw-win-overlay" id="cwWinOverlay">
+    <div class="cw-win-modal" role="dialog" aria-modal="true" aria-labelledby="cwWinTitle">
+      <button type="button" class="cw-win-close" id="cwWinClose" aria-label="Cerrar">✕</button>
+      <span class="cw-win-icon">🎉</span>
+      <h3 id="cwWinTitle">¡Crucigrama completo!</h3>
+      <p>Resolviste las 10 palabras sobre el mundo digital. Buen diagnóstico.</p>
+      <button type="button" class="hb-btn hb-btn-primary cw-win-again" id="cwWinAgain">🔄 Jugar de nuevo</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Lógica del widget -->
+<script src="script.js"></script>
+
+<!-- Web Component del logo -->
+<script src="../../scripts/hybridge-logo.js"></script>
+
+</body>
+</html>

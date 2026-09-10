@@ -1,0 +1,333 @@
+/* =========================================================================
+   CRUCIGRAMA: EVALUACIÓN DIAGNÓSTICA
+   ========================================================================= */
+
+:root {
+  --cw-cell: 38px;
+}
+
+/* El embed en la plataforma usa <iframe height="100%">, y ese contenedor
+   suele ser más alto que el contenido — sin esto, el widget queda pegado
+   arriba dejando una franja vacía abajo. Se centra verticalmente dentro
+   del alto que la plataforma le dé, sin importar cuánto sea (vh se mide
+   contra el propio viewport del iframe, no el de la página que lo aloja). */
+body {
+  display: flex;
+  flex-direction: column;
+  /* "safe" evita que, si el contenido no cabe (pantallas muy bajas), el
+     centrado empuje la parte de arriba fuera de vista sin forma de verla. */
+  justify-content: safe center;
+  min-height: 100vh;
+  padding: var(--space-8) 0;
+}
+/* Como flex item, .wrap no se estira solo a su max-width — se lo forzamos
+   para que siga ocupando el mismo ancho que tenía como bloque normal. */
+body > .wrap {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------------
+   TOPBAR
+   ------------------------------------------------------------------------- */
+
+.game-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.score-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-body-l);
+}
+
+.cw-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.cw-btn {
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.15s, transform 0.12s;
+}
+.cw-btn:hover { transform: translateY(-1px); }
+.cw-btn:active { transform: translateY(0); }
+
+/* -------------------------------------------------------------------------
+   TABLERO
+   ------------------------------------------------------------------------- */
+
+.cw-board-card {
+  overflow: hidden;
+}
+.cw-board-card .card-watermark {
+  z-index: -1;
+}
+
+.cw-scroll {
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.cw-grid {
+  display: grid;
+  gap: 3px;
+  width: max-content;
+  margin: 0 auto;
+}
+
+.cw-blank {
+  width: var(--cw-cell);
+  height: var(--cw-cell);
+}
+
+.cw-cell {
+  position: relative;
+  width: var(--cw-cell);
+  height: var(--cw-cell);
+  border-radius: 6px;
+  background: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border);
+  opacity: 0;
+  transform: scale(0.6);
+  animation: cwDeal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+@keyframes cwDeal {
+  to { opacity: 1; transform: scale(1); }
+}
+
+.cw-cell-num {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cw-cell input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: var(--fw-bold);
+  font-size: 1rem;
+  border-radius: 6px;
+  caret-color: var(--hb-yellow);
+}
+.cw-cell input:focus { outline: none; }
+
+.cw-cell.is-active-word {
+  background: rgba(226, 248, 151, 0.12);
+  border-color: rgba(226, 248, 151, 0.35);
+}
+
+.cw-cell.is-selected {
+  background: rgba(226, 248, 151, 0.24);
+  border-color: var(--hb-yellow);
+  box-shadow: 0 0 0 2px rgba(226, 248, 151, 0.25);
+}
+
+.cw-cell.is-correct {
+  background: rgba(46, 230, 160, 0.16);
+  border-color: var(--color-success);
+  animation: cwCorrectPop 0.4s ease;
+}
+.cw-cell.is-correct input {
+  color: var(--color-success);
+  cursor: default;
+}
+
+@keyframes cwCorrectPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.cw-cell.is-wrong {
+  border-color: var(--color-error);
+  animation: cwShake 0.4s ease;
+}
+
+@keyframes cwShake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+/* -------------------------------------------------------------------------
+   PISTAS
+   ------------------------------------------------------------------------- */
+
+.cw-clues {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.cw-clue-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-4);
+}
+
+.cw-clue-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cw-clue-list li {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-base);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.cw-clue-list li strong { color: var(--color-text); }
+
+.cw-clue-list li:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cw-clue-list li.is-active {
+  background: rgba(226, 248, 151, 0.10);
+  border-color: rgba(226, 248, 151, 0.35);
+  color: var(--color-text);
+}
+
+.cw-clue-list li.is-solved {
+  color: var(--color-success);
+  text-decoration: line-through;
+  text-decoration-color: rgba(46, 230, 160, 0.5);
+}
+.cw-clue-list li.is-solved strong { color: var(--color-success); }
+
+/* -------------------------------------------------------------------------
+   POPUP DE VICTORIA
+   ------------------------------------------------------------------------- */
+
+.cw-win-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.cw-win-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cw-win-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  padding: var(--space-8);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-success);
+  background: var(--hb-gray-900);
+  box-shadow: var(--shadow-lift);
+  transform: scale(0.9) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cw-win-overlay.is-visible .cw-win-modal {
+  transform: scale(1) translateY(0);
+}
+
+.cw-win-close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+}
+.cw-win-close:hover { background: rgba(255, 255, 255, 0.16); color: var(--color-text); }
+
+.cw-win-icon {
+  display: inline-block;
+  font-size: 2.5rem;
+  animation: cwBounce 1s ease infinite;
+}
+
+.cw-win-modal h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  color: var(--color-success);
+  margin: var(--space-2) 0;
+}
+
+.cw-win-modal p {
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-6);
+}
+
+.cw-win-again {
+  width: 100%;
+}
+
+@keyframes cwBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  :root { --cw-cell: 30px; }
+  .cw-clues { grid-template-columns: 1fr; gap: var(--space-6); }
+  .cw-cell-num { font-size: 0.5rem; }
+  .cw-cell input { font-size: 0.85rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-cell {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .cw-win-icon, .cw-win-modal {
+    animation: none !important;
+    transition: none !important;
+  }
+}
