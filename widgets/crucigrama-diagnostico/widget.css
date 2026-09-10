@@ -434,80 +434,6 @@ body > .wrap {
 }
 
 /* -------------------------------------------------------------------------
-   PANEL DEL PROFESOR — verificación (discreto, colapsado por defecto)
-   ------------------------------------------------------------------------- */
-
-.cw-teacher-panel {
-  max-width: 1024px;
-  margin: var(--space-8) auto 0;
-  padding: 0 var(--space-6);
-  font-size: var(--fs-caption);
-  color: var(--color-text-muted);
-}
-
-.cw-teacher-panel summary {
-  cursor: pointer;
-  font-weight: var(--fw-bold);
-  color: var(--color-text-muted);
-  padding: var(--space-2) 0;
-  transition: color 0.15s ease;
-}
-.cw-teacher-panel summary:hover {
-  color: var(--color-text);
-}
-
-.cw-teacher-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  margin-top: var(--space-2);
-  margin-bottom: var(--space-8);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-}
-
-.cw-teacher-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
-}
-.cw-teacher-row label {
-  display: block;
-  font-size: var(--fs-label);
-  font-weight: var(--fw-bold);
-  margin-bottom: 4px;
-  color: var(--color-text-muted);
-}
-.cw-teacher-row input {
-  width: 100%;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1.5px solid var(--color-border-strong);
-  background: var(--color-surface-raised);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-}
-.cw-teacher-row input:focus {
-  outline: none;
-  border-color: var(--hb-yellow);
-}
-
-.cw-verify-result {
-  font-size: var(--fs-body-l);
-  min-height: 1.4em;
-}
-.cw-verify-result strong {
-  font-family: var(--font-mono);
-  color: var(--hb-yellow);
-  letter-spacing: 0.05em;
-}
-.cw-verify-result.is-error {
-  color: var(--color-error);
-}
-
-/* -------------------------------------------------------------------------
    RESPONSIVE
    ------------------------------------------------------------------------- */
 
@@ -516,7 +442,6 @@ body > .wrap {
   .cw-clues { grid-template-columns: 1fr; gap: var(--space-6); }
   .cw-cell-num { font-size: 0.5rem; }
   .cw-cell input { font-size: 0.85rem; }
-  .cw-teacher-row { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -626,21 +626,6 @@ async function downloadCertificate() {
   }
 }
 
-async function verifyCertificate() {
-  const name = document.getElementById('cwVerifyName').value.trim();
-  const dateVal = document.getElementById('cwVerifyDate').value;
-  const resultEl = document.getElementById('cwVerifyResult');
-
-  if (!name || !dateVal) {
-    resultEl.classList.add('is-error');
-    resultEl.textContent = '⚠️ Completa el nombre y la fecha del comprobante.';
-    return;
-  }
-  resultEl.classList.remove('is-error');
-  const code = await computeVerificationCode(name, dateVal);
-  resultEl.innerHTML = `Código esperado: <strong>${code}</strong>`;
-}
-
 printBtn.addEventListener('click', () => window.print());
 resetBtn.addEventListener('click', resetGame);
 winClose.addEventListener('click', closeWinOverlay);
@@ -651,12 +636,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('cwDownloadCert').addEventListener('click', downloadCertificate);
-document.getElementById('cwVerifyBtn').addEventListener('click', verifyCertificate);
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 
 renderGrid();
 renderClues();
 renderPrintSheet();
-document.getElementById('cwVerifyDate').value = todayStr();
 updateCounter();
