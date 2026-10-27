@@ -11,28 +11,39 @@
   --nx-accent: var(--hb-yellow);
 }
 
-/* Centrado dentro del <iframe height="100%"> de la plataforma. */
+/* App de altura fija. En Hybridge Hub el embed mide 750 px de alto y el
+   ancho de la columna de la lección (≈270–810 px). Navegación arriba y
+   controles abajo quedan SIEMPRE visibles; si una diapositiva no cabe,
+   solo ella hace scroll por dentro (nada de doble scroll con la página). */
+html, body { height: 100%; }
 body {
   display: flex;
   flex-direction: column;
-  justify-content: safe center;
-  min-height: 100vh;
-  padding: var(--space-6) 0;
+  height: 100vh;
+  padding: var(--space-3) 0;
+  overflow: hidden;
 }
-body > .wrap { width: 100%; }
+body > .wrap {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-4);
+}
 
 /* -------------------------------------------------------------------------
    NAVEGACIÓN
    ------------------------------------------------------------------------- */
 
-.nx-nav { margin-bottom: var(--space-4); }
+.nx-nav { flex: none; margin-bottom: var(--space-3); }
 
 .nx-nav-track {
   height: 4px;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 .nx-nav-fill {
   height: 100%;
@@ -63,6 +74,7 @@ body > .wrap { width: 100%; }
   font-family: var(--font-sans);
   font-size: var(--fs-label);
   font-weight: var(--fw-bold);
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -85,9 +97,11 @@ body > .wrap { width: 100%; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  flex: none;
 }
+.nx-controls .hb-btn { padding: var(--space-2) var(--space-6); }
 .nx-count {
   font-family: var(--font-mono);
   font-size: var(--fs-caption);
@@ -101,19 +115,30 @@ body > .wrap { width: 100%; }
 
 /* "clip" (no "hidden"): evita scroll horizontal mientras la diapositiva
    entra deslizándose, sin recortar nada en vertical. */
-.nx-deck { position: relative; overflow-x: clip; }
+.nx-deck {
+  position: relative;
+  overflow-x: clip;
+  flex: 1;
+  min-height: 0;
+}
 
 .nx-slide {
   display: none;
   position: relative;
+  height: 100%;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
-  padding: var(--space-8);
-  min-height: 520px;
-  overflow: hidden;
+  padding: var(--space-6);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
+.nx-slide::-webkit-scrollbar { width: 6px; }
+.nx-slide::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 9999px; }
 .nx-slide.is-active { display: block; }
 .nx-slide.enter-next { animation: nxEnterNext 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .nx-slide.enter-prev { animation: nxEnterPrev 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -175,9 +200,9 @@ body > .wrap { width: 100%; }
 
 .nx-cover {
   background: #050508;
-  min-height: 540px;
   display: none;
   padding: 0;
+  overflow: hidden;
 }
 .nx-cover.is-active { display: flex; align-items: flex-end; }
 
@@ -191,14 +216,16 @@ body > .wrap { width: 100%; }
 .nx-cover-content {
   position: relative;
   z-index: 1;
-  padding: var(--space-8);
-  max-width: 560px;
+  padding: var(--space-6);
+  max-width: 520px;
+  width: 100%;
+  min-width: 0;   /* como flex item, sin esto no se encoge en anchos de móvil */
 }
 
 .nx-cover-title {
   display: flex;
   flex-direction: column;
-  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-size: clamp(2.4rem, 10vw, 5rem);
   font-weight: var(--fw-regular);
   line-height: 0.95;
   letter-spacing: -0.02em;
@@ -226,13 +253,15 @@ body > .wrap { width: 100%; }
   text-transform: uppercase;
   color: #E8E6DC;
   margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  row-gap: var(--space-1, 4px);
 }
 
 .nx-cover-lead {
   color: rgba(232, 230, 220, 0.8);
-  font-size: var(--fs-body-l);
+  font-size: 1rem;
   line-height: var(--lh-base);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   max-width: 44ch;
 }
 
@@ -253,9 +282,9 @@ body > .wrap { width: 100%; }
   font-size: clamp(1.15rem, 2.6vw, 1.6rem);
   font-weight: var(--fw-semibold);
   line-height: 1.35;
-  padding: var(--space-6);
+  padding: var(--space-4) var(--space-6);
   border-radius: var(--radius-card);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -265,7 +294,7 @@ body > .wrap { width: 100%; }
   justify-content: center;
   gap: var(--space-6);
   flex-wrap: wrap;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
 }
 
 .nx-vs {
@@ -277,7 +306,7 @@ body > .wrap { width: 100%; }
 
 .nx-orb {
   position: relative;
-  width: clamp(170px, 26vw, 230px);
+  width: clamp(140px, 26vw, 210px);
   aspect-ratio: 1;
   border-radius: 50%;
   border: none;
@@ -335,19 +364,19 @@ body > .wrap { width: 100%; }
    ENCABEZADOS Y TEXTO DE CONTENIDO
    ------------------------------------------------------------------------- */
 
-.nx-head { margin-bottom: var(--space-6); }
+.nx-head { margin-bottom: var(--space-4); }
 .nx-head--center { text-align: center; }
 
 .nx-title {
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 700;
-  font-size: clamp(2.6rem, 7vw, 4.2rem);
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
   line-height: 1;
   color: #FFFFFF;
   letter-spacing: -0.01em;
 }
-.nx-title--serif { font-size: clamp(2.2rem, 6vw, 3.6rem); }
+.nx-title--serif { font-size: clamp(1.9rem, 6vw, 3rem); }
 
 .nx-red {
   color: var(--nx-red);
@@ -362,24 +391,24 @@ body > .wrap { width: 100%; }
 
 .nx-sub {
   font-style: italic;
-  font-size: var(--fs-body-l);
+  font-size: 1rem;
   color: var(--color-text);
-  margin-top: var(--space-2);
-  padding-left: clamp(0px, 10vw, 140px);
+  margin-top: var(--space-1, 4px);
+  padding-left: clamp(0px, 8vw, 120px);
 }
 
 .nx-split {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
-  gap: var(--space-8);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-6);
   align-items: start;
 }
 
 .nx-text p {
-  font-size: var(--fs-body-l);
-  line-height: var(--lh-base);
+  font-size: 1rem;
+  line-height: 1.55;
   color: #D8D8D8;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 .nx-text strong { color: #FFFFFF; }
 
@@ -399,7 +428,7 @@ body > .wrap { width: 100%; }
   color: var(--nx-red) !important;
   font-weight: var(--fw-black);
   letter-spacing: -0.01em;
-  font-size: 1.3rem !important;
+  font-size: 1.1rem !important;
   margin-bottom: var(--space-2) !important;
 }
 
@@ -408,15 +437,15 @@ body > .wrap { width: 100%; }
   background: #FFFFFF;
   color: #1A1A1A;
   font-family: "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  padding: var(--space-3) var(--space-6);
+  font-size: clamp(0.95rem, 2.4vw, 1.2rem);
+  padding: var(--space-2) var(--space-4);
   border-radius: 6px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
   max-width: 100%;
   line-height: 1.6;
 }
 .nx-eq sup { font-size: 0.6em; }
-.nx-eq--big { display: table; margin: var(--space-4) auto; font-size: clamp(1.1rem, 3vw, 1.6rem); }
+.nx-eq--big { display: table; margin: var(--space-3) auto; font-size: clamp(1rem, 2.6vw, 1.3rem); }
 
 .nx-mini {
   font-size: var(--fs-caption);
@@ -481,14 +510,12 @@ body > .wrap { width: 100%; }
    RECUADROS SECUNDARIOS (penetración) Y "PIENSA"
    ------------------------------------------------------------------------- */
 
-.nx-shield {
-  margin-top: var(--space-8);
-  padding: var(--space-6);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-border);
-  background: rgba(255, 255, 255, 0.02);
-}
-.nx-shield h3 { font-size: var(--fs-h3); margin-bottom: var(--space-2); }
+.nx-col { display: flex; flex-direction: column; gap: var(--space-4); }
+.nx-col .nx-teaser { margin-top: 0; }
+
+/* Alcance de la radiación: vive como pestaña dentro del escenario. */
+.nx-shield { padding: var(--space-2) var(--space-2) var(--space-3); }
+.nx-shield h3 { font-size: 1.05rem; margin-bottom: var(--space-2); }
 .nx-shield > p { color: var(--color-text-muted); line-height: var(--lh-base); margin-bottom: var(--space-4); }
 .nx-shield > p strong { color: var(--color-text); }
 
@@ -630,27 +657,34 @@ body > .wrap { width: 100%; }
   background: #A2DCE7;
   color: #1E2A2E;
   border-radius: 28px 28px 28px 28px;
-  padding: var(--space-8);
+  padding: var(--space-4) var(--space-6);
   text-align: center;
   box-shadow: 10px -10px 0 #8FBF9A;
-  margin: var(--space-4) var(--space-4) var(--space-8) 0;
+  margin: var(--space-3) var(--space-3) var(--space-4) 0;
 }
 .nx-callout p {
-  font-size: clamp(1.05rem, 2.3vw, 1.35rem);
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
   line-height: 1.5;
   max-width: 60ch;
   margin: 0 auto;
 }
 .nx-callout strong { color: #0D0D0D; }
-.nx-callout-law { margin-top: var(--space-4) !important; font-weight: var(--fw-semibold); }
+.nx-callout-law { margin-top: var(--space-2) !important; font-weight: var(--fw-semibold); }
 
-.nx-balance { text-align: center; }
+.nx-balance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+.nx-balance-ctrl { display: flex; flex-direction: column; align-items: center; }
 .nx-balance .nx-tabs { justify-content: center; }
 
 .nx-scale {
   display: block;
   width: 100%;
-  max-width: 560px;
+  max-width: 420px;
   margin: 0 auto;
   height: auto;
 }
@@ -669,19 +703,21 @@ body > .wrap { width: 100%; }
 .nx-tally {
   display: flex;
   justify-content: center;
-  gap: var(--space-4);
+  gap: var(--space-2);
   flex-wrap: wrap;
-  margin: var(--space-3) 0 var(--space-4);
+  width: 100%;
+  margin: var(--space-1, 4px) 0 var(--space-3);
 }
 .nx-tally div {
-  min-width: 190px;
+  flex: 1;
+  min-width: 130px;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background: rgba(255, 255, 255, 0.03);
 }
 .nx-tally span { display: block; font-size: var(--fs-label); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-label); }
-.nx-tally strong { font-family: var(--font-mono); font-size: 1.15rem; }
+.nx-tally strong { font-family: var(--font-mono); font-size: 1rem; }
 .nx-tally strong.is-ok { color: var(--hb-mint); }
 
 /* -------------------------------------------------------------------------
@@ -785,18 +821,35 @@ body > .wrap { width: 100%; }
    RESPONSIVE
    ------------------------------------------------------------------------- */
 
-@media (max-width: 820px) {
-  .nx-split { grid-template-columns: 1fr; gap: var(--space-6); }
+/* Rangos reales del embed en Hybridge Hub (alto fijo 750 px):
+   ≥1440 px de ventana → 712–808 px · tablet → ~650 px · móvil → ~270 px.
+   Dos columnas desde 600 px para que el escenario animado quede a la
+   vista sin tener que bajar. */
+@media (max-width: 600px) {
+  .nx-split { grid-template-columns: 1fr; gap: var(--space-4); }
+  .nx-balance { grid-template-columns: 1fr; }
+  .nx-sub { padding-left: 0; }
+  .nx-sort { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 640px) {
-  .nx-slide { padding: var(--space-4); min-height: 0; }
-  .nx-cover { min-height: 520px; }
-  .nx-cover-content { padding: var(--space-6) var(--space-4); }
+@media (max-width: 480px) {
+  body > .wrap { padding: 0 var(--space-2); }
+  .nx-slide { padding: var(--space-4); }
+  .nx-cover-content { padding: var(--space-4); }
+  .nx-cover-brand { letter-spacing: 0.15em; font-size: 0.85rem; }
   .nx-shield { padding: var(--space-4); }
-  .nx-sort { grid-template-columns: 1fr; }
-  .nx-callout { padding: var(--space-6) var(--space-4); }
-  .nx-sub { padding-left: 0; }
+  .nx-callout { padding: var(--space-4); margin-right: var(--space-2); box-shadow: 6px -6px 0 #8FBF9A; }
+  .nx-callout p { font-size: 1rem; }
+  .nx-twin { gap: var(--space-3); }
+  .nx-vs { display: none; }
+  .nx-tally div { min-width: 0; flex: 1; }
+  .nx-controls .hb-btn { padding: var(--space-2) var(--space-3); font-size: 0.85rem; }
+  .nx-lbl { display: none; }
+  .nx-title { font-size: 1.9rem; overflow-wrap: anywhere; }
+  .nx-title--serif { font-size: 1.55rem; }
+  .nx-dot { padding: 3px 8px; font-size: 0.65rem; }
+  .nx-shield-row { gap: var(--space-2); }
+  .nx-shield-tag { flex-basis: 28px; height: 28px; font-size: 0.9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
