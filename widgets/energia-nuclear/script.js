@@ -140,8 +140,7 @@ function go(i) {
   s.classList.add(dir);
   updateNav();
   onEnter(i);
-  const top = document.querySelector('.nx-nav').getBoundingClientRect().top;
-  if (top < 0) window.scrollBy({ top: top - 12, behavior: REDUCED ? 'auto' : 'smooth' });
+  s.scrollTop = 0;   // cada diapositiva tiene su propio scroll interno
 }
 
 function updateNav() {
@@ -186,7 +185,7 @@ function onEnter(i) {
   if (s.classList.contains('nx-cover')) cover.start();
   if (s.querySelector('#fisionSvg')) buildFission();
   if (s.querySelector('#fusionSvg')) buildFusion();
-  if (s.querySelector('#decaySvg')) playDecay(decayType);
+  if (s.querySelector('#decaySvg')) { decayView.hidden = false; shieldView.hidden = true; playDecay(decayType); }
   if (s.querySelector('#balanceEq')) renderBalance(balanceKey);
 }
 function onLeave(i) {
@@ -214,7 +213,9 @@ const cover = (() => {
   }
 
   function center() {
-    return w < 640 ? { x: w * 0.62, y: h * 0.26 } : { x: w * 0.72, y: h * 0.42 };
+    // En el ancho del embed (≤ 810 px) las esferas van arriba a la derecha
+    // para no tapar el título, que vive abajo a la izquierda.
+    return w < 860 ? { x: w * 0.7, y: h * 0.22 } : { x: w * 0.72, y: h * 0.42 };
   }
 
   function spawn() {
@@ -244,7 +245,7 @@ const cover = (() => {
   function frame() {
     t += 1;
     const c = center();
-    const R = Math.min(w, h) * (w < 640 ? 0.13 : 0.15);
+    const R = Math.min(w, h) * (w < 860 ? 0.14 : 0.15);
     ctx.fillStyle = 'rgba(5,5,8,0.28)';
     ctx.fillRect(0, 0, w, h);
 
@@ -596,7 +597,21 @@ async function playDecay(type) {
   }
 }
 
-document.querySelectorAll('#decayTabs .nx-tab').forEach((t) => t.addEventListener('click', () => playDecay(t.dataset.decay)));
+// La pestaña "Alcance" cambia la vista del escenario a la prueba de
+// penetración; las demás muestran la animación de cada desintegración.
+const decayView = document.getElementById('decayView');
+const shieldView = document.getElementById('shieldView');
+document.querySelectorAll('#decayTabs .nx-tab').forEach((t) => t.addEventListener('click', () => {
+  const isShield = t.dataset.decay === 'shield';
+  decayView.hidden = isShield;
+  shieldView.hidden = !isShield;
+  if (isShield) {
+    decayRun++;
+    document.querySelectorAll('#decayTabs .nx-tab').forEach((x) => x.classList.toggle('is-active', x === t));
+  } else {
+    playDecay(t.dataset.decay);
+  }
+}));
 document.getElementById('decayReplay').addEventListener('click', () => playDecay(decayType));
 
 // ── Poder de penetración ────────────────────────────────────────────────
