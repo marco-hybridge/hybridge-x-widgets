@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Energía Nuclear: Fisión y Fusión · Hybridge X</title>
+
+  <meta name="description" content="Explora la energía nuclear de forma interactiva: fisión, fusión, desintegración radiactiva y la conservación de los nucleones.">
+  <link rel="canonical" href="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/energia-nuclear/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hybridge X">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Energía Nuclear: Fisión y Fusión">
+  <meta property="og:description" content="Fisión, fusión, desintegración radiactiva y conservación de nucleones, con simulaciones interactivas.">
+  <meta property="og:url" content="https://marco-hybridge.github.io/hybridge-x-widgets/widgets/energia-nuclear/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Energía Nuclear: Fisión y Fusión">
+  <meta name="twitter:description" content="Simulaciones interactivas de fisión, fusión y desintegración radiactiva.">
+
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+  <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+
+<!-- Gradientes compartidos por todas las ilustraciones SVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gProton" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFC2D6"/>
+      <stop offset="55%" stop-color="#FF4F7B"/>
+      <stop offset="100%" stop-color="#9E1B45"/>
+    </radialGradient>
+    <radialGradient id="gNeutron" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#D9FBFF"/>
+      <stop offset="55%" stop-color="#4FC3E8"/>
+      <stop offset="100%" stop-color="#1B5E86"/>
+    </radialGradient>
+    <radialGradient id="gFlash" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="30%" stop-color="#FFE873"/>
+      <stop offset="70%" stop-color="#FF8A3D" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#FF5A1F" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E2F897" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#E2F897" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gPositron" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#C07CFF"/>
+    </radialGradient>
+    <radialGradient id="gNeutrino" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#F2F2F2"/>
+      <stop offset="100%" stop-color="#8A8A8A"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <!-- Barra de progreso / navegación por capítulos -->
+  <nav class="nx-nav" aria-label="Capítulos">
+    <div class="nx-nav-track"><div class="nx-nav-fill" id="nxNavFill"></div></div>
+    <ol class="nx-dots" id="nxDots"></ol>
+  </nav>
+
+  <main class="nx-deck" id="nxDeck">
+
+    <!-- 1 · PORTADA -->
+    <section class="nx-slide nx-cover" data-title="Inicio">
+      <canvas class="nx-cover-canvas" id="nxCoverCanvas" aria-hidden="true"></canvas>
+      <div class="nx-cover-content">
+        <span class="hb-overline">⚛️ Física · Energía</span>
+        <h1 class="nx-cover-title"><span>Energía</span><span>Nuclear</span></h1>
+        <p class="nx-cover-brand"><hybridge-logo fill="#FFFFFF" width="130px"></hybridge-logo><span>Education</span></p>
+        <p class="nx-cover-lead">Toda esa energía viene del núcleo del átomo. Pero ¿cómo se libera? Rompiendo núcleos, uniéndolos… o dejando que se transformen solos. Descúbrelo disparando y chocando átomos.</p>
+        <button type="button" class="hb-btn hb-btn-primary nx-start" data-go="1">Comenzar ⚡</button>
+      </div>
+    </section>
+
+    <!-- 2 · DOS PROCESOS -->
+    <section class="nx-slide" data-title="Dos procesos">
+      <h2 class="nx-banner">La energía nuclear puede liberarse mediante <strong>dos procesos fundamentales</strong>:</h2>
+      <div class="nx-twin">
+        <button type="button" class="nx-orb nx-orb--fision" data-go="2">
+          <span class="nx-orb-ring"></span>
+          <span class="nx-orb-label">FISIÓN</span>
+          <span class="nx-orb-hint">Romper núcleos pesados →</span>
+        </button>
+        <span class="nx-vs">vs</span>
+        <button type="button" class="nx-orb nx-orb--fusion" data-go="3">
+          <span class="nx-orb-ring"></span>
+          <span class="nx-orb-label">FUSIÓN</span>
+          <span class="nx-orb-hint">Unir núcleos ligeros →</span>
+        </button>
+      </div>
+      <p class="nx-note">💡 Fíjate: <strong>F<em class="nx-red">I</em>SIÓN</strong> y <strong>F<em class="nx-red">U</em>SIÓN</strong> solo cambian una letra… pero son procesos opuestos. Toca uno para explorarlo. Después veremos un tercer fenómeno: la <strong>desintegración radiactiva</strong>.</p>
+    </section>
+
+    <!-- 3 · FISIÓN -->
+    <section class="nx-slide nx-theme-fision" data-title="Fisión">
+      <header class="nx-head">
+        <h2 class="nx-title">F<em class="nx-red">I</em>SIÓN</h2>
+        <p class="nx-sub">Rompiendo núcleos pesados</p>
+      </header>
+
+      <div class="nx-split">
+        <div class="nx-text">
+          <p>La fisión consiste en <strong>dividir núcleos atómicos pesados</strong> (como el <strong>uranio-235</strong>) en núcleos más pequeños.</p>
+          <p>La fisión libera <strong>enormes cantidades de energía</strong> y se usa en <strong>reactores nucleares</strong> y <strong>armas atómicas</strong>.</p>
+          <div class="nx-fact">🔬 <strong>¿Recuerdas los "millones de veces más energía"?</strong> Aquí está el número: cada núcleo de uranio-235 que se parte libera unos <strong>200 MeV</strong>, mientras que una reacción química (como quemar gasolina) libera apenas unos pocos eV por átomo.</div>
+          <p class="nx-ex-label">EJEMPLO:</p>
+          <div class="nx-eq"><sup>235</sup>U + n → <sup>141</sup>Ba + <sup>92</sup>Kr + 3n + energía</div>
+        </div>
+
+        <div class="nx-stage">
+          <svg class="nx-svg" id="fisionSvg" viewBox="0 0 640 360" role="img" aria-label="Animación de la fisión del uranio-235"></svg>
+          <div class="nx-stage-bar">
+            <button type="button" class="hb-btn hb-btn-primary" id="fisionFire">🎯 Disparar neutrón</button>
+            <span class="nx-stage-msg" id="fisionMsg">Lanza un neutrón contra el núcleo de uranio.</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="nx-teaser">🤔 <strong>Piensa:</strong> de cada fisión salen <strong>3 neutrones</strong>… ¿qué pasaría si cada uno chocara con otro núcleo de uranio? Más adelante lo comprobarás tú mismo en un simulador.</p>
+    </section>
+
+    <!-- 4 · FUSIÓN -->
+    <section class="nx-slide nx-theme-fusion" data-title="Fusión">
+      <header class="nx-head">
+        <h2 class="nx-title">F<em class="nx-red">U</em>SIÓN</h2>
+        <p class="nx-sub">Uniendo átomos ligeros</p>
+      </header>
+
+      <div class="nx-split">
+        <div class="nx-text">
+          <p>La fusión ocurre cuando <strong>dos núcleos ligeros</strong> (como <strong>hidrógeno</strong>) se unen para formar un <strong>núcleo más pesado</strong>, liberando grandes cantidades de energía.</p>
+          <p>Este proceso <strong>alimenta al Sol</strong> y es una de las fuentes más prometedoras de <strong>energía limpia</strong>. 🌞⚡</p>
+          <p class="nx-ex-label">EJEMPLO:</p>
+          <div class="nx-eq"><sup>2</sup>H + <sup>3</sup>H → <sup>4</sup>He + n + energía</div>
+          <p class="nx-mini">Deuterio (<sup>2</sup>H) + Tritio (<sup>3</sup>H) → Helio (<sup>4</sup>He) + neutrón + <strong>17.6 MeV</strong></p>
+        </div>
+
+        <div class="nx-stage">
+          <svg class="nx-svg" id="fusionSvg" viewBox="0 0 640 360" role="img" aria-label="Animación de la fusión de deuterio y tritio"></svg>
+          <div class="nx-stage-bar">
+            <button type="button" class="hb-btn hb-btn-primary" id="fusionGo">💥 Fusionar núcleos</button>
+            <span class="nx-stage-msg" id="fusionMsg">Lanza el deuterio y el tritio uno contra otro.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · DESINTEGRACIÓN RADIACTIVA -->
+    <section class="nx-slide nx-theme-decay" data-title="Desintegración">
+      <header class="nx-head">
+        <h2 class="nx-title nx-title--serif">Desintegración radiactiva</h2>
+        <p class="nx-sub">El núcleo se ajusta</p>
+      </header>
+
+      <div class="nx-split">
+        <div class="nx-text">
+          <p>Los <strong>núcleos inestables</strong> pueden transformarse <strong>espontáneamente</strong> en otros núcleos más estables, emitiendo partículas (como <strong>α, β o γ</strong>).</p>
+          <p>Este proceso <strong>ocurre naturalmente</strong> o <strong>se provoca artificialmente</strong>.</p>
+          <p class="nx-ex-label">EJEMPLO:</p>
+          <div class="nx-eq"><sup>238</sup>U → <sup>234</sup>Th + α</div>
+        </div>
+
+        <div class="nx-stage">
+          <div class="nx-tabs" role="tablist" id="decayTabs">
+            <button type="button" role="tab" class="nx-tab is-active" data-decay="alpha">α Alfa</button>
+            <button type="button" role="tab" class="nx-tab" data-decay="beta">β Beta</button>
+            <button type="button" role="tab" class="nx-tab" data-decay="gamma">γ Gamma</button>
+          </div>
+          <svg class="nx-svg" id="decaySvg" viewBox="0 0 640 300" role="img" aria-label="Animación de desintegración radiactiva"></svg>
+          <div class="nx-decay-info" id="decayInfo"></div>
+          <div class="nx-stage-bar">
+            <button type="button" class="hb-btn hb-btn-ghost" id="decayReplay">↻ Repetir animación</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nx-shield">
+        <h3>🛡️ ¿Qué tan lejos llega cada radiación?</h3>
+        <p>Toca <strong>Lanzar</strong> y mira qué barrera detiene a cada una.</p>
+        <div class="nx-shield-grid" id="shieldGrid">
+          <div class="nx-shield-row" data-type="alpha"><span class="nx-shield-tag">α</span><div class="nx-shield-lane"><span class="nx-shot"></span><span class="nx-wall nx-wall--paper">Papel</span><span class="nx-wall nx-wall--al">Aluminio</span><span class="nx-wall nx-wall--pb">Plomo</span></div></div>
+          <div class="nx-shield-row" data-type="beta"><span class="nx-shield-tag">β</span><div class="nx-shield-lane"><span class="nx-shot"></span><span class="nx-wall nx-wall--paper">Papel</span><span class="nx-wall nx-wall--al">Aluminio</span><span class="nx-wall nx-wall--pb">Plomo</span></div></div>
+          <div class="nx-shield-row" data-type="gamma"><span class="nx-shield-tag">γ</span><div class="nx-shield-lane"><span class="nx-shot"></span><span class="nx-wall nx-wall--paper">Papel</span><span class="nx-wall nx-wall--al">Aluminio</span><span class="nx-wall nx-wall--pb">Plomo</span></div></div>
+        </div>
+        <button type="button" class="hb-btn hb-btn-primary" id="shieldFire">🚀 Lanzar</button>
+      </div>
+    </section>
+
+    <!-- 6 · CONSERVACIÓN -->
+    <section class="nx-slide nx-theme-cons" data-title="Conservación">
+      <div class="nx-callout">
+        <p>En todos los procesos nucleares, <strong>se conserva el número total de nucleones (protones + neutrones)</strong>, aunque se libere energía o se cambie la identidad del núcleo.</p>
+        <p class="nx-callout-law">Es una ley de conservación fundamental. ⚖️</p>
+      </div>
+
+      <div class="nx-balance">
+        <div class="nx-tabs" role="tablist" id="balanceTabs">
+          <button type="button" role="tab" class="nx-tab is-active" data-eq="fision">Fisión</button>
+          <button type="button" role="tab" class="nx-tab" data-eq="fusion">Fusión</button>
+          <button type="button" role="tab" class="nx-tab" data-eq="alpha">Desintegración α</button>
+        </div>
+
+        <div class="nx-eq nx-eq--big" id="balanceEq"></div>
+
+        <svg class="nx-scale" viewBox="0 0 600 230" aria-hidden="true">
+          <polygon points="300,90 270,215 330,215" fill="#2A2A2A" stroke="rgba(255,255,255,0.25)"/>
+          <rect x="230" y="212" width="140" height="10" rx="5" fill="#2A2A2A"/>
+          <g id="scaleBeam" class="nx-beam">
+            <rect x="80" y="84" width="440" height="10" rx="5" fill="#E2F897"/>
+            <circle cx="300" cy="89" r="10" fill="#0D0D0D" stroke="#E2F897" stroke-width="3"/>
+            <g class="nx-pan" id="panLeft" transform="translate(110 94)">
+              <line x1="0" y1="0" x2="-40" y2="70" stroke="rgba(255,255,255,0.4)"/>
+              <line x1="0" y1="0" x2="40" y2="70" stroke="rgba(255,255,255,0.4)"/>
+              <path d="M-55 70 Q0 105 55 70 Z" fill="#C07CFF" opacity="0.85"/>
+              <text x="0" y="62" text-anchor="middle" class="nx-pan-num" id="panLeftNum">0</text>
+            </g>
+            <g class="nx-pan" id="panRight" transform="translate(490 94)">
+              <line x1="0" y1="0" x2="-40" y2="70" stroke="rgba(255,255,255,0.4)"/>
+              <line x1="0" y1="0" x2="40" y2="70" stroke="rgba(255,255,255,0.4)"/>
+              <path d="M-55 70 Q0 105 55 70 Z" fill="#2EE6A0" opacity="0.85"/>
+              <text x="0" y="62" text-anchor="middle" class="nx-pan-num" id="panRightNum">0</text>
+            </g>
+          </g>
+        </svg>
+
+        <div class="nx-tally">
+          <div><span>Nucleones (A)</span><strong id="tallyA">—</strong></div>
+          <div><span>Protones / carga (Z)</span><strong id="tallyZ">—</strong></div>
+        </div>
+        <button type="button" class="hb-btn hb-btn-primary" id="balanceGo">⚖️ Pesar la reacción</button>
+        <p class="nx-mini nx-center">🧮 <strong>Dato extra:</strong> si se conservan los nucleones, ¿de dónde sale la energía? Los productos pesan un poquito <strong>menos</strong> que lo que reaccionó, y esa diminuta masa se convierte en energía según <strong>E = mc²</strong> de Einstein. En algunos procesos ocurre al revés: se <strong>absorbe</strong> energía y se gana una pizca de masa.</p>
+      </div>
+    </section>
+
+    <!-- 7 · RETO -->
+    <section class="nx-slide" data-title="Reto">
+      <header class="nx-head nx-head--center">
+        <span class="hb-overline">🏆 Pon a prueba lo aprendido</span>
+        <h2 class="hb-h2">Reto nuclear</h2>
+      </header>
+
+      <div class="nx-quiz">
+        <h3>1 · Completa el número que falta</h3>
+        <p class="nx-mini">Usa la ley de conservación: los nucleones de un lado deben sumar lo mismo que del otro.</p>
+        <div class="nx-fill" id="fillList"></div>
+
+        <h3>2 · ¿Fisión, fusión o desintegración?</h3>
+        <div class="nx-sort" id="sortList"></div>
+
+        <div class="nx-score" id="quizScore"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Controles inferiores -->
+  <div class="nx-controls">
+    <button type="button" class="hb-btn hb-btn-ghost" id="nxPrev">← Anterior</button>
+    <span class="nx-count" id="nxCount">1 / 7</span>
+    <button type="button" class="hb-btn hb-btn-primary" id="nxNext">Siguiente →</button>
+  </div>
+
+</div>
+
+<div class="nx-confetti" id="nxConfetti" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+<script src="../../scripts/hybridge-logo.js"></script>
+</body>
+</html>
